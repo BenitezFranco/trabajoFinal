@@ -12,7 +12,8 @@ router.post('/login', authController.login);
 // Ruta protegida para obtener el perfil del usuario
 router.get('/perfil', authenticate, async (ctx) => {
     try {
-        const usuarioId = ctx.state.user.id;
+        const usuarioId = ctx.state.user.id_usuario;
+        console.log('Usuario ID:', usuarioId);
         const usuario = await Usuario.findByPk(usuarioId, {
             attributes: ['id_usuario', 'nombre', 'correo_electronico', 'foto_perfil']
         });
