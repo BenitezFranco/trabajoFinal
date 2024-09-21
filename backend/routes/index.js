@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
 const Usuario = require('../models/Usuario');
+const { crearReceta } = require('../controllers/recetaController');
 
 const router = new Router();
 
@@ -29,5 +30,9 @@ router.get('/perfil', authenticate, async (ctx) => {
         ctx.body = { error: 'Error al obtener los datos del perfil' };
     }
 });
+
+// Ruta para crear recetas (protegida por el middleware de autenticación)
+router.post('/create-recipe', authenticate, crearReceta);
+
 
 module.exports = router;
