@@ -4,6 +4,7 @@ const authenticate = require('../middleware/authMiddleware');
 const Usuario = require('../models/Usuario');
 const { crearReceta } = require('../controllers/recetaController');
 const {obtenerReceta} = require('../controllers/recetaController');
+const {buscarRecetasYUsuarios} = require('../controllers/searchController');
 
 const router = new Router();
 
@@ -37,5 +38,8 @@ router.post('/create-recipe', authenticate, crearReceta);
 
 router.get('/receta/:id', authenticate, obtenerReceta);
 
+
+// Buscador 
+router.get('/search', buscarRecetasYUsuarios);
 
 module.exports = router;
