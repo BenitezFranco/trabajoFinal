@@ -4,6 +4,7 @@ const JWT_SECRET = 'tu_clave_secreta';
 const authenticate = async (ctx, next) => {
     const authHeader = ctx.headers.authorization;
     if (!authHeader) {
+        console.log('Decoded:', authHeader);
         ctx.status = 401;
         ctx.body = { error: 'No token provided' };
         return;

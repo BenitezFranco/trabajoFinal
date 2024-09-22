@@ -3,6 +3,7 @@ const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
 const Usuario = require('../models/Usuario');
 const { crearReceta } = require('../controllers/recetaController');
+const {obtenerReceta} = require('../controllers/recetaController');
 
 const router = new Router();
 
@@ -33,6 +34,8 @@ router.get('/perfil', authenticate, async (ctx) => {
 
 // Ruta para crear recetas (protegida por el middleware de autenticación)
 router.post('/create-recipe', authenticate, crearReceta);
+
+router.get('/receta/:id', authenticate, obtenerReceta);
 
 
 module.exports = router;
