@@ -29,7 +29,7 @@ const Login = () => {
             const result = await response.json();
             if (response.ok) {
                 localStorage.setItem('token', result.token);
-                router.push('/perfil');
+                router.push('/HomeLog');
             } else {
                 setError(result.error || 'Error en el login');
             }

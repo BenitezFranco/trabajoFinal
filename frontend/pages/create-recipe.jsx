@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import jwt from 'jsonwebtoken';
-
+import Header from './Header';
+import Footer from './Footer';
 
 const CreateRecipe = () => {
     const [formData, setFormData] = useState({
@@ -9,22 +10,20 @@ const CreateRecipe = () => {
         descripcion: '',
         instrucciones: '',
         ingredientes: '',
-        dificultad: 'Fácil', // Valor predeterminado
+        dificultad: 'Fácil',
         tiempo_preparacion: '',
         categorias: [],
     });
     const router = useRouter();
-
     const [id_usuario, setIdUsuario] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(''); // Estado para el mensaje de éxito
 
     useEffect(() => {
-        if (typeof window !== 'undefined') { // Verifica si estás en el cliente
+        if (typeof window !== 'undefined') {
             const token = localStorage.getItem('token');
             if (token) {
-                // Decodificar el token
-                const decodedToken = jwt.decode(token); // Utiliza el método decode de jsonwebtoken
-                console.log(decodedToken);
-                setIdUsuario(decodedToken.id_usuario); // Asegúrate de que 'id_usuario' esté en el payload del token
+                const decodedToken = jwt.decode(token);
+                setIdUsuario(decodedToken.id_usuario);
             }
         }
     }, []);
@@ -53,21 +52,14 @@ const CreateRecipe = () => {
         e.preventDefault();
 
         const recetaData = {
-            titulo: formData.titulo,
-            descripcion: formData.descripcion,
-            instrucciones: formData.instrucciones,
-            ingredientes: formData.ingredientes,
-            dificultad: formData.dificultad,
-            tiempo_preparacion: formData.tiempo_preparacion,
+            ...formData,
             fecha_publicacion: new Date().toISOString().split('T')[0],
             id_usuario: id_usuario,
-            categorias: formData.categorias,
         };
+
         const token = localStorage.getItem('token');
-        console.log(token);
-        console.log(recetaData);
+
         try {
-            // Insertar en la tabla receta
             const response = await fetch('http://localhost:3000/create-recipe', {
                 method: 'POST',
                 headers: { 
@@ -77,150 +69,187 @@ const CreateRecipe = () => {
                 body: JSON.stringify(recetaData),
             });
 
-            const result = await response.json();
-            /** 
             if (response.ok) {
-                // Insertar en la tabla receta_categoria para cada categoría seleccionada
-                const id_receta = result.id_receta;
-                for (const id_categoria of formData.categorias) {
-                    await fetch('http://localhost:3000/receta_categoria', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id_receta, id_categoria }),
-                    });
-                }
-                
+                setSuccessMessage('Receta creada con éxito'); // Mensaje de éxito
+                setTimeout(() => {
+                    router.push('/'); // Redirigir al home después de un breve tiempo
+                }, 2000); // Esperar 2 segundos antes de redirigir
             } else {
-                console.error('Error al crear la receta', result);
-            }*/
-                router.push('/perfil');
+                console.error('Error al crear la receta');
+            }
         } catch (error) {
             console.error('Error al crear la receta', error);
         }
     };
 
     return (
-        <div>
-            <h1>Crear Receta</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Título:
-                    <input
-                        type="text"
-                        name="titulo"
-                        value={formData.titulo}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
+        <div className="flex flex-col min-h-screen bg-gray-100">
+            {/* Header */}
+            <Header />
 
-                <label>
-                    Descripción:
-                    <textarea
-                        name="descripcion"
-                        value={formData.descripcion}
-                        onChange={handleChange}
-                        required
-                    ></textarea>
-                </label>
-
-                <label>
-                    Instrucciones:
-                    <textarea
-                        name="instrucciones"
-                        value={formData.instrucciones}
-                        onChange={handleChange}
-                        required
-                    ></textarea>
-                </label>
-
-                <label>
-                    Ingredientes:
-                    <textarea
-                        name="ingredientes"
-                        value={formData.ingredientes}
-                        onChange={handleChange}
-                        required
-                    ></textarea>
-                </label>
-
-                <label>
-                    Tiempo de Preparación (minutos):
-                    <input
-                        type="text"
-                        name="tiempo_preparacion"
-                        value={formData.tiempo_preparacion}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-
-                <label>
-                    Dificultad:
-                    <label>
-                        <input
-                            type="radio"
-                            name="dificultad"
-                            value="Fácil"
-                            checked={formData.dificultad === 'Fácil'}
-                            onChange={handleChange}
-                        />
-                        Fácil
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="dificultad"
-                            value="Media"
-                            checked={formData.dificultad === 'Media'}
-                            onChange={handleChange}
-                        />
-                        Media
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="dificultad"
-                            value="Difícil"
-                            checked={formData.dificultad === 'Difícil'}
-                            onChange={handleChange}
-                        />
-                        Difícil
-                    </label>
-                </label>
-
-                <label>
-                    Categorías:
-                    {[
-                        'Vegetariano',
-                        'Vegano',
-                        'Desayuno',
-                        'Sin TACC',
-                        'Sin gluten',
-                        'Postres',
-                        'Saludables',
-                        'Cenas',
-                        'Almuerzos',
-                        'Platos principales',
-                        'Aperitivos',
-                        'Bebidas',
-                        'Dulces',
-                        'Ensaladas',
-                        'Sopas y cremas',
-                    ].map((categoria, index) => (
-                        <label key={index}>
-                            <input
-                                type="checkbox"
-                                value={index + 1}
-                                onChange={handleCheckboxChange}
-                            />
-                            {categoria}
+            {/* Main content */}
+            <main className="flex-grow flex flex-col items-center p-6">
+                <h1 className="text-4xl font-bold mb-8">Crear Receta</h1>
+                {successMessage && (
+                    <div className="mb-4 text-green-600">{successMessage}</div> // Mensaje de éxito
+                )}
+                <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    {/* Resto del formulario... */}
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Título:
                         </label>
-                    ))}
-                </label>
+                        <input
+                            type="text"
+                            name="titulo"
+                            value={formData.titulo}
+                            onChange={handleChange}
+                            required
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Descripción:
+                        </label>
+                        <textarea
+                            name="descripcion"
+                            value={formData.descripcion}
+                            onChange={handleChange}
+                            required
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        ></textarea>
+                    </div>
 
-                <button type="submit">Crear Receta</button>
-            </form>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Instrucciones:
+                        </label>
+                        <textarea
+                            name="instrucciones"
+                            value={formData.instrucciones}
+                            onChange={handleChange}
+                            required
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        ></textarea>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Ingredientes:
+                        </label>
+                        <textarea
+                            name="ingredientes"
+                            value={formData.ingredientes}
+                            onChange={handleChange}
+                            required
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        ></textarea>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Tiempo de Preparación (minutos):
+                        </label>
+                        <input
+                            type="text"
+                            name="tiempo_preparacion"
+                            value={formData.tiempo_preparacion}
+                            onChange={handleChange}
+                            required
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Dificultad:
+                        </label>
+                        <div className="flex items-center">
+                            <label className="mr-4">
+                                <input
+                                    type="radio"
+                                    name="dificultad"
+                                    value="Fácil"
+                                    checked={formData.dificultad === 'Fácil'}
+                                    onChange={handleChange}
+                                    className="mr-2"
+                                />
+                                Fácil
+                            </label>
+                            <label className="mr-4">
+                                <input
+                                    type="radio"
+                                    name="dificultad"
+                                    value="Media"
+                                    checked={formData.dificultad === 'Media'}
+                                    onChange={handleChange}
+                                    className="mr-2"
+                                />
+                                Media
+                            </label>
+                            <label className="mr-4">
+                                <input
+                                    type="radio"
+                                    name="dificultad"
+                                    value="Difícil"
+                                    checked={formData.dificultad === 'Difícil'}
+                                    onChange={handleChange}
+                                    className="mr-2"
+                                />
+                                Difícil
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Categorías:
+                        </label>
+                        <div className="flex flex-wrap">
+                            {[
+                                'Vegetariano',
+                                'Vegano',
+                                'Desayuno',
+                                'Sin TACC',
+                                'Sin gluten',
+                                'Postres',
+                                'Saludables',
+                                'Cenas',
+                                'Almuerzos',
+                                'Platos principales',
+                                'Aperitivos',
+                                'Bebidas',
+                                'Dulces',
+                                'Ensaladas',
+                                'Sopas y cremas',
+                            ].map((categoria, index) => (
+                                <label key={index} className="mr-4 mb-2">
+                                    <input
+                                        type="checkbox"
+                                        value={categoria}
+                                        onChange={handleCheckboxChange}
+                                        className="hidden"
+                                    />
+                                    <span className={`inline-block cursor-pointer px-4 py-2 rounded-md border ${formData.categorias.includes(categoria) ? 'bg-blue-500 text-white border-blue-500' : 'bg-gray-200 text-gray-700 border-gray-300'} hover:bg-blue-400 transition`}>
+                                        {categoria}
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        Crear Receta
+                    </button>
+                </form>
+            </main>
+
+            {/* Footer */}
+            <Footer />
         </div>
     );
 };
