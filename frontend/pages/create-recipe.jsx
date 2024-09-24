@@ -33,17 +33,17 @@ const CreateRecipe = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleCheckboxChange = (e) => {
-        const { value, checked } = e.target;
+    const handleCheckboxChange = (e, categoriaIndex) => {
+        const { checked } = e.target;
         if (checked) {
             setFormData({
                 ...formData,
-                categorias: [...formData.categorias, value],
+                categorias: [...formData.categorias, categoriaIndex], // Agregar el índice + 1
             });
         } else {
             setFormData({
                 ...formData,
-                categorias: formData.categorias.filter((cat) => cat !== value),
+                categorias: formData.categorias.filter((cat) => cat !== categoriaIndex), // Remover el índice + 1
             });
         }
     };
@@ -62,17 +62,17 @@ const CreateRecipe = () => {
         try {
             const response = await fetch('http://localhost:3000/create-recipe', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(recetaData),
             });
-
+            console.log('response:', response);
             if (response.ok) {
                 setSuccessMessage('Receta creada con éxito'); // Mensaje de éxito
                 setTimeout(() => {
-                    router.push('/'); // Redirigir al home después de un breve tiempo
+                    router.push('/HomeLog'); // Redirigir al home después de un breve tiempo
                 }, 2000); // Esperar 2 segundos antes de redirigir
             } else {
                 console.error('Error al crear la receta');
@@ -227,11 +227,11 @@ const CreateRecipe = () => {
                                 <label key={index} className="mr-4 mb-2">
                                     <input
                                         type="checkbox"
-                                        value={categoria}
-                                        onChange={handleCheckboxChange}
+                                        value={index + 1} // Enviar el índice + 1 como valor
+                                        onChange={(e) => handleCheckboxChange(e, index + 1)} // Pasar el índice + 1 a la función
                                         className="hidden"
                                     />
-                                    <span className={`inline-block cursor-pointer px-4 py-2 rounded-md border ${formData.categorias.includes(categoria) ? 'bg-blue-500 text-white border-blue-500' : 'bg-gray-200 text-gray-700 border-gray-300'} hover:bg-blue-400 transition`}>
+                                    <span className={`inline-block cursor-pointer px-4 py-2 rounded-md border ${formData.categorias.includes(index + 1) ? 'bg-blue-500 text-white border-blue-500' : 'bg-gray-200 text-gray-700 border-gray-300'} hover:bg-blue-400 transition`}>
                                         {categoria}
                                     </span>
                                 </label>

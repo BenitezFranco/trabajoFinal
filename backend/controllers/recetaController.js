@@ -1,5 +1,5 @@
 const Receta = require('../models/Receta'); // Modelo de receta
-const RecetaCategoria = require('../models/Receta_categoria'); // Modelo de receta_categoria
+const RecetaCategoria = require('../models/Receta_Categoria'); // Modelo de receta_categoria
 const Usuario = require ('../models/Usuario');
 
 const crearReceta = async (ctx) => {
