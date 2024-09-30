@@ -10,6 +10,10 @@ const Home = () => {
         const token = localStorage.getItem('token');
         if (token) {
             setUsuarioAutenticado(true); // Usuario está autenticado si hay un token
+        }if (!token) {
+            console.log('No token, redirecting to /login');
+            router.push('/login');
+            return;
         }
     }, []);
 

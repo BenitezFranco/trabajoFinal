@@ -24,6 +24,10 @@ const CreateRecipe = () => {
             if (token) {
                 const decodedToken = jwt.decode(token);
                 setIdUsuario(decodedToken.id_usuario);
+            }if (!token) {
+                console.log('No token, redirecting to /login');
+                router.push('/login');
+                return;
             }
         }
     }, []);
