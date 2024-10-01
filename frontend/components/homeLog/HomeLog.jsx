@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-
+import Seguimientos from '../seguimineto/Seguiminto'; // Importar el componente de seguimientos
 
 const Home = () => {
     const router = useRouter();
@@ -9,20 +9,19 @@ const Home = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            setUsuarioAutenticado(true); // Usuario está autenticado si hay un token
-        }if (!token) {
-            console.log('No token, redirecting to /login');
+            setUsuarioAutenticado(true);
+        } else {
             router.push('/login');
             return;
         }
     }, []);
 
     const handlePerfilClick = () => {
-        router.push('/perfil'); // Redirigir a la página de perfil
+        router.push('/perfil');
     };
 
     const handleCrearRecetaClick = () => {
-        router.push('/create-recipe'); // Redirigir a la página para crear una receta
+        router.push('/create-recipe');
     };
 
     return (
@@ -36,16 +35,19 @@ const Home = () => {
                         <>
                             <button 
                                 onClick={handlePerfilClick} 
-                                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600"
                             >
                                 Ir a mi perfil
                             </button>
                             <button 
                                 onClick={handleCrearRecetaClick} 
-                                className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600"
                             >
                                 Crear una nueva receta
                             </button>
+
+                            {/* Mostrar el componente de seguimientos */}
+                            <Seguimientos />
                         </>
                     ) : (
                         <p className="text-lg text-center">Inicia sesión para acceder a tu perfil y crear recetas.</p>

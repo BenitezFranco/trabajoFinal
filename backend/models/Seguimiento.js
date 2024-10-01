@@ -13,7 +13,10 @@ const Seguimiento = sequelize.define('Seguimiento', {
     timestamps: false,
 });
 
-Seguimiento.belongsTo(Usuario, { foreignKey: 'id_usuario_seguidor' });
-Seguimiento.belongsTo(Usuario, { foreignKey: 'id_usuario_seguido' });
+// Relación con Usuario como Seguidor
+Seguimiento.belongsTo(Usuario, { foreignKey: 'id_usuario_seguidor', as: 'seguidor' });
+
+// Relación con Usuario como Seguido
+Seguimiento.belongsTo(Usuario, { foreignKey: 'id_usuario_seguido', as: 'seguido' });
 
 module.exports = Seguimiento;

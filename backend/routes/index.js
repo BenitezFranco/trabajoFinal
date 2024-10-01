@@ -3,6 +3,7 @@ const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
 const { crearReceta, obtenerReceta, calificarReceta } = require('../controllers/recetaController');
 const { buscarRecetasYUsuarios } = require('../controllers/searchController');
+const { seguirUsuario, obtenerSeguimientos } = require('../controllers/seguimientoController'); // Importar las funciones del controlador
 const Usuario = require('../models/Usuario');
 
 const router = new Router();
@@ -37,5 +38,11 @@ router.post('/receta/:id/calificar', authenticate, calificarReceta);
 
 // Buscador
 router.get('/search', buscarRecetasYUsuarios);
+
+// Ruta para seguir a un usuario (protegida)
+router.post('/follow', authenticate, seguirUsuario);
+
+// Ruta para obtener la lista de usuarios seguidos (protegida)
+router.get('/seguimientos', authenticate, obtenerSeguimientos);
 
 module.exports = router;

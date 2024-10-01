@@ -6,6 +6,7 @@ const Search = () => {
     const [filter, setFilter] = useState('titulo');
     const [results, setResults] = useState([]);
     const [searchSubmitted, setSearchSubmitted] = useState(false);
+    const [followedUsers, setFollowedUsers] = useState(new Set()); // Para rastrear usuarios seguidos
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -17,6 +18,28 @@ const Search = () => {
             setResults(data);
         } catch (error) {
             console.error('Error al realizar la búsqueda:', error);
+        }
+    };
+
+    // Manejar el seguimiento de un usuario
+    const handleFollow = async (id_usuario) => {
+        try {
+            const response = await fetch(`http://localhost:3000/follow`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Enviar token de autenticación
+                },
+                body: JSON.stringify({ id_usuario_seguido: id_usuario }),
+            });
+
+            if (response.ok) {
+                setFollowedUsers((prev) => new Set([...prev, id_usuario])); // Añadir el usuario a la lista de seguidos
+            } else {
+                console.error('Error al seguir usuario:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error al seguir usuario:', error);
         }
     };
 
@@ -64,7 +87,21 @@ const Search = () => {
                                 className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-md hover:bg-gray-100"
                             >
                                 {item.nombre ? (
-                                    <span className="text-lg font-medium">Usuario: {item.nombre} (ID: {item.id_usuario})</span>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-lg font-medium">
+                                            Usuario: {item.nombre} (ID: {item.id_usuario})
+                                        </span>
+                                        {/* Botón de seguir */}
+                                        <button 
+                                            onClick={() => handleFollow(item.id_usuario)}
+                                            disabled={followedUsers.has(item.id_usuario)} // Desactivar si ya se sigue
+                                            className={`py-1 px-3 rounded ${
+                                                followedUsers.has(item.id_usuario) ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600'
+                                            } text-white font-bold`}
+                                        >
+                                            {followedUsers.has(item.id_usuario) ? 'Seguido' : 'Seguir'}
+                                        </button>
+                                    </div>
                                 ) : (
                                     <Link href={`/recipe/${item.id_receta}`} className="text-lg font-medium text-blue-600 hover:underline">
                                         Receta: {item.titulo}
