@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Rating from '@/components/rating/Rating'; // Importar el componente de calificación
 
 const RecipePage = () => {
     const router = useRouter();
@@ -68,6 +69,10 @@ const RecipePage = () => {
                 <p className="text-lg font-medium mb-2"><strong>Tiempo de Preparación:</strong> {receta.tiempo_preparacion} minutos</p>
                 <p className="text-lg font-medium mb-2"><strong>Fecha de Publicación:</strong> {new Date(receta.fecha_publicacion).toLocaleDateString()}</p>
                 <p className="text-lg font-medium mb-4"><strong>Autor:</strong> {receta.nombre_usuario}</p>
+                
+                {/* Componente de Calificación */}
+                <Rating recetaId={id} />
+
                 <button 
                     onClick={() => router.back()} 
                     className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"

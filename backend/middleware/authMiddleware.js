@@ -1,3 +1,4 @@
+//authMiddleware.js
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'tu_clave_secreta';
 
@@ -24,3 +25,4 @@ const authenticate = async (ctx, next) => {
 };
 
 module.exports = authenticate;
+

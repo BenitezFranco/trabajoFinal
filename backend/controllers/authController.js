@@ -1,3 +1,4 @@
+//authController.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
@@ -37,3 +38,4 @@ exports.login = async (ctx) => {
         ctx.body = { error: 'Error al iniciar sesión' };
     }
 };
+
