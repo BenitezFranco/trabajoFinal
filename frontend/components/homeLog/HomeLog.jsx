@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Seguimientos from '../seguimineto/Seguiminto'; // Importar el componente de seguimientos
+import Seguimientos from '../seguimiento/Seguimiento'; // Importar el componente de seguimientos
 
 const Home = () => {
     const router = useRouter();

@@ -1,6 +1,7 @@
 const Seguimiento = require('../models/Seguimiento');
 const Usuario = require('../models/Usuario');
 
+
 // Función para seguir a un usuario
 const seguirUsuario = async (ctx) => {
     const { id_usuario_seguido } = ctx.request.body;
@@ -59,7 +60,32 @@ const obtenerSeguimientos = async (ctx) => {
     }
 };
 
+const dejarDeSeguirUsuario = async (ctx) => {
+    const { id_usuario_seguido } = ctx.request.body;
+    const id_usuario_seguidor = ctx.state.user.id_usuario;
+
+    try {
+        const seguimiento = await Seguimiento.findOne({
+            where: { id_usuario_seguidor, id_usuario_seguido }
+        });
+
+        if (!seguimiento) {
+            ctx.status = 404;
+            ctx.body = { error: 'No sigues a este usuario.' };
+            return;
+        }
+
+        await seguimiento.destroy();
+        ctx.status = 200;
+        ctx.body = { message: 'Has dejado de seguir al usuario.' };
+    } catch (error) {
+        ctx.status = 500;
+        ctx.body = { error: 'Error al dejar de seguir al usuario.' };
+    }
+};
+
 module.exports = {
     seguirUsuario,
+    dejarDeSeguirUsuario,
     obtenerSeguimientos,
 };

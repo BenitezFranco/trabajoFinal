@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const Search = () => {
@@ -7,6 +7,26 @@ const Search = () => {
     const [results, setResults] = useState([]);
     const [searchSubmitted, setSearchSubmitted] = useState(false);
     const [followedUsers, setFollowedUsers] = useState(new Set()); // Para rastrear usuarios seguidos
+
+    // Cargar usuarios seguidos al montar el componente
+    useEffect(() => {
+        const fetchFollowedUsers = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/seguimientos', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const data = await response.json();
+                const followedSet = new Set(data.map((user) => user.id_usuario_seguido));
+                setFollowedUsers(followedSet); // Cargar los usuarios seguidos en el estado
+            } catch (error) {
+                console.error('Error al obtener seguimientos:', error);
+            }
+        };
+
+        fetchFollowedUsers();
+    }, []);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -28,7 +48,7 @@ const Search = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Enviar token de autenticación
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({ id_usuario_seguido: id_usuario }),
             });
@@ -40,6 +60,32 @@ const Search = () => {
             }
         } catch (error) {
             console.error('Error al seguir usuario:', error);
+        }
+    };
+
+    // Manejar el dejar de seguir a un usuario
+    const handleUnfollow = async (id_usuario) => {
+        try {
+            const response = await fetch(`http://localhost:3000/unfollow`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({ id_usuario_seguido: id_usuario }),
+            });
+
+            if (response.ok) {
+                setFollowedUsers((prev) => {
+                    const newSet = new Set(prev);
+                    newSet.delete(id_usuario);
+                    return newSet;
+                }); // Eliminar el usuario de la lista de seguidos
+            } else {
+                console.error('Error al dejar de seguir usuario:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error al dejar de seguir usuario:', error);
         }
     };
 
@@ -91,15 +137,20 @@ const Search = () => {
                                         <span className="text-lg font-medium">
                                             Usuario: {item.nombre} (ID: {item.id_usuario})
                                         </span>
-                                        {/* Botón de seguir */}
-                                        <button 
-                                            onClick={() => handleFollow(item.id_usuario)}
-                                            disabled={followedUsers.has(item.id_usuario)} // Desactivar si ya se sigue
+                                        {/* Botón de seguir/dejar de seguir */}
+                                        <button
+                                            onClick={() =>
+                                                followedUsers.has(item.id_usuario)
+                                                    ? handleUnfollow(item.id_usuario)
+                                                    : handleFollow(item.id_usuario)
+                                            }
                                             className={`py-1 px-3 rounded ${
-                                                followedUsers.has(item.id_usuario) ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600'
+                                                followedUsers.has(item.id_usuario)
+                                                    ? 'bg-red-500 hover:bg-red-600'
+                                                    : 'bg-green-500 hover:bg-green-600'
                                             } text-white font-bold`}
                                         >
-                                            {followedUsers.has(item.id_usuario) ? 'Seguido' : 'Seguir'}
+                                            {followedUsers.has(item.id_usuario) ? 'Dejar de seguir' : 'Seguir'}
                                         </button>
                                     </div>
                                 ) : (
