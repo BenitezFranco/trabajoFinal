@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const Seguimientos = () => {
     const [seguimientos, setSeguimientos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchSeguimientos = async () => {
@@ -46,12 +48,12 @@ const Seguimientos = () => {
             <ul>
                 {seguimientos.map((seguimiento) => (
                     <li key={seguimiento.id_seguimiento} className="flex items-center mb-4">
-                       {/*<img 
-                            src={seguimiento.seguido.foto_perfil || '/default-profile.png'} 
-                            alt={seguimiento.seguido.nombre} 
-                            className="w-10 h-10 rounded-full mr-4" 
-                        />  */}
-                        <span>{seguimiento.seguido.nombre}</span>
+                        <span 
+                            onClick={() => router.push(`/perfil/${seguimiento.seguido.id}`)} 
+                            className="cursor-pointer text-blue-500 hover:underline"
+                        >
+                            {seguimiento.seguido.nombre}
+                        </span>
                     </li>
                 ))}
             </ul>

@@ -135,7 +135,7 @@ const Search = () => {
                                 {item.nombre ? (
                                     <div className="flex justify-between items-center">
                                         <span className="text-lg font-medium">
-                                            Usuario: {item.nombre} (ID: {item.id_usuario})
+                                             {item.nombre}
                                         </span>
                                         {/* Botón de seguir/dejar de seguir */}
                                         <button
