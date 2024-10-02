@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image'; // Importa el componente Image de Next.js
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons'; // Importa el ícono de buscador
 
 const Header = () => {
     const handleLogout = () => {
@@ -7,15 +10,26 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-blue-500 text-white p-4 flex justify-between items-center">
+        <header className="bg-blue-400 text-white p-4 flex justify-between items-center">
             <Link href="/HomeLog" passHref>
-                <h1 className="text-lg font-bold cursor-pointer">FoodBook</h1>
+                <div className="cursor-pointer">
+                    {/* Incluye el logo en lugar del texto "FoodBook" */}
+                    <Image 
+                        src="/logo.png" // Asegúrate de que el logo esté en la carpeta public con este nombre
+                        alt="FoodBook Logo"
+                        width={100} // Ajusta el tamaño según tus necesidades
+                        height={50}
+                    />
+                </div>
             </Link>
             <Link href="/search" passHref>
-                <p className="cursor-pointer">Buscador Avanzado</p>
+                <div className="flex items-center space-x-2 cursor-pointer">
+                    <p className="text-black">Buscador</p>
+                    <FontAwesomeIcon icon={faSearch} className="text-black" /> {/* Ícono de buscador */}
+                </div>
             </Link>
-            <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 p-2 rounded">
-                Cerrar Sesión
+            <button onClick={handleLogout} className="bg-red-800 hover:bg-red-600 p-2 rounded">
+                <p className="text-white">Cerrar Sesión</p>   
             </button>
         </header>
     );

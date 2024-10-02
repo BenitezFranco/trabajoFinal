@@ -23,6 +23,6 @@ body::before {
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.2; /* Ajusta la opacidad si es necesario */
+    opacity: 0.1; /* Ajusta la opacidad si es necesario */
     pointer-events: none; /* Para que no interfiera con el contenido */
 }
