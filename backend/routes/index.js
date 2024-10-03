@@ -62,7 +62,7 @@ router.get('/favoritos', authenticate, obtenerFavoritos);
 // Verificar si una receta está en favoritos (protegida)
 router.get('/receta/:id/favorito/estado', authenticate, estaEnFavoritos);
 
-router.get('/perfil /:id', authenticate, obtenerPerfil);
+router.get('/perfil/:id', authenticate, obtenerPerfil);
 
 module.exports = router;
 
