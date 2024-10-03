@@ -37,5 +37,33 @@ exports.login = async (ctx) => {
         ctx.status = 500;
         ctx.body = { error: 'Error al iniciar sesión' };
     }
+
+    const obtenerPerfil = async (ctx) => {
+        const userId = ctx.state.user.id; // Asumiendo que el ID del usuario está en el estado después de la autenticación
+    
+        try {
+            const usuario = await Usuario.findOne({
+                where: { id: userId },
+                attributes: ['id_usuario', 'nombre', 'correo_electronico'], // Ajusta los atributos según tus necesidades
+            });
+    
+            if (!usuario) {
+                ctx.status = 404;
+                ctx.body = { message: 'Usuario no encontrado' };
+                return;
+            }
+    
+            ctx.status = 200;
+            ctx.body = usuario; // Envia el objeto del usuario como respuesta
+        } catch (error) {
+            ctx.status = 500;
+            ctx.body = { message: 'Error al obtener el perfil del usuario' };
+            console.error('Error al obtener el perfil:', error);
+        }
+    };
+    
+    module.exports = {
+        obtenerPerfil,
+    };
 };
 

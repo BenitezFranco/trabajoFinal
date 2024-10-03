@@ -17,9 +17,11 @@ const Seguimientos = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
+                const textResponse = await response.text(); // Obtener la respuesta como texto
+                console.log('Response:', textResponse);
                 if (response.ok) {
-                    const data = await response.json();
+                    const data = JSON.parse(textResponse);
+                    
                     setSeguimientos(data);
                 } else {
                     console.error('Error al obtener seguimientos');
@@ -48,8 +50,9 @@ const Seguimientos = () => {
             <ul>
                 {seguimientos.map((seguimiento) => (
                     <li key={seguimiento.id_seguimiento} className="flex items-center mb-4">
+                        {console.log("informacion seguimiento", seguimiento)}
                         <span 
-                            onClick={() => router.push(`/perfil/${seguimiento.seguido.id}`)} 
+                            onClick={() => router.push(`/perfil/${seguimiento.id_usuario_seguido}`)} 
                             className="cursor-pointer text-blue-500 hover:underline"
                         >
                             {seguimiento.seguido.nombre}

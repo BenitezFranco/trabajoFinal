@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Header from '../Header'; 
-import Footer from '../Footer';
+import Header from '@/components/header/Header';
+import Footer from '@/components/footer/Footer';
 
 const PerfilUsuario = () => {
     const [perfil, setPerfil] = useState(null);
@@ -63,8 +63,10 @@ const PerfilUsuario = () => {
             <main className="flex-grow p-6 bg-gray-100">
                 <h1 className="text-2xl font-bold mb-4">Perfil del Usuario</h1>
                 <p>Nombre: {perfil.nombre}</p>
-                <p>Correo Electrónico: {perfil.correo_electronico}</p>
-                <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
+                <p>Correo Electrónico: {perfil.email}</p> {/* Corregido */}
+                {perfil.foto_perfil && (
+                    <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
+                )}
             </main>
             <Footer />
         </div>

@@ -1,12 +1,12 @@
+// Importa los modelos necesarios
 const Seguimiento = require('../models/Seguimiento');
 const Usuario = require('../models/Usuario');
-
 
 // Función para seguir a un usuario
 const seguirUsuario = async (ctx) => {
     const { id_usuario_seguido } = ctx.request.body;
     const id_usuario_seguidor = ctx.state.user.id_usuario;
-    console.log('seguidor ', ctx);
+    
     try {
         const usuarioSeguido = await Usuario.findByPk(id_usuario_seguido);
         if (!usuarioSeguido) {
@@ -41,7 +41,6 @@ const seguirUsuario = async (ctx) => {
 // Función para obtener la lista de usuarios seguidos
 const obtenerSeguimientos = async (ctx) => {
     const id_usuario_seguidor = ctx.state.user.id_usuario;
-    console.log('usuario', id_usuario_seguidor);
 
     try {
         const seguimientos = await Seguimiento.findAll({
@@ -60,6 +59,7 @@ const obtenerSeguimientos = async (ctx) => {
     }
 };
 
+// Función para dejar de seguir a un usuario
 const dejarDeSeguirUsuario = async (ctx) => {
     const { id_usuario_seguido } = ctx.request.body;
     const id_usuario_seguidor = ctx.state.user.id_usuario;
@@ -84,8 +84,38 @@ const dejarDeSeguirUsuario = async (ctx) => {
     }
 };
 
+// Nueva función para obtener el perfil de un usuario
+
+const obtenerPerfil = async (ctx) => {
+    try {
+        const id_usuario = ctx.params.id;
+
+        // Obtener el perfil del usuario
+        const usuario = await Usuario.findOne({
+            where: { id_usuario },
+            attributes: ['id_usuario', 'nombre', 'email', 'foto_perfil'] // Añadir otros atributos si es necesario
+        });
+
+        if (!usuario) {
+            ctx.status = 404;
+            ctx.body = { error: 'Usuario no encontrado' };
+            return;
+        }
+
+        // Enviar la respuesta con el perfil del usuario
+        ctx.status = 200;
+        ctx.body = usuario;
+        
+    } catch (error) {
+        ctx.status = 500;
+        ctx.body = { error: 'Error al obtener el perfil del usuario.' };
+    }
+};
+
+
 module.exports = {
     seguirUsuario,
     dejarDeSeguirUsuario,
     obtenerSeguimientos,
+    obtenerPerfil, // Exporta la nueva función
 };

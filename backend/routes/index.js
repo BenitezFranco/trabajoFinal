@@ -4,7 +4,7 @@ const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
 const { crearReceta, obtenerReceta, calificarReceta } = require('../controllers/recetaController');
 const { buscarRecetasYUsuarios } = require('../controllers/searchController');
-const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario } = require('../controllers/seguimientoController');
+const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario, obtenerPerfil } = require('../controllers/seguimientoController');
 const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos} = require('../controllers/favoritoController'); // Controlador de favoritos
 const Usuario = require('../models/Usuario');
 
@@ -62,7 +62,7 @@ router.get('/favoritos', authenticate, obtenerFavoritos);
 // Verificar si una receta está en favoritos (protegida)
 router.get('/receta/:id/favorito/estado', authenticate, estaEnFavoritos);
 
-
+router.get('/perfil /:id', authenticate, obtenerPerfil);
 
 module.exports = router;
 
