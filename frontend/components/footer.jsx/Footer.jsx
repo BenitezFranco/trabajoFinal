@@ -4,7 +4,7 @@ const Footer = () => {
     return (
         <footer className="bg-gray-600 text-white p-6">
             <div className="flex justify-between items-center">
-                <p>Gropo 27</p>
+                <p>Grupo 27</p>
                 <div className="flex space-x-4">
                     <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400">
                         <i className="fab fa-github text-2xl"></i>
