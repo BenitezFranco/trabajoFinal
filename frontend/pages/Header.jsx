@@ -1,4 +1,4 @@
-import Header from "@/components/header.jsx/Header";
+import Header from "@/components/header/Header";
 
 const SearchPage = () => {
     return (

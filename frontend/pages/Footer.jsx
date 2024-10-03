@@ -1,4 +1,4 @@
-import Footer from "@/components/footer.jsx/Footer";
+import Footer from "@/components/footer/Footer";
 
 const SearchPage = () => {
     return (

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Seguimientos from '../seguimiento/Seguimiento'; // Importar el componente de seguimientos
-import Footer from '../footer.jsx/Footer';
-import Header from '../header.jsx/Header';
+import Favoritos from '../favoritos/Favoritos'; // Importar el componente de favoritos
+import Footer from '../footer/Footer';
+import Header from '../header/Header';
+
 const Home = () => {
     const router = useRouter();
     const [usuarioAutenticado, setUsuarioAutenticado] = useState(false);
@@ -15,7 +17,7 @@ const Home = () => {
             router.push('/login');
             return;
         }
-    }, []);
+    }, [router]);
 
     const handlePerfilClick = () => {
         router.push('/perfil');
@@ -28,7 +30,7 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow p-6 bg-gray- 00">
+            <main className="flex-grow p-6 bg-gray-100">
                 <h1 className="text-3xl font-bold mb-4 text-center">Bienvenido a Foodbook</h1>
                 <p className="text-lg text-center mb-8">Descubre, crea y comparte deliciosas recetas.</p>
 
@@ -50,6 +52,9 @@ const Home = () => {
 
                             {/* Mostrar el componente de seguimientos */}
                             <Seguimientos />
+
+                            {/* Mostrar el componente de favoritos */}
+                            <Favoritos />
                         </>
                     ) : (
                         <p className="text-lg text-center">Inicia sesión para acceder a tu perfil y crear recetas.</p>

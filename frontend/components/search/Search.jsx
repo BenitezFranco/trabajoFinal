@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Header from '../header.jsx/Header';
-import Footer from '../footer.jsx/Footer';
+import Header from '../header/Header';
+import Footer from '../footer/Footer';
 
 const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
