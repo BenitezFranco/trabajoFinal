@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Seguimientos from '../seguimiento/Seguimiento'; 
-import Favoritos from '../favoritos/Favoritos'; 
+import Seguimientos from '../seguimiento/Seguimiento';
+import Favoritos from '../favoritos/Favoritos';
+import Seguidores from '../seguidores/Seguidores'; // Nuevo componente para Seguidores
 import Footer from '../footer/Footer';
 import Header from '../header/Header';
 
@@ -33,13 +33,17 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow p-6 bg-gray-100 flex justify-between"> 
+            <main className="flex-grow p-6 bg-gray-100 flex justify-between">
                 <div className="flex flex-col items-start w-1/4 pl-2 mt-8 h-full"> {/* Columna de seguimientos */}
                     <h2 className="text-xl font-semibold mb-2">Mis Seguimientos</h2>
                     {loading ? (
                         <p>Cargando...</p>
                     ) : (
-                        <Seguimientos />
+                        <>
+                            <Seguimientos />
+                            <h2 className="text-xl font-semibold mt-6">Mis Seguidores</h2> {/* Nuevo título para Seguidores */}
+                            <Seguidores /> {/* Nuevo componente de seguidores */}
+                        </>
                     )}
                 </div>
 

@@ -21,7 +21,7 @@ const Seguimientos = () => {
                 console.log('Response:', textResponse);
                 if (response.ok) {
                     const data = JSON.parse(textResponse);
-                    
+
                     setSeguimientos(data);
                 } else {
                     console.error('Error al obtener seguimientos');
@@ -46,22 +46,24 @@ const Seguimientos = () => {
 
     return (
         <div className="mt-4">
-            <h2 className="text-2xl font-bold mb-4">Usuarios que sigues:</h2>
+            <h3 className="text-2xl font-bold mb-4">Usuarios que sigues:</h3>
+            <div className="max-h-[33rem] overflow-y-scroll">
             <ul className="space-y-4">
                 {seguimientos.map((seguimiento) => (
-                    <li key={seguimiento.id_seguimiento} className="flex items-center p-4 bg-gray-200 rounded-lg shadow hover:bg-gray-100 transition duration-200">
-                        <span 
-                            onClick={() => router.push(`/perfil/${seguimiento.id_usuario_seguido}`)} 
+                    <li key={seguimiento.id_seguimiento} className="flex items-center p-4 bg-gray-200 rounded-lg shadow hover:bg-gray-100 transition duration-200 transition-transform transform hover:scale-95">
+                        <span
+                            onClick={() => router.push(`/perfil/${seguimiento.id_usuario_seguido}`)}
                             className="cursor-pointer text-blue-500 hover:underline font-semibold"
                         >
                             {seguimiento.seguido.nombre}
                         </span>
                     </li>
-                ))}
-            </ul>
+                ))}                
+                </ul>
+            </div>
         </div>
     );
-    
+
 };
 
 export default Seguimientos;

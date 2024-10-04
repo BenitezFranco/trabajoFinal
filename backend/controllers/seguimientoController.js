@@ -114,9 +114,30 @@ const obtenerPerfil = async (ctx) => {
 };
 
 
+const obtenerSeguidores = async (ctx) => {
+    const id_usuario_seguido = ctx.state.user.id_usuario; // Usuario autenticado
+
+    try {
+        const seguidores = await Seguimiento.findAll({
+            where: { id_usuario_seguido }, // Buscar quienes siguen al usuario autenticado
+            include: {
+                model: Usuario,
+                as: 'seguidor', // Alias para la relación
+                attributes: ['id_usuario', 'nombre']
+            }
+        });
+
+        ctx.body = seguidores;
+    } catch (error) {
+        ctx.status = 500;
+        ctx.body = { error: 'Error al obtener seguidores.' };
+    }
+};
+
 module.exports = {
     seguirUsuario,
     dejarDeSeguirUsuario,
     obtenerSeguimientos,
-    obtenerPerfil, // Exporta la nueva función
+    obtenerPerfil,
+    obtenerSeguidores // Exporta la nueva función
 };
