@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Seguimientos from '../seguimiento/Seguimiento'; 
@@ -32,8 +33,8 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow p-6 bg-gray-100 flex justify-between"> {/* Sin padding-top aquí */}
-                <div className="flex flex-col items-start w-1/4 pl-2 mt-8"> {/* Columna de seguimientos */}
+            <main className="flex-grow p-6 bg-gray-100 flex justify-between"> 
+                <div className="flex flex-col items-start w-1/4 pl-2 mt-8 h-full"> {/* Columna de seguimientos */}
                     <h2 className="text-xl font-semibold mb-2">Mis Seguimientos</h2>
                     {loading ? (
                         <p>Cargando...</p>
@@ -66,7 +67,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <div className="flex flex-col items-start w-1/4 pr-2 mt-8"> {/* Columna de favoritos */}
+                <div className="flex flex-col items-start w-1/4 pr-2 mt-8 h-full"> {/* Columna de favoritos */}
                     <h2 className="text-xl font-semibold mb-2">Mis Favoritos</h2>
                     {loading ? (
                         <p>Cargando...</p>
