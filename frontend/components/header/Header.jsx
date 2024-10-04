@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons'; // Importa el ícono de buscador
+import { faSearch, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Importa los íconos
 
 const Header = () => {
     const handleLogout = () => {
@@ -15,13 +15,14 @@ const Header = () => {
             </Link>
             <Link href="/search" passHref>
                 <div className="flex items-center space-x-2 cursor-pointer">
-                <p className="text-black">Buscador</p>
+                    <p className="text-black">Buscador</p>
                     <FontAwesomeIcon icon={faSearch} className="text-black" /> {/* Ícono de buscador */}
-                    
                 </div>
             </Link>
-            <button onClick={handleLogout} className="bg-red-800 hover:bg-red-600 p-2 rounded">
-            <p className="text-white">Cerrar Sesión</p>   
+            <button onClick={handleLogout} className="bg-red-600 hover:bg-red-800 p-2 rounded flex items-center">
+                <FontAwesomeIcon icon={faSignOutAlt} className="text-white mr-2" /> {/* Ícono de cerrar sesión */}
+                {/* Puedes eliminar el <p> aquí si no deseas texto */}
+                <p className="text-white hidden">Cerrar Sesión</p> 
             </button>
         </header>
     );
