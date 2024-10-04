@@ -102,7 +102,33 @@ const obtenerReceta = async (ctx) => {
         }
     };
 
+    const obtenerCalificacion = async (ctx) => {
+        const id_receta = ctx.params.id;
+        const id_usuario = ctx.state.user.id_usuario;
+    
+        try {
+            // Buscar si el usuario ya ha calificado esta receta
+            const calificacion = await Calificacion.findOne({
+                where: {
+                    id_receta,
+                    id_usuario
+                },
+                attributes: ['puntuacion']
+            });
+    
+            if (calificacion) {
+                ctx.status = 200;
+                ctx.body = { puntuacion: calificacion.puntuacion };
+            } else {
+                ctx.status = 404;
+                ctx.body = { message: 'No has calificado esta receta aún.' };
+            }
+        } catch (error) {
+            console.error('Error al obtener la calificación:', error);
+            ctx.status = 500;
+            ctx.body = { error: 'Error al obtener la calificación.' };
+        }
+    };
+    
 
-module.exports = { calificarReceta };
-
-module.exports = { crearReceta, obtenerReceta, calificarReceta };
+module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion};

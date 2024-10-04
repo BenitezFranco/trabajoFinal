@@ -46,11 +46,10 @@ const Seguimientos = () => {
 
     return (
         <div className="mt-4">
-            <h3 className="text-lg font-medium mb-2">Usuarios que sigues:</h3>
+            <h2 className="text-2xl font-bold mb-4">Usuarios que sigues:</h2>
             <ul>
                 {seguimientos.map((seguimiento) => (
                     <li key={seguimiento.id_seguimiento} className="flex items-center mb-4">
-                        {console.log("informacion seguimiento", seguimiento)}
                         <span 
                             onClick={() => router.push(`/perfil/${seguimiento.id_usuario_seguido}`)} 
                             className="cursor-pointer text-blue-500 hover:underline"

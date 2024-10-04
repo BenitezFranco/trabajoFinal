@@ -1,11 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Rating = ({ recetaId }) => {
     const [rating, setRating] = useState(0);
     const [submitted, setSubmitted] = useState(false);
-    
+
+    // Recuperar la calificación existente al cargar la página
+    useEffect(() => {
+        const fetchCalificacion = async () => {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/receta/${recetaId}/calificacion`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setRating(data.puntuacion);  // Mostrar la calificación existente
+                    setSubmitted(true);  // Desactivar el botón si ya se ha enviado
+                }
+            } catch (error) {
+                console.error('Error al obtener la calificación:', error);
+            }
+        };
+
+        fetchCalificacion();
+    }, [recetaId]);
+
     const handleRating = (value) => {
         setRating(value);
+        setSubmitted(false);  // Permitir cambiar la calificación si es necesario
     };
 
     const handleSubmit = async () => {
@@ -25,7 +56,6 @@ const Rating = ({ recetaId }) => {
                 },
                 body: JSON.stringify({ puntuacion: rating })
             });
-             // Enviar el id_receta y la puntuación
           
             if (response.ok) {
                 setSubmitted(true);
@@ -48,10 +78,10 @@ const Rating = ({ recetaId }) => {
                     <button
                         key={value}
                         onClick={() => handleRating(value)}
-                        
                         className={`p-2 rounded-full border ${
                             value <= rating ? 'bg-yellow-400' : 'bg-gray-300'
                         }`}
+                        disabled={submitted}  // Deshabilitar si ya se ha enviado
                     >
                         {value}★
                     </button>

@@ -2,7 +2,7 @@
 const Router = require('koa-router');
 const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
-const { crearReceta, obtenerReceta, calificarReceta } = require('../controllers/recetaController');
+const { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion } = require('../controllers/recetaController');
 const { buscarRecetasYUsuarios } = require('../controllers/searchController');
 const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario, obtenerPerfil } = require('../controllers/seguimientoController');
 const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos} = require('../controllers/favoritoController'); // Controlador de favoritos
@@ -37,6 +37,9 @@ router.get('/receta/:id', authenticate, obtenerReceta);
 
 // Calificar receta (protegida)
 router.post('/receta/:id/calificar', authenticate, calificarReceta);
+
+router.get('/receta/:id/calificacion', authenticate, obtenerCalificacion);
+
 
 // Buscador de recetas y usuarios
 router.get('/search', buscarRecetasYUsuarios);

@@ -30,7 +30,7 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow p-6 bg-gray-100">
+            <main className="flex-grow p-6 bg-gray-00">
                 <h1 className="text-3xl font-bold mb-4 text-center">Bienvenido a Foodbook</h1>
                 <p className="text-lg text-center mb-8">Descubre, crea y comparte deliciosas recetas.</p>
 
