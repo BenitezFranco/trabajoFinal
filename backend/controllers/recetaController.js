@@ -129,6 +129,30 @@ const obtenerReceta = async (ctx) => {
             ctx.body = { error: 'Error al obtener la calificación.' };
         }
     };
+
+    const obtenerPromedioCalificacion = async (ctx) => {
+        const id_receta = ctx.params.id;
+    
+        try {
+            // Obtener todas las calificaciones de la receta
+            const calificaciones = await Calificacion.findAll({
+                where: { id_receta },
+                attributes: ['puntuacion']
+            });
+    
+            // Calcular el promedio
+            const totalCalificaciones = calificaciones.length;
+            const suma = calificaciones.reduce((acc, curr) => acc + curr.puntuacion, 0);
+            const promedio = totalCalificaciones > 0 ? (suma / totalCalificaciones).toFixed(1) : 0;
+    
+            ctx.status = 200;
+            ctx.body = { promedio };
+        } catch (error) {
+            console.error('Error al obtener el promedio de calificaciones:', error);
+            ctx.status = 500;
+            ctx.body = { error: 'Error al obtener el promedio de calificaciones.' };
+        }
+    };
     
 
-module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion};
+module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion};

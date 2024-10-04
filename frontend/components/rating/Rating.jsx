@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 const Rating = ({ recetaId }) => {
     const [rating, setRating] = useState(0);
     const [submitted, setSubmitted] = useState(false);
+    const [promedio, setPromedio] = useState(0);
 
     // Recuperar la calificación existente al cargar la página
     useEffect(() => {
@@ -34,6 +35,29 @@ const Rating = ({ recetaId }) => {
         fetchCalificacion();
     }, [recetaId]);
 
+    // Obtener el promedio de calificaciones al cargar la página
+    useEffect(() => {
+        const fetchPromedio = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/receta/${recetaId}/promedio`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setPromedio(data.promedio);  // Guardar el promedio en el estado
+                }
+            } catch (error) {
+                console.error('Error al obtener el promedio de calificaciones:', error);
+            }
+        };
+
+        fetchPromedio();
+    }, [recetaId]);
+
     const handleRating = (value) => {
         setRating(value);
         setSubmitted(false);  // Permitir cambiar la calificación si es necesario
@@ -60,6 +84,14 @@ const Rating = ({ recetaId }) => {
             if (response.ok) {
                 setSubmitted(true);
                 alert('Calificación enviada con éxito');
+                
+                // Actualizar el promedio después de enviar la calificación
+                const fetchPromedio = async () => {
+                    const promedioResponse = await fetch(`http://localhost:3000/receta/${recetaId}/promedio`);
+                    const data = await promedioResponse.json();
+                    setPromedio(data.promedio);  // Actualizar el promedio
+                };
+                fetchPromedio();
             } else {
                 const errorData = await response.json();
                 alert(errorData.error || 'Error al enviar la calificación');
@@ -96,6 +128,11 @@ const Rating = ({ recetaId }) => {
             >
                 {submitted ? 'Calificación enviada' : 'Enviar Calificación'}
             </button>
+
+            {/* Mostrar el promedio de calificaciones */}
+            <div className="mt-4">
+                <h4 className="text-lg font-medium">Promedio de calificaciones: {promedio}★</h4>
+            </div>
         </div>
     );
 };

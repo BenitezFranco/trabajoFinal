@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Rating from '@/components/rating/Rating';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import Comentarios from '@/components/comentario/Comentarios';
 
 const RecipePage = () => {
     const router = useRouter();
@@ -111,6 +112,9 @@ const RecipePage = () => {
 
                     {/* Componente de Calificación */}
                     <Rating recetaId={id} />
+
+                    {/* Sección de comentarios */}
+                    <Comentarios recetaId={id} />
 
                     <button
                         onClick={() => router.back()}

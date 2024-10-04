@@ -1,8 +1,9 @@
 //routes/index.js
+const Comentario = require('../models/Comentario'); // Importa tu modelo de comentarios
 const Router = require('koa-router');
 const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
-const { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion } = require('../controllers/recetaController');
+const { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion } = require('../controllers/recetaController');
 const { buscarRecetasYUsuarios } = require('../controllers/searchController');
 const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario, obtenerPerfil } = require('../controllers/seguimientoController');
 const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos} = require('../controllers/favoritoController'); // Controlador de favoritos
@@ -29,6 +30,46 @@ router.get('/perfil', authenticate, async (ctx) => {
     }
 });
 
+// Obtener comentarios de una receta
+router.get('/receta/:id/comentarios', async (ctx) => {
+    const id_receta = ctx.params.id;
+    try {
+        const comentarios = await Comentario.findAll({
+            where: { id_receta },
+            include: [
+                { model: Usuario, attributes: ['nombre', 'foto_perfil'] }
+            ]
+        });
+        ctx.body = comentarios; // Asegúrate de que esto sea un array
+    } catch (error) {
+        console.error('Error al obtener los comentarios:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'Error al obtener los comentarios' };
+    }
+});
+
+
+router.post('/receta/:id/comentarios', authenticate, async (ctx) => {
+    const id_receta = ctx.params.id;
+    const id_usuario = ctx.state.user.id_usuario;
+    const { texto } = ctx.request.body;
+
+    try {
+        const nuevoComentario = await Comentario.create({
+            texto,
+            id_receta,
+            id_usuario,
+        });
+        ctx.status = 201;
+        ctx.body = nuevoComentario;
+    } catch (error) {
+        console.error('Error al crear el comentario:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'Error al crear el comentario' };
+    }
+});
+
+
 // Crear receta (protegida)
 router.post('/create-recipe', authenticate, crearReceta);
 
@@ -39,7 +80,6 @@ router.get('/receta/:id', authenticate, obtenerReceta);
 router.post('/receta/:id/calificar', authenticate, calificarReceta);
 
 router.get('/receta/:id/calificacion', authenticate, obtenerCalificacion);
-
 
 // Buscador de recetas y usuarios
 router.get('/search', buscarRecetasYUsuarios);
@@ -66,6 +106,8 @@ router.get('/favoritos', authenticate, obtenerFavoritos);
 router.get('/receta/:id/favorito/estado', authenticate, estaEnFavoritos);
 
 router.get('/perfil/:id', authenticate, obtenerPerfil);
+
+router.get('/receta/:id/promedio', obtenerPromedioCalificacion);
 
 module.exports = router;
 
