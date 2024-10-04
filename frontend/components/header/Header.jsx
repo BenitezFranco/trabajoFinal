@@ -15,8 +15,8 @@ const Header = () => {
             </Link>
             <Link href="/search" passHref>
                 <div className="flex items-center space-x-2 cursor-pointer">
-                    <p className="text-black">Buscador</p>
-                    <FontAwesomeIcon icon={faSearch} className="text-black" /> {/* Ícono de buscador */}
+                    <p className="text-white">Buscador</p>
+                    <FontAwesomeIcon icon={faSearch} className="text-white" /> {/* Ícono de buscador */}
                 </div>
             </Link>
             <button onClick={handleLogout} className="bg-red-600 hover:bg-red-800 p-2 rounded flex items-center">

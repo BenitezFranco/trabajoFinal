@@ -46,13 +46,13 @@ const Favoritos = () => {
         <div className="mt-6">
             <h2 className="text-2xl font-bold mb-4">Tus Recetas Favoritas</h2>
             <ul className="space-y-4">
-                {favoritos.map((favorito) => (                   
-                    <li key={favorito.id_receta} className="p-4 bg-white rounded-lg shadow-md">
+                {favoritos.map((favorito) => (
+                    <li key={favorito.id_receta} className="p-4 bg-white rounded-lg shadow-md transition-transform transform hover:scale-105">
                         {console.log("informacion", favorito)}
-                        <h3 className="text-xl font-semibold">{favorito.Recetum.titulo}</h3>
+                        <h3 className="text-xl font-semibold mb-2">{favorito.Recetum.titulo}</h3>
                         <button 
                             onClick={() => router.push(`/recipe/${favorito.id_receta}`)}
-                            className="mt-2 bg-blue-500 text-white font-bold py-1 px-2 rounded hover:bg-blue-600"
+                            className="bg-blue-500 text-white font-bold py-1 px-2 rounded hover:bg-blue-600 transition duration-200"
                         >
                             Ver Receta
                         </button>
@@ -61,6 +61,7 @@ const Favoritos = () => {
             </ul>
         </div>
     );
+    
 };
 
 export default Favoritos;
