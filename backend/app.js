@@ -2,9 +2,15 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
 
-const indexRoutes = require('./routes/index'); // Importa las rutas (incluye auth y perfil)
+const indexRoutes = require('./routes/index');
+/** 
+const syncDatabase = require('./syncDB'); // Importa la función de sincronización
 
+// Sincroniza la base de datos al iniciar la aplicación
+syncDatabase();
+*/
 const app = new Koa();
+
 
 // Configura CORS
 app.use(cors());

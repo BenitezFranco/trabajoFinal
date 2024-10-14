@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 const Usuario = require('./Usuario');
-const Categoria = require('./Categoria');
 
 const Receta = sequelize.define('Receta', {
     id_receta: {
@@ -38,6 +37,5 @@ const Receta = sequelize.define('Receta', {
 });
 
 Receta.belongsTo(Usuario, { foreignKey: 'id_usuario' });
-Receta.belongsTo(Categoria, { foreignKey: 'id_categoria' });
 
 module.exports = Receta;
