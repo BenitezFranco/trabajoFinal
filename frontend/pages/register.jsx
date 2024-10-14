@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router'; // Importar useRouter
+import { validarCorreoElectronico } from '@/utils/funcion';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ const Register = () => {
         contrasena: '',
     });
     const router = useRouter(); // Usar el hook useRouter para redirigir
-
+    const [errorCorreo, setErrorCorreo] = useState('');
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -16,6 +17,22 @@ const Register = () => {
             [name]: value,
         }));
     };
+
+    const handleChangeEmail = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+        if (name === 'correo_electronico') {
+            if (!validarCorreoElectronico(value)) {
+                setErrorCorreo('Por favor ingresa un correo electrónico válido.');
+            } else {
+                setErrorCorreo('');
+            }
+        }
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,9 +79,12 @@ const Register = () => {
                             name="correo_electronico" // Nombre del campo para que el estado se actualice correctamente
                             className="border border-gray-300 p-2 w-full rounded-md text-gray-900 focus:ring focus:ring-blue-200"
                             value={formData.correo_electronico}
-                            onChange={handleChange}
+                            onChange={handleChangeEmail}
                             required
                         />
+                        {errorCorreo && (
+                            <p className="text-red-500 text-sm mt-1">{errorCorreo}</p>
+                        )}
                     </div>
                     <div>
                         <label className="block text-gray-700 font-medium mb-2" htmlFor="contrasena">Contraseña</label>

@@ -25,3 +25,7 @@ export const uploadImage = async (file) => {
         return null; // Devolvemos null en caso de error para manejarlo adecuadamente
     }
 };
+export const validarCorreoElectronico = (correo) => {
+    const regexCorreo = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+    return regexCorreo.test(correo);
+};
