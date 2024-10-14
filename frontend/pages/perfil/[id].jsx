@@ -28,9 +28,12 @@ const PerfilUsuario = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'Cache-Control': 'no-cache', // Evitar caché
+                        'Pragma': 'no-cache', // Para compatibilidad con navegadores antiguos
                     },
                 });
+                
 
                 const result = await response.json();
 
