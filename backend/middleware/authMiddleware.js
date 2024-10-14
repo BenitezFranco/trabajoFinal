@@ -5,7 +5,6 @@ const JWT_SECRET = 'tu_clave_secreta';
 const authenticate = async (ctx, next) => {
     const authHeader = ctx.headers.authorization;
     if (!authHeader) {
-        console.log('Decoded:', authHeader);
         ctx.status = 401;
         ctx.body = { error: 'No token provided' };
         return;
@@ -15,7 +14,6 @@ const authenticate = async (ctx, next) => {
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         ctx.state.user = decoded; // Coloca el ID del usuario en el estado
-        console.log('Decoded:', decoded);
         await next();
     } catch (error) {
         ctx.status = 403;

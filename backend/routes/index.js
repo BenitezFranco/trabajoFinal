@@ -8,6 +8,7 @@ const { buscarRecetasYUsuarios } = require('../controllers/searchController');
 const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario, obtenerPerfil, obtenerSeguidores } = require('../controllers/seguimientoController');
 const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos } = require('../controllers/favoritoController'); // Controlador de favoritos
 const Usuario = require('../models/Usuario');
+const {subirImagen} = require('../controllers/uploadController');
 
 const router = new Router();
 
@@ -112,6 +113,8 @@ router.get('/receta/:id/promedio', obtenerPromedioCalificacion);
 // Ruta para obtener la lista de seguidores (protegida)
 router.get('/seguidores', authenticate, obtenerSeguidores);
 
+// Ruta para subir imagen 
+router.post('/upload',subirImagen);
 
 module.exports = router;
 

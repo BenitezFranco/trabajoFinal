@@ -16,7 +16,8 @@ const Receta = sequelize.define('Receta', {
         type: DataTypes.TEXT,
     },
     instrucciones: {
-        type: DataTypes.TEXT,
+        type: DataTypes.JSON,
+        allowNull: false,
     },
     ingredientes: {
         type: DataTypes.TEXT,

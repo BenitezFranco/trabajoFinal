@@ -75,9 +75,6 @@ const obtenerReceta = async (ctx) => {
         const id_receta = ctx.params.id; // Obtener el id_receta desde los parámetros de la ruta
         const id_usuario = ctx.state.user.id_usuario; // Obtener el id del usuario autenticado
 
-        console.log('ctx: ', ctx);
-        console.log('id_usuario: ', id_usuario);
-
         try {
             // Validar que la puntuación esté dentro del rango permitido
             if (puntuacion < 1 || puntuacion > 5) {

@@ -88,7 +88,13 @@ const RecipePage = () => {
 
     if (loading) return <p className="text-center text-lg">Cargando receta...</p>;
     if (!receta) return <p className="text-center text-lg text-red-500">Receta no encontrada</p>;
-
+    console.log("Receta: ",receta);
+    let instrucciones = [];
+try {
+    instrucciones = JSON.parse(receta.instrucciones);
+} catch (error) {
+    console.error('Error al parsear instrucciones:', error);
+}
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -96,8 +102,22 @@ const RecipePage = () => {
                 <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6">
                     <h1 className="text-3xl font-bold text-center mb-4">{receta.titulo}</h1>
                     <p className="text-lg font-medium mb-2"><strong>Descripción:</strong> {receta.descripcion}</p>
-                    <p className="text-lg font-medium mb-2"><strong>Instrucciones:</strong> {receta.instrucciones}</p>
                     <p className="text-lg font-medium mb-2"><strong>Ingredientes:</strong> {receta.ingredientes}</p>
+                    <p className="text-lg font-medium mb-2"><strong>Instrucciones:</strong></p>
+                    <ol className="list-disc list-inside mb-4">
+                    {Array.isArray(instrucciones) && instrucciones.length > 0 ? (
+                        instrucciones.map((instruccion, index) => (
+                            <li key={index} className="mb-2">
+                                {instruccion.paso}
+                                {instruccion.imagen && (
+                                    <img src={instruccion.imagen} alt={`Paso ${index + 1}`} className="mt-2" />
+                                )}
+                            </li>
+                        ))
+                    ) : (
+                        <li className="mb-2">No hay instrucciones disponibles.</li>
+                    )}
+                </ol>
                     <p className="text-lg font-medium mb-2"><strong>Dificultad:</strong> {receta.dificultad}</p>
                     <p className="text-lg font-medium mb-2"><strong>Tiempo de Preparación:</strong> {receta.tiempo_preparacion} minutos</p>
                     <p className="text-lg font-medium mb-4"><strong>Autor:</strong> {receta.nombre_usuario}</p>

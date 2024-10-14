@@ -7,8 +7,6 @@ const buscarRecetasYUsuarios = async (ctx) => {
     const { filter, term } = ctx.query;
 
     let results = [];
-    console.log("filter: ",filter);
-    console.log("term: ",term);
     try {
         if (filter === 'titulo') {
             results = await Receta.findAll({ where: { titulo: { [Op.like]: `%${term}%` } } });

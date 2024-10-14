@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import jwt from 'jsonwebtoken';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../components/header/Header';
+import Footer from '../components/footer/Footer';
+import PasoInstruccion from '@/components/receta/pasoInstruccion/PasoInstruccion';
+import { uploadImage } from '@/utils/funcion';
 
 const CreateRecipe = () => {
     const [formData, setFormData] = useState({
         titulo: '',
         descripcion: '',
-        instrucciones: '',
         ingredientes: '',
         dificultad: 'Fácil',
         tiempo_preparacion: '',
@@ -17,6 +18,7 @@ const CreateRecipe = () => {
     const router = useRouter();
     const [id_usuario, setIdUsuario] = useState(null);
     const [successMessage, setSuccessMessage] = useState(''); // Estado para el mensaje de éxito
+    const [pasos, setPasos] = useState([{ paso: '', imagen: null }]); // Estado para los pasos
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -37,6 +39,27 @@ const CreateRecipe = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const handlePasoChange = (index, value) => {
+        const newPasos = [...pasos];
+        newPasos[index].paso = value;
+        setPasos(newPasos);
+    };
+
+    const handleImagenChange = (index, file) => {
+        const newPasos = [...pasos];
+        newPasos[index].imagen = file;
+        setPasos(newPasos);
+    };
+
+    const handleAddPaso = () => {
+        setPasos([...pasos, { paso: '', imagen: null }]);
+    };
+    const handleRemovePaso = () => {
+        if (pasos.length > 1) {
+            setPasos(pasos.slice(0, -1));
+        }
+    };
+
     const handleCheckboxChange = (e, categoriaIndex) => {
         const { checked } = e.target;
         if (checked) {
@@ -54,9 +77,29 @@ const CreateRecipe = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Aquí debes subir cada imagen y obtener su URL antes de armar el JSON final.
+        // Supongamos que tienes una función `uploadImage` que te devuelve la URL de la imagen subida.
+        const instrucciones = await Promise.all(
+            pasos.map(async (paso) => {
+                let imageUrl = null;
+
+                if (paso.imagen) {
+                    // Lógica para subir la imagen y obtener la URL.
+                    // Ejemplo:
+                    imageUrl = await uploadImage(paso.imagen);
+                    console.log('url:',imageUrl);
+                }
+
+                return {
+                    paso: paso.paso,
+                    imagen: imageUrl,
+                };
+            })
+        );
 
         const recetaData = {
             ...formData,
+            instrucciones,
             fecha_publicacion: new Date().toISOString().split('T')[0],
             id_usuario: id_usuario,
         };
@@ -126,16 +169,31 @@ const CreateRecipe = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Instrucciones:
-                        </label>
-                        <textarea
-                            name="instrucciones"
-                            value={formData.instrucciones}
-                            onChange={handleChange}
-                            required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        ></textarea>
+                        <h2 className="block text-gray-700 text-sm font-bold mb-2">Instrucciones:</h2>
+                        {pasos.map((paso, index) => (
+                            <PasoInstruccion
+                                key={index}
+                                index={index}
+                                paso={paso}
+                                handlePasoChange={handlePasoChange}
+                                handleImagenChange={handleImagenChange}
+                            />
+                        ))}
+                        <button
+                            type="button"
+                            onClick={handleAddPaso}
+                            className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                            Agregar Paso
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleRemovePaso}
+                            className="mt-2 ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            disabled={pasos.length <= 1} // Deshabilitado si solo hay un paso
+                        >
+                            Borrar Último Paso
+                        </button>
                     </div>
 
                     <div className="mb-4">
@@ -246,6 +304,7 @@ const CreateRecipe = () => {
                     <button
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth'})}
                     >
                         Crear Receta
                     </button>

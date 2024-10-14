@@ -89,11 +89,8 @@ const dejarDeSeguirUsuario = async (ctx) => {
 const obtenerPerfil = async (ctx) => {
     try {
         const id_usuario = ctx.params.id;
-        console.log('cosas', ctx.params);
         // Obtener el perfil del usuario
         const usuario = await Usuario.findByPk(id_usuario);
-        
-        console.log('cosas', usuario);
         if (!usuario) {
             ctx.status = 404;
             ctx.body = { error: 'Usuario no encontrado' };
@@ -101,7 +98,7 @@ const obtenerPerfil = async (ctx) => {
         }
 
         // Log para verificar la respuesta antes de enviar
-        console.log('Perfil encontrado:', usuario);
+        //console.log('Perfil encontrado:', usuario);
 
         // Enviar la respuesta con el perfil del usuario
         ctx.status = 200;

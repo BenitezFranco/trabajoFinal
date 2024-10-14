@@ -1,28 +1,36 @@
 const Koa = require('koa');
-const bodyParser = require('koa-bodyparser');
+const { koaBody } = require('koa-body');
 const cors = require('@koa/cors');
-
+const serve = require('koa-static');
+const path = require('path');
+const mount = require('koa-mount');
 const indexRoutes = require('./routes/index');
-/** 
-const syncDatabase = require('./syncDB'); // Importa la función de sincronización
 
-// Sincroniza la base de datos al iniciar la aplicación
-syncDatabase();
-*/
+
+// Importa y sincroniza la base de datos
+// const syncDatabase = require('./syncDB');
+// syncDatabase();
+
+
 const app = new Koa();
 
-
-// Configura CORS
 app.use(cors());
 
-// Configura el middleware para parsear el cuerpo de las solicitudes
-app.use(bodyParser());
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+    uploadDir: path.join(__dirname, 'uploads'),
+    keepExtensions: true,
+  }
+}));
+
+// Montar una subaplicación para servir archivos estáticos desde 'uploads'
+app.use(mount('/uploads', serve(path.join(__dirname, 'uploads'))));
 
 // Usa las rutas en la aplicación
 app.use(indexRoutes.routes());
 app.use(indexRoutes.allowedMethods());
 
-// Inicia el servidor
 app.listen(3000, () => {
-    console.log('Servidor escuchando en el puerto 3000');
+  console.log('Servidor escuchando en el puerto 3000');
 });
