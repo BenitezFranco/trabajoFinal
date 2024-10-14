@@ -9,8 +9,9 @@ const Search = () => {
     const [results, setResults] = useState([]);
     const [searchSubmitted, setSearchSubmitted] = useState(false);
     const [followedUsers, setFollowedUsers] = useState(new Set()); // Para rastrear usuarios seguidos
+    const [currentUserId, setCurrentUserId] = useState(null); // Almacena el ID del usuario autenticado
 
-    // Cargar usuarios seguidos al montar el componente
+    // Cargar usuarios seguidos y obtener el ID del usuario autenticado desde localStorage
     useEffect(() => {
         const fetchFollowedUsers = async () => {
             try {
@@ -27,7 +28,23 @@ const Search = () => {
             }
         };
 
+        const getUserIdFromToken = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1])); // Extraer el payload del JWT
+                    return payload.id_usuario; // Aquí asumo que el token tiene un campo 'id_usuario'
+                } catch (error) {
+                    console.error('Error al extraer el ID del token:', error);
+                    return null;
+                }
+            }
+            return null;
+        };
+
         fetchFollowedUsers();
+        const userId = getUserIdFromToken(); // Obtener el ID del usuario autenticado desde el token
+        setCurrentUserId(userId);
     }, []);
 
     const handleSearch = async (e) => {
@@ -95,8 +112,6 @@ const Search = () => {
         <div className="flex flex-col min-h-screen">
             <Header />
             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-00">
-
-
                 <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
                     <h1 className="text-2xl font-bold text-center mb-6">Buscar Recetas o Usuarios</h1>
                     <form onSubmit={handleSearch} className="mb-4">
@@ -144,19 +159,21 @@ const Search = () => {
                                                 {item.nombre}
                                             </span>
                                             {/* Botón de seguir/dejar de seguir */}
-                                            <button
-                                                onClick={() =>
-                                                    followedUsers.has(item.id_usuario)
-                                                        ? handleUnfollow(item.id_usuario)
-                                                        : handleFollow(item.id_usuario)
-                                                }
-                                                className={`py-1 px-3 rounded ${followedUsers.has(item.id_usuario)
+                                            {item.id_usuario !== currentUserId && (
+                                                <button
+                                                    onClick={() =>
+                                                        followedUsers.has(item.id_usuario)
+                                                            ? handleUnfollow(item.id_usuario)
+                                                            : handleFollow(item.id_usuario)
+                                                    }
+                                                    className={`py-1 px-3 rounded ${followedUsers.has(item.id_usuario)
                                                         ? 'bg-red-500 hover:bg-red-600'
                                                         : 'bg-green-500 hover:bg-green-600'
                                                     } text-white font-bold`}
-                                            >
-                                                {followedUsers.has(item.id_usuario) ? 'Dejar de seguir' : 'Seguir'}
-                                            </button>
+                                                >
+                                                    {followedUsers.has(item.id_usuario) ? 'Dejar de seguir' : 'Seguir'}
+                                                </button>
+                                            )}
                                         </div>
                                     ) : (
                                         <Link href={`/recipe/${item.id_receta}`} className="text-lg font-medium text-blue-600 hover:underline">
@@ -172,7 +189,6 @@ const Search = () => {
                         <p className="text-gray-500 text-center">No se encontraron resultados</p>
                     ) : null}
                 </div>
-
             </div>
             <Footer />
         </div>
