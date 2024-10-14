@@ -20,6 +20,7 @@ const CreateRecipe = () => {
     const [successMessage, setSuccessMessage] = useState(''); // Estado para el mensaje de éxito
     const [pasos, setPasos] = useState([{ paso: '', imagen: null }]); // Estado para los pasos
     const [ingredientes, setIngredientes] = useState([{ nombre: '' }]);
+    const [imagenReceta, setImagenReceta] = useState(null); // Estado para la imagen
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -78,6 +79,11 @@ const CreateRecipe = () => {
         nuevosIngredientes[index].nombre = value;
         setIngredientes(nuevosIngredientes);
     };
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImagenReceta(file);
+    };
+
 
     const handleCheckboxChange = (e, categoriaIndex) => {
         const { checked } = e.target;
@@ -96,8 +102,16 @@ const CreateRecipe = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Aquí debes subir cada imagen y obtener su URL antes de armar el JSON final.
-        // Supongamos que tienes una función `uploadImage` que te devuelve la URL de la imagen subida.
+        let fotoRecetaUrl = '';
+        if (imagenReceta) {
+            fotoRecetaUrl = await uploadImage(imagenReceta);
+            if (!fotoRecetaUrl) {
+                alert('Error al subir la imagen. Inténtalo de nuevo.');
+                return;
+            }
+            console.log("imagen: ",fotoRecetaUrl);
+        }
+
         const instrucciones = await Promise.all(
             pasos.map(async (paso) => {
                 let imageUrl = null;
@@ -118,6 +132,7 @@ const CreateRecipe = () => {
 
         const recetaData = {
             ...formData,
+            foto_receta: fotoRecetaUrl,
             instrucciones,
             ingredientes,
             fecha_publicacion: new Date().toISOString().split('T')[0],
@@ -175,6 +190,15 @@ const CreateRecipe = () => {
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
+                    <div className="mb-4">
+                    <label htmlFor="foto_receta">Foto de la Receta:</label>
+            <input
+                type="file"
+                name="foto_receta"
+                accept="image/*"
+                onChange={handleImageChange}
+            />
+            </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Descripción:

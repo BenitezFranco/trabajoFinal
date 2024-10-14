@@ -103,6 +103,13 @@ console.log('ingredientes: ',ingredientes);
             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
                 <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6">
                     <h1 className="text-3xl font-bold text-center mb-4">{receta.titulo}</h1>
+                    {receta.foto_receta && (
+        <img
+            src={receta.foto_receta}
+            alt={`Imagen de ${receta.titulo}`}
+            className="w-full h-auto rounded-lg mb-4"
+        />
+    )}
                     <p className="text-lg font-medium mb-2"><strong>Descripción:</strong> {receta.descripcion}</p>
                     
                     <p className="text-lg font-medium mb-2"><strong>Ingredientes:</strong></p>

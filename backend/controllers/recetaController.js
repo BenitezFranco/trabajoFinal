@@ -5,7 +5,7 @@ const Calificacion = require('../models/Calificacion'); // Modelo de calificaciÃ
 
 // Crear una nueva receta
 const crearReceta = async (ctx) => {
-    const { titulo, descripcion, instrucciones, ingredientes, dificultad, tiempo_preparacion, categorias } = ctx.request.body;
+    const { titulo, descripcion, instrucciones, ingredientes, dificultad, tiempo_preparacion, categorias,foto_receta } = ctx.request.body;
     const id_usuario = ctx.state.user.id_usuario;
 
     const nuevaReceta = await Receta.create({
@@ -17,6 +17,7 @@ const crearReceta = async (ctx) => {
         tiempo_preparacion,
         fecha_publicacion: new Date(), 
         id_usuario,
+        foto_receta
     });
 
     for (const id_categoria of categorias) {
