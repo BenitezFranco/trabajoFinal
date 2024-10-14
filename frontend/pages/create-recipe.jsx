@@ -19,6 +19,7 @@ const CreateRecipe = () => {
     const [id_usuario, setIdUsuario] = useState(null);
     const [successMessage, setSuccessMessage] = useState(''); // Estado para el mensaje de éxito
     const [pasos, setPasos] = useState([{ paso: '', imagen: null }]); // Estado para los pasos
+    const [ingredientes, setIngredientes] = useState([{ nombre: '' }]);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -58,6 +59,24 @@ const CreateRecipe = () => {
         if (pasos.length > 1) {
             setPasos(pasos.slice(0, -1));
         }
+    };
+    const handleAgregarIngrediente = () => {
+        if (ingredientes.length < 10) { // Limitar a 10 ingredientes (o el número que desees)
+            setIngredientes([...ingredientes, { nombre: '' }]);
+        }
+    };
+
+    const handleQuitarIngrediente = (index) => {
+        if (ingredientes.length > 1) {
+            const nuevosIngredientes = ingredientes.filter((_, i) => i !== index);
+            setIngredientes(nuevosIngredientes);
+        }
+    };
+
+    const handleChangeIngrediente = (index, value) => {
+        const nuevosIngredientes = [...ingredientes];
+        nuevosIngredientes[index].nombre = value;
+        setIngredientes(nuevosIngredientes);
     };
 
     const handleCheckboxChange = (e, categoriaIndex) => {
@@ -100,6 +119,7 @@ const CreateRecipe = () => {
         const recetaData = {
             ...formData,
             instrucciones,
+            ingredientes,
             fecha_publicacion: new Date().toISOString().split('T')[0],
             id_usuario: id_usuario,
         };
@@ -197,17 +217,36 @@ const CreateRecipe = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Ingredientes:
-                        </label>
-                        <textarea
-                            name="ingredientes"
-                            value={formData.ingredientes}
-                            onChange={handleChange}
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Ingredientes:
+                </label>
+                {ingredientes.map((ingrediente, index) => (
+                    <div key={index} className="flex mb-2">
+                        <input
+                            type="text"
+                            placeholder="Ingrediente"
+                            value={ingrediente.nombre}
+                            onChange={(e) => handleChangeIngrediente(index, e.target.value)}
+                            className="border mb-2 p-2 flex-1"
                             required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        ></textarea>
+                        />
+                        <button
+                            type="button"
+                            onClick={() => handleQuitarIngrediente(index)}
+                            className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                            Quitar
+                        </button>
                     </div>
+                ))}
+                <button
+                    type="button"
+                    onClick={handleAgregarIngrediente}
+                    className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                >
+                    Agregar Ingrediente
+                </button>
+            </div>
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">

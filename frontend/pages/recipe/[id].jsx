@@ -95,6 +95,8 @@ try {
 } catch (error) {
     console.error('Error al parsear instrucciones:', error);
 }
+const ingredientes = JSON.parse(receta.ingredientes);
+console.log('ingredientes: ',ingredientes);
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -102,8 +104,15 @@ try {
                 <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6">
                     <h1 className="text-3xl font-bold text-center mb-4">{receta.titulo}</h1>
                     <p className="text-lg font-medium mb-2"><strong>Descripción:</strong> {receta.descripcion}</p>
-                    <p className="text-lg font-medium mb-2"><strong>Ingredientes:</strong> {receta.ingredientes}</p>
-                    <p className="text-lg font-medium mb-2"><strong>Instrucciones:</strong></p>
+                    
+                    <p className="text-lg font-medium mb-2"><strong>Ingredientes:</strong></p>
+                <ul className="list-disc list-inside mb-4">
+                    {ingredientes.map((ingrediente, index) => (
+                        <li key={index} className="mb-2">{ingrediente.nombre}</li>
+                    ))}
+                </ul>
+                    
+                    <p className="text-lg font-medium mb-2"><strong>Instrucciones:</strong></p>                   
                     <ol className="list-disc list-inside mb-4">
                     {Array.isArray(instrucciones) && instrucciones.length > 0 ? (
                         instrucciones.map((instruccion, index) => (

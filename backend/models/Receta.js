@@ -20,7 +20,8 @@ const Receta = sequelize.define('Receta', {
         allowNull: false,
     },
     ingredientes: {
-        type: DataTypes.TEXT,
+        type: DataTypes.JSON,
+        allowNull: false,
     },
     dificultad: {
         type: DataTypes.ENUM('Fácil', 'Media', 'Difícil'),
