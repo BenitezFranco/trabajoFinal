@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
+import FollowButton from '../followButton/FollowButton';
 
 const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -148,43 +149,36 @@ const Search = () => {
                     {/* Mostrar los resultados */}
                     {searchSubmitted && results.length > 0 ? (
                         <ul className="space-y-4">
-                            {results.map((item) => (
-                                <li
-                                    key={item.id_usuario || item.id_receta}
-                                    className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-md hover:bg-gray-100"
-                                >
-                                    {item.nombre ? (
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-lg font-medium">
-                                                {item.nombre}
-                                            </span>
-                                            {/* Botón de seguir/dejar de seguir */}
-                                            {item.id_usuario !== currentUserId && (
-                                                <button
-                                                    onClick={() =>
-                                                        followedUsers.has(item.id_usuario)
-                                                            ? handleUnfollow(item.id_usuario)
-                                                            : handleFollow(item.id_usuario)
-                                                    }
-                                                    className={`py-1 px-3 rounded ${followedUsers.has(item.id_usuario)
-                                                        ? 'bg-red-500 hover:bg-red-600'
-                                                        : 'bg-green-500 hover:bg-green-600'
-                                                    } text-white font-bold`}
-                                                >
-                                                    {followedUsers.has(item.id_usuario) ? 'Dejar de seguir' : 'Seguir'}
-                                                </button>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <Link href={`/recipe/${item.id_receta}`} className="text-lg font-medium text-blue-600 hover:underline">
-                                            Receta: {item.titulo}
-                                            <p className="text-sm text-gray-600">Descripción: {item.descripcion}</p>
-                                            <p className="text-sm text-gray-500">Dificultad: {item.dificultad}</p>
-                                        </Link>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
+                        {results.map((item) => (
+                            <li
+                                key={item.id_usuario || item.id_receta}
+                                className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-md hover:bg-gray-100"
+                            >
+                                {item.nombre ? (
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-lg font-medium">
+                                            {item.nombre}
+                                        </span>
+                                        {/* Componente FollowButton */}
+                                        {item.id_usuario !== currentUserId && ( // No mostrar el botón si es el propio usuario
+                                            <FollowButton
+                                                id_usuario={item.id_usuario}
+                                                isFollowed={followedUsers.has(item.id_usuario)}
+                                                onFollow={handleFollow}
+                                                onUnfollow={handleUnfollow}
+                                            />
+                                        )}
+                                    </div>
+                                ) : (
+                                    <Link href={`/recipe/${item.id_receta}`} className="text-lg font-medium text-blue-600 hover:underline">
+                                        Receta: {item.titulo}
+                                        <p className="text-sm text-gray-600">Descripción: {item.descripcion}</p>
+                                        <p className="text-sm text-gray-500">Dificultad: {item.dificultad}</p>
+                                    </Link>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
                     ) : searchSubmitted && results.length === 0 ? (
                         <p className="text-gray-500 text-center">No se encontraron resultados</p>
                     ) : null}
