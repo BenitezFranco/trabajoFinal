@@ -1,57 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
-import FollowButton from '../followButton/FollowButton';
-import CardReceta from '../cards/receta/CardReceta';
+import SearchGrid from './SearchGrid';
 
 const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filter, setFilter] = useState('titulo');
     const [results, setResults] = useState([]);
     const [searchSubmitted, setSearchSubmitted] = useState(false);
-    const [followedUsers, setFollowedUsers] = useState(new Set()); // Para rastrear usuarios seguidos
-    const [currentUserId, setCurrentUserId] = useState(null); // Almacena el ID del usuario autenticado
-
-    // Cargar usuarios seguidos y obtener el ID del usuario autenticado desde localStorage
-    useEffect(() => {
-        const fetchFollowedUsers = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/seguimientos', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                const data = await response.json();
-                const followedSet = new Set(data.map((user) => user.id_usuario_seguido));
-                setFollowedUsers(followedSet); // Cargar los usuarios seguidos en el estado
-            } catch (error) {
-                console.error('Error al obtener seguimientos:', error);
-            }
-        };
-
-        const getUserIdFromToken = () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1])); // Extraer el payload del JWT
-                    return payload.id_usuario; // Aquí asumo que el token tiene un campo 'id_usuario'
-                } catch (error) {
-                    console.error('Error al extraer el ID del token:', error);
-                    return null;
-                }
-            }
-            return null;
-        };
-
-        fetchFollowedUsers();
-        const userId = getUserIdFromToken(); // Obtener el ID del usuario autenticado desde el token
-        setCurrentUserId(userId);
-    }, []);
+    
+    // Añadimos este estado para controlar el tipo de búsqueda
+    const [searchType, setSearchType] = useState('recetas'); // 'recetas' o 'usuarios'
 
     const handleSearch = async (e) => {
         e.preventDefault();
         setSearchSubmitted(true);
+        setResults([]); // Reiniciamos los resultados antes de la búsqueda
 
         try {
             const response = await fetch(`http://localhost:3000/search?filter=${filter}&term=${searchTerm}`);
@@ -62,52 +27,21 @@ const Search = () => {
         }
     };
 
-    // Manejar el seguimiento de un usuario
-    const handleFollow = async (id_usuario) => {
-        try {
-            const response = await fetch(`http://localhost:3000/follow`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify({ id_usuario_seguido: id_usuario }),
-            });
-
-            if (response.ok) {
-                setFollowedUsers((prev) => new Set([...prev, id_usuario])); // Añadir el usuario a la lista de seguidos
-            } else {
-                console.error('Error al seguir usuario:', await response.text());
-            }
-        } catch (error) {
-            console.error('Error al seguir usuario:', error);
+    const handleFilterChange = (e) => {
+        const newFilter = e.target.value;
+        setFilter(newFilter);
+        
+        // Aquí determinamos el tipo de búsqueda y reiniciamos el estado
+        if (newFilter === "usuario") {
+            setSearchType('usuarios');
+        } else {
+            setSearchType('recetas');
         }
-    };
-
-    // Manejar el dejar de seguir a un usuario
-    const handleUnfollow = async (id_usuario) => {
-        try {
-            const response = await fetch(`http://localhost:3000/unfollow`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify({ id_usuario_seguido: id_usuario }),
-            });
-
-            if (response.ok) {
-                setFollowedUsers((prev) => {
-                    const newSet = new Set(prev);
-                    newSet.delete(id_usuario);
-                    return newSet;
-                }); // Eliminar el usuario de la lista de seguidos
-            } else {
-                console.error('Error al dejar de seguir usuario:', await response.text());
-            }
-        } catch (error) {
-            console.error('Error al dejar de seguir usuario:', error);
-        }
+        
+        // Reiniciamos los resultados y el estado de búsqueda al cambiar el filtro
+        setSearchSubmitted(false);
+        setResults([]); // Reiniciar resultados
+        setSearchTerm(''); // Reiniciar término de búsqueda
     };
 
     return (
@@ -128,7 +62,7 @@ const Search = () => {
 
                             <select
                                 value={filter}
-                                onChange={(e) => setFilter(e.target.value)}
+                                onChange={handleFilterChange} // Cambiamos a la nueva función
                                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="titulo">Por Título</option>
@@ -146,43 +80,15 @@ const Search = () => {
                             </button>
                         </div>
                     </form>
-
-                    {/* Mostrar los resultados */}
-                    {searchSubmitted && results.length > 0 ? (
-                        <ul className="space-y-4">
-                            {results.map((item) => (
-                                <li
-                                    key={item.id_usuario || item.id_receta}
-                                    className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-md hover:bg-gray-100"
-                                >
-                                    {item.nombre ? (
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-lg font-medium">
-                                                {item.nombre}
-                                            </span>
-                                            {/* Componente FollowButton */}
-                                            {item.id_usuario !== currentUserId && ( // No mostrar el botón si es el propio usuario
-                                                <FollowButton
-                                                    id_usuario={item.id_usuario}
-                                                    isFollowed={followedUsers.has(item.id_usuario)}
-                                                    onFollow={handleFollow}
-                                                    onUnfollow={handleUnfollow}
-                                                />
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-full max-w-xs">
-                                            <CardReceta item={item} />
-                                        </div>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : searchSubmitted && results.length === 0 ? (
-                        <p className="text-gray-500 text-center">No se encontraron resultados</p>
-                    ) : null}
                 </div>
-            </div>
+                
+                {/* Mostrar los resultados */}
+                {searchSubmitted && results.length > 0 ? (
+                    <SearchGrid results={results} />
+                ) : searchSubmitted && results.length === 0 ? (
+                    <p className="text-gray-500 text-center">No se encontraron resultados</p>
+                ) : null}
+            </div>   
             <Footer />
         </div>
     );

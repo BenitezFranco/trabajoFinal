@@ -38,3 +38,4 @@ next-env.d.ts
 # uploads
 uploads/*
 !uploads/.gitkeep
+!uploads/default-image.png
