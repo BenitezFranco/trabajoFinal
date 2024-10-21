@@ -50,8 +50,11 @@ const buscarRecetasYUsuarios = async (ctx) => {
                     }))
                 };
             }
-            if (dificultad) {
-                recetaFilter.dificultad = { [Op.in]: `%${dificultad}%` };
+            if (dificultades.length > 0) {
+                // Filtrar por dificultades, ya sea una lista o un solo valor
+                recetaFilter.dificultad = {
+                    [Op.in]: dificultades
+                };
             }
 
             // Buscar recetas filtrando por los criterios definidos
