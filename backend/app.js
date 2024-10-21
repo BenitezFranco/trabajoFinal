@@ -5,11 +5,12 @@ const serve = require('koa-static');
 const path = require('path');
 const mount = require('koa-mount');
 const indexRoutes = require('./routes/index');
+const initModels = require('./models/initModels');
 
 
 // Importa y sincroniza la base de datos
-const syncDatabase = require('./syncDB');
-syncDatabase();
+//const syncDatabase = require('./syncDB');
+//syncDatabase();
 
 
 const app = new Koa();
@@ -23,7 +24,7 @@ app.use(koaBody({
     keepExtensions: true,
   }
 }));
-
+initModels();
 // Montar una subaplicación para servir archivos estáticos desde 'uploads'
 app.use(mount('/uploads', serve(path.join(__dirname, 'uploads'))));
 
