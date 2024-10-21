@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router'; // Importar useRouter
-import { validarCorreoElectronico } from '@/utils/funcion';
+import { validarCorreoElectronico, validarContrasena } from '@/utils/funcion'; // Asegúrate de que solo se importa una vez
 
 const Register = () => {
     const [formData, setFormData] = useState({
         nombre: '',
         correo_electronico: '',
         contrasena: '',
+        repetir_contrasena: '', // Nuevo campo para repetir la contraseña
     });
     const router = useRouter(); // Usar el hook useRouter para redirigir
     const [errorCorreo, setErrorCorreo] = useState('');
+    const [errorContrasena, setErrorContrasena] = useState(''); // Nuevo estado para la validación de contraseñas
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
@@ -33,14 +36,30 @@ const Register = () => {
         }
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validar que las contraseñas coincidan
+        if (formData.contrasena !== formData.repetir_contrasena) {
+            setErrorContrasena('Las contraseñas no coinciden.');
+            return;
+        } else if (!validarContrasena(formData.contrasena)) {
+            setErrorContrasena('La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula, un número y un carácter especial (por ejemplo: !, @, #, $, %, &, *).');
+
+            return;
+        } else {
+            setErrorContrasena(''); // Limpiar el error si las contraseñas coinciden y son válidas
+        }
+
         try {
             const response = await fetch('http://localhost:3000/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    nombre: formData.nombre,
+                    correo_electronico: formData.correo_electronico,
+                    contrasena: formData.contrasena,
+                }), // Enviar solo las propiedades necesarias
             });
             const result = await response.json();
             if (response.ok) {
@@ -54,6 +73,7 @@ const Register = () => {
             console.error('Error al registrar', error);
         }
     };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="max-w-md w-full bg-white p-6 shadow-md rounded-lg">
@@ -97,6 +117,21 @@ const Register = () => {
                             onChange={handleChange}
                             required
                         />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-2" htmlFor="repetir_contrasena">Repetir Contraseña</label>
+                        <input
+                            type="password"
+                            id="repetir_contrasena"
+                            name="repetir_contrasena" // Nombre del campo para que el estado se actualice correctamente
+                            className="border border-gray-300 p-2 w-full rounded-md text-gray-900 focus:ring focus:ring-blue-200"
+                            value={formData.repetir_contrasena}
+                            onChange={handleChange}
+                            required
+                        />
+                        {errorContrasena && (
+                            <p className="text-red-500 text-sm mt-1">{errorContrasena}</p>
+                        )}
                     </div>
                     <button
                         type="submit"
