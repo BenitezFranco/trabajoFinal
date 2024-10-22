@@ -5,6 +5,7 @@ const Rating = ({ recetaId }) => {
     const [submitted, setSubmitted] = useState(false);
     const [promedio, setPromedio] = useState(0);
     const [successMessage, setSuccessMessage] = useState('');  // Estado para el mensaje de éxito
+    const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
 
     // Definir fetchPromedio fuera del useEffect
     const fetchPromedio = async () => {
@@ -68,12 +69,17 @@ const Rating = ({ recetaId }) => {
 
     const handleSubmit = async () => {
         const token = localStorage.getItem('token');
-    
+
         if (!token) {
-            alert('Debes iniciar sesión para calificar esta receta');
+            setErrorMessage('Debes iniciar sesión para calificar esta receta');
             return;
         }
-    
+
+        if (rating < 1 || rating > 5) {
+            setErrorMessage('Por favor, selecciona una calificación entre 1 y 5.');
+            return;
+        }
+
         try {
             const response = await fetch(`http://localhost:3000/receta/${recetaId}/calificar`, {
                 method: 'POST',
@@ -83,7 +89,7 @@ const Rating = ({ recetaId }) => {
                 },
                 body: JSON.stringify({ puntuacion: rating })
             });
-    
+
             if (response.ok) {
                 setSubmitted(true);
                 
@@ -93,29 +99,38 @@ const Rating = ({ recetaId }) => {
                 
                 // Actualizar el promedio después de enviar la calificación
                 fetchPromedio();
+                setErrorMessage(''); // Limpiar el mensaje de error
             } else {
                 const errorData = await response.json();
-                alert(errorData.error || 'Error al enviar la calificación');
+                setErrorMessage(errorData.error || 'Error al enviar la calificación');
             }
         } catch (error) {
             console.error('Error al calificar la receta:', error);
-            alert('Error al calificar la receta. Revisa la consola para más detalles.');
+            setErrorMessage('Error al calificar la receta. Revisa la consola para más detalles.');
         }
     };
 
     const handleRecalificar = () => {
         setSubmitted(false);  // Permitir recalificar
         setRating(0);  // Reiniciar la calificación
+        setErrorMessage(''); // Limpiar el mensaje de error al recalificar
     };
 
     return (
         <div className="mt-4">
             <h3 className="text-lg font-medium mb-2">Calificar esta receta:</h3>
-            
+
             {/* Mostrar el mensaje de éxito si existe */}
             {successMessage && (
                 <div className="mb-4 p-2 bg-green-200 text-green-800 rounded">
                     {successMessage}
+                </div>
+            )}
+
+            {/* Mostrar el mensaje de error si existe */}
+            {errorMessage && (
+                <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">
+                    {errorMessage}
                 </div>
             )}
 
