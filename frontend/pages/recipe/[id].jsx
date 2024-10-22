@@ -88,15 +88,16 @@ const RecipePage = () => {
 
     if (loading) return <p className="text-center text-lg">Cargando receta...</p>;
     if (!receta) return <p className="text-center text-lg text-red-500">Receta no encontrada</p>;
-    console.log("Receta: ",receta);
+
     let instrucciones = [];
-try {
-    instrucciones = JSON.parse(receta.instrucciones);
-} catch (error) {
-    console.error('Error al parsear instrucciones:', error);
-}
-const ingredientes = JSON.parse(receta.ingredientes);
-console.log('ingredientes: ',ingredientes);
+    try {
+        instrucciones = JSON.parse(receta.instrucciones);
+    } catch (error) {
+        console.error('Error al parsear instrucciones:', error);
+    }
+
+    const ingredientes = JSON.parse(receta.ingredientes);
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -104,36 +105,35 @@ console.log('ingredientes: ',ingredientes);
                 <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6">
                     <h1 className="text-3xl font-bold text-center mb-4">{receta.titulo}</h1>
                     {receta.foto_receta && (
-        <img
-            src={receta.foto_receta}
-            alt={`Imagen de ${receta.titulo}`}
-            className="w-full h-auto rounded-lg mb-4"
-        />
-    )}
+                        <img
+                            src={receta.foto_receta}
+                            alt={`Imagen de ${receta.titulo}`}
+                            className="w-full h-auto rounded-lg mb-4"
+                        />
+                    )}
                     <p className="text-lg font-medium mb-2"><strong>Descripción:</strong> {receta.descripcion}</p>
-                    
                     <p className="text-lg font-medium mb-2"><strong>Ingredientes:</strong></p>
-                <ul className="list-disc list-inside mb-4">
-                    {ingredientes.map((ingrediente, index) => (
-                        <li key={index} className="mb-2">{ingrediente.nombre}</li>
-                    ))}
-                </ul>
+                    <ul className="list-disc list-inside mb-4">
+                        {ingredientes.map((ingrediente, index) => (
+                            <li key={index} className="mb-2">{ingrediente.nombre}</li>
+                        ))}
+                    </ul>
                     
                     <p className="text-lg font-medium mb-2"><strong>Instrucciones:</strong></p>                   
                     <ol className="list-disc list-inside mb-4">
-                    {Array.isArray(instrucciones) && instrucciones.length > 0 ? (
-                        instrucciones.map((instruccion, index) => (
-                            <li key={index} className="mb-2">
-                                {instruccion.paso}
-                                {instruccion.imagen && (
-                                    <img src={instruccion.imagen} alt={`Paso ${index + 1}`} className="mt-2" />
-                                )}
-                            </li>
-                        ))
-                    ) : (
-                        <li className="mb-2">No hay instrucciones disponibles.</li>
-                    )}
-                </ol>
+                        {Array.isArray(instrucciones) && instrucciones.length > 0 ? (
+                            instrucciones.map((instruccion, index) => (
+                                <li key={index} className="mb-2">
+                                    {instruccion.paso}
+                                    {instruccion.imagen && (
+                                        <img src={instruccion.imagen} alt={`Paso ${index + 1}`} className="mt-2" />
+                                    )}
+                                </li>
+                            ))
+                        ) : (
+                            <li className="mb-2">No hay instrucciones disponibles.</li>
+                        )}
+                    </ol>
                     <p className="text-lg font-medium mb-2"><strong>Dificultad:</strong> {receta.dificultad}</p>
                     <p className="text-lg font-medium mb-2"><strong>Tiempo de Preparación:</strong> {receta.tiempo_preparacion} minutos</p>
                     <p className="text-lg font-medium mb-4"><strong>Autor:</strong> {receta.nombre_usuario}</p>
@@ -150,7 +150,7 @@ console.log('ingredientes: ',ingredientes);
                     <Rating recetaId={id} />
 
                     {/* Sección de comentarios */}
-                    <Comentarios recetaId={id} />
+                    <Comentarios recetaId={id} autorRecetaId={receta.id_usuario} />
 
                     <button
                         onClick={() => router.back()}

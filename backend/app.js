@@ -9,8 +9,8 @@ const initModels = require('./models/initModels');
 
 
 // Importa y sincroniza la base de datos
-//const syncDatabase = require('./syncDB');
-//syncDatabase();
+const syncDatabase = require('./syncDB');
+syncDatabase();
 
 
 const app = new Koa();
