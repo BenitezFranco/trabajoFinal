@@ -3,22 +3,38 @@ import Link from 'next/link';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import SearchGrid from './SearchGrid';
-import OpcionBusqueda from './opcionBusqueda/OpcionBusqueda'; // Asegúrate de importar el componente correctamente
+import OpcionBusqueda from './opcionBusqueda/OpcionBusqueda';
 
 const Search = () => {
     const [opcionesBusqueda, setOpcionesBusqueda] = useState([{ filter: 'titulo', term: '' }]);
     const [results, setResults] = useState([]);
     const [searchSubmitted, setSearchSubmitted] = useState(false);
+    const [modoBusqueda, setModoBusqueda] = useState('receta'); // Puede ser 'receta' o 'usuario'
+    const [usuarioTerm, setUsuarioTerm] = useState(''); // Término para la búsqueda por usuario
+    const [errorMessage, setErrorMessage] = useState(''); // Estado para mensaje de error
 
     const handleSearch = async (e) => {
         e.preventDefault();
         setSearchSubmitted(true);
         setResults([]);
 
+        if (modoBusqueda === 'usuario' && usuarioTerm.trim() === '') {
+            setErrorMessage('Por favor, ingresa un nombre de usuario para buscar.'); // Mensaje de error si el campo está vacío
+            return;
+        }
+
+        setErrorMessage(''); // Limpiar el mensaje de error si hay un término
+
         try {
-            const searchQueries = opcionesBusqueda.map(
-                (opcion) => `${opcion.filter}=${opcion.term}`
-            ).join('&');
+            let searchQueries = '';
+
+            if (modoBusqueda === 'receta') {
+                searchQueries = opcionesBusqueda
+                    .map((opcion) => `${opcion.filter}=${opcion.term}`)
+                    .join('&');
+            } else if (modoBusqueda === 'usuario') {
+                searchQueries = `usuario=${usuarioTerm}`;
+            }
 
             const response = await fetch(`http://localhost:3000/search?${searchQueries}`);
             const data = await response.json();
@@ -28,18 +44,18 @@ const Search = () => {
         }
     };
 
-    // Añadir una nueva opción de búsqueda
-    const handleAddOption = () => {
-        // Verificar si ya existe un filtro "titulo"
-        const hasTitleFilter = opcionesBusqueda.some(opcion => opcion.filter === 'titulo');
+    // Cambiar el modo de búsqueda
+    const handleModoBusquedaChange = (modo) => {
+        setModoBusqueda(modo);
+        setOpcionesBusqueda([{ filter: 'titulo', term: '' }]); // Reinicia las opciones de búsqueda
+        setUsuarioTerm(''); // Reinicia el término de búsqueda por usuario
+        setSearchSubmitted(false); // Resetea los resultados
+        setErrorMessage(''); // Limpiar el mensaje de error
+    };
 
-        // Si no hay filtro "titulo", agregar uno nuevo por defecto (por ejemplo, "id_categoria")
-        if (!hasTitleFilter) {
-            setOpcionesBusqueda([...opcionesBusqueda, { filter: 'id_categoria', term: '' }]);
-        } else {
-            // Si ya hay un filtro "titulo", puedes agregar otros tipos de filtro
-            setOpcionesBusqueda([...opcionesBusqueda, { filter: 'id_categoria', term: '' }]); // Cambia esto al filtro por defecto que quieras
-        }
+    // Añadir una nueva opción de búsqueda para recetas
+    const handleAddOption = () => {
+        setOpcionesBusqueda([...opcionesBusqueda, { filter: 'id_categoria', term: '' }]);
     };
 
     // Quitar una opción de búsqueda
@@ -66,30 +82,70 @@ const Search = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-00">
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
                 <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-md">
                     <h1 className="text-2xl font-bold text-center mb-6">Buscar Recetas o Usuarios</h1>
+
+                    {/* Selector de modo de búsqueda */}
+                    <div className="flex justify-center space-x-4 mb-4">
+                        <button
+                            onClick={() => handleModoBusquedaChange('receta')}
+                            className={`py-2 px-4 rounded-lg ${
+                                modoBusqueda === 'receta' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                            }`}
+                        >
+                            Buscar por Receta
+                        </button>
+                        <button
+                            onClick={() => handleModoBusquedaChange('usuario')}
+                            className={`py-2 px-4 rounded-lg ${
+                                modoBusqueda === 'usuario' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                            }`}
+                        >
+                            Buscar por Usuario
+                        </button>
+                    </div>
+
+                    {/* Formulario de búsqueda */}
                     <form onSubmit={handleSearch} className="mb-4">
                         <div className="flex flex-col space-y-4">
-                            {opcionesBusqueda.map((opcion, index) => (
-                                <OpcionBusqueda
-                                    key={index}
-                                    index={index}
-                                    filter={opcion.filter}
-                                    term={opcion.term}
-                                    onFilterChange={handleFilterChange}
-                                    onTermChange={handleTermChange}
-                                    onRemove={handleRemoveOption}
-                                />
-                            ))}
-
-                            <button
-                                type="button"
-                                onClick={handleAddOption}
-                                className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            >
-                                Agregar Filtro
-                            </button>
+                            {modoBusqueda === 'receta' ? (
+                                // Formulario de búsqueda de recetas con múltiples opciones
+                                <>
+                                    {opcionesBusqueda.map((opcion, index) => (
+                                        <OpcionBusqueda
+                                            key={index}
+                                            index={index}
+                                            filter={opcion.filter}
+                                            term={opcion.term}
+                                            onFilterChange={handleFilterChange}
+                                            onTermChange={handleTermChange}
+                                            onRemove={handleRemoveOption}
+                                        />
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={handleAddOption}
+                                        className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    >
+                                        Agregar Filtro
+                                    </button>
+                                </>
+                            ) : (
+                                // Input de búsqueda para buscar por usuario
+                                <>
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar por nombre de usuario"
+                                        value={usuarioTerm}
+                                        onChange={(e) => setUsuarioTerm(e.target.value)}
+                                        className="border border-gray-300 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    {errorMessage && (
+                                        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+                                    )}
+                                </>
+                            )}
 
                             <button
                                 type="submit"

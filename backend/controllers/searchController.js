@@ -2,7 +2,7 @@ const Usuario = require('../models/Usuario');
 const Receta = require('../models/Receta');
 const Receta_Categoria = require('../models/Receta_Categoria');
 const Categoria = require('../models/Categoria');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 const buscarRecetasYUsuarios = async (ctx) => {
     console.log("ctx.query: ", ctx.query);
@@ -32,7 +32,9 @@ const buscarRecetasYUsuarios = async (ctx) => {
                 // Si hay id_categoria, buscar los id_receta correspondientes
                 const recetasConCategoria = await Receta_Categoria.findAll({
                     where: { id_categoria: { [Op.in]: categorias } },
-                    attributes: ['id_receta'] // Solo necesitamos los id_receta
+                    attributes: ['id_receta'],
+                    group: ['id_receta'],
+                    having: Sequelize.literal(`COUNT(id_categoria) = ${categorias.length}`)
                 });
 
                 const idsRecetas = recetasConCategoria.map(receta => receta.id_receta);

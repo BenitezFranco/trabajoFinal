@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Header from './Header'; 
-import Footer from './Footer';
+import Header from '../components/header/Header'; 
+import Footer from '../components/footer/Footer';
 
 const Perfil = () => {
     const [perfil, setPerfil] = useState(null);

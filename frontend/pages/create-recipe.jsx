@@ -5,6 +5,7 @@ import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import PasoInstruccion from '@/components/receta/pasoInstruccion/PasoInstruccion';
 import { uploadImage } from '@/utils/funcion';
+import Select from 'react-select';
 
 const CreateRecipe = () => {
     const [formData, setFormData] = useState({
@@ -85,19 +86,9 @@ const CreateRecipe = () => {
     };
 
 
-    const handleCheckboxChange = (e, categoriaIndex) => {
-        const { checked } = e.target;
-        if (checked) {
-            setFormData({
-                ...formData,
-                categorias: [...formData.categorias, categoriaIndex], // Agregar el índice + 1
-            });
-        } else {
-            setFormData({
-                ...formData,
-                categorias: formData.categorias.filter((cat) => cat !== categoriaIndex), // Remover el índice + 1
-            });
-        }
+    const handleSelectChange = (selectedOptions) => {
+        const selectedCategories = selectedOptions ? selectedOptions.map(option => option.value) : [];
+        setFormData({ ...formData, categorias: selectedCategories });
     };
 
     const handleSubmit = async (e) => {
@@ -163,6 +154,24 @@ const CreateRecipe = () => {
             console.error('Error al crear la receta', error);
         }
     };
+
+    const categoriasOptions = [
+        { value: 1, label: 'Vegetariano' },
+        { value: 2, label: 'Vegano' },
+        { value: 3, label: 'Desayuno' },
+        { value: 4, label: 'Sin TACC' },
+        { value: 5, label: 'Sin gluten' },
+        { value: 6, label: 'Postres' },
+        { value: 7, label: 'Saludables' },
+        { value: 8, label: 'Cenas' },
+        { value: 9, label: 'Almuerzos' },
+        { value: 10, label: 'Platos principales' },
+        { value: 11, label: 'Aperitivos' },
+        { value: 12, label: 'Bebidas' },
+        { value: 13, label: 'Dulces' },
+        { value: 14, label: 'Ensaladas' },
+        { value: 15, label: 'Sopas y cremas' },
+    ];
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-00">
@@ -331,37 +340,15 @@ const CreateRecipe = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Categorías:
                         </label>
-                        <div className="flex flex-wrap">
-                            {[
-                                'Vegetariano',
-                                'Vegano',
-                                'Desayuno',
-                                'Sin TACC',
-                                'Sin gluten',
-                                'Postres',
-                                'Saludables',
-                                'Cenas',
-                                'Almuerzos',
-                                'Platos principales',
-                                'Aperitivos',
-                                'Bebidas',
-                                'Dulces',
-                                'Ensaladas',
-                                'Sopas y cremas',
-                            ].map((categoria, index) => (
-                                <label key={index} className="mr-4 mb-2">
-                                    <input
-                                        type="checkbox"
-                                        value={index + 1} // Enviar el índice + 1 como valor
-                                        onChange={(e) => handleCheckboxChange(e, index + 1)} // Pasar el índice + 1 a la función
-                                        className="hidden"
-                                    />
-                                    <span className={`inline-block cursor-pointer px-4 py-2 rounded-md border ${formData.categorias.includes(index + 1) ? 'bg-blue-500 text-white border-blue-500' : 'bg-gray-200 text-gray-700 border-gray-300'} hover:bg-blue-400 transition`}>
-                                        {categoria}
-                                    </span>
-                                </label>
-                            ))}
-                        </div>
+                        <Select
+                            isMulti
+                            options={categoriasOptions}
+                            className="basic-multi-select"
+                            classNamePrefix="select"
+                            placeholder="Selecciona una o más categorías"
+                            onChange={handleSelectChange}
+                            value={categoriasOptions.filter(option => formData.categorias.includes(option.value))}
+                        />
                     </div>
 
                     <button
