@@ -96,7 +96,7 @@ const RecipePage = () => {
         console.error('Error al parsear instrucciones:', error);
     }
 
-    const ingredientes = JSON.parse(receta.ingredientes);
+    const ingredientes = (receta.ingredientes);
 
     const categorias = receta.categorias;
 
@@ -117,7 +117,7 @@ const RecipePage = () => {
                     <p className="text-lg font-medium mb-2"><strong>Ingredientes:</strong></p>
                     <ul className="list-disc list-inside mb-4">
                         {ingredientes.map((ingrediente, index) => (
-                            <li key={index} className="mb-2">{ingrediente.nombre}</li>
+                            <li key={index} className="mb-2">{ingrediente.nombre} : {ingrediente.cantidad}</li>
                         ))}
                     </ul>
 

@@ -20,8 +20,12 @@ const CreateRecipe = () => {
     const [id_usuario, setIdUsuario] = useState(null);
     const [successMessage, setSuccessMessage] = useState(''); // Estado para el mensaje de éxito
     const [pasos, setPasos] = useState([{ paso: '', imagen: null }]); // Estado para los pasos
-    const [ingredientes, setIngredientes] = useState([{ nombre: '' }]);
+    const [ingredientes, setIngredientes] = useState([{ id_ingrediente: null, nombre: '', cantidad: '' }]);
+
     const [imagenReceta, setImagenReceta] = useState(null); // Estado para la imagen
+
+    const [ingredientesOptions, setIngredientesOptions] = useState([]);
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -35,6 +39,29 @@ const CreateRecipe = () => {
                 return;
             }
         }
+    }, []);
+
+    useEffect(() => {
+        // Llamada a la API para obtener ingredientes
+        const fetchIngredientes = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/ingredientes');
+                if (!response.ok) {
+                    throw new Error('Error al obtener los ingredientes');
+                }
+                const ingredientes = await response.json();
+                // Formatear los ingredientes para el Select
+                const options = ingredientes.map(ingrediente => ({
+                    value: ingrediente.id_ingrediente,
+                    label: ingrediente.nombre,
+                }));
+                setIngredientesOptions(options);
+            } catch (error) {
+                console.error('Error al obtener ingredientes:', error);
+            }
+        };
+
+        fetchIngredientes();
     }, []);
 
     const handleChange = (e) => {
@@ -62,24 +89,33 @@ const CreateRecipe = () => {
             setPasos(pasos.slice(0, -1));
         }
     };
-    const handleAgregarIngrediente = () => {
-        if (ingredientes.length < 10) { // Limitar a 10 ingredientes (o el número que desees)
-            setIngredientes([...ingredientes, { nombre: '' }]);
-        }
-    };
+const handleAgregarIngrediente = () => {
+    setIngredientes([...ingredientes, { id_ingrediente: null, nombre: '', cantidad: '' }]);
+};
 
-    const handleQuitarIngrediente = (index) => {
-        if (ingredientes.length > 1) {
-            const nuevosIngredientes = ingredientes.filter((_, i) => i !== index);
-            setIngredientes(nuevosIngredientes);
-        }
-    };
-
-    const handleChangeIngrediente = (index, value) => {
-        const nuevosIngredientes = [...ingredientes];
-        nuevosIngredientes[index].nombre = value;
+const handleQuitarIngrediente = (index) => {
+    if (ingredientes.length > 1) {
+        const nuevosIngredientes = ingredientes.filter((_, i) => i !== index);
         setIngredientes(nuevosIngredientes);
+    }
+};
+
+    const handleSelectIngredienteChange = (selectedOption, index) => {
+        const newIngredientes = [...ingredientes];
+        newIngredientes[index] = {
+            ...newIngredientes[index],
+            id_ingrediente: selectedOption ? selectedOption.value : null,
+            nombre: selectedOption ? selectedOption.label : '',
+        };
+        setIngredientes(newIngredientes);
     };
+    
+    const handleCantidadChange = (index, value) => {
+        const newIngredientes = [...ingredientes];
+        newIngredientes[index].cantidad = value;
+        setIngredientes(newIngredientes);
+    };
+    
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImagenReceta(file);
@@ -250,36 +286,44 @@ const CreateRecipe = () => {
                     </div>
 
                     <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Ingredientes:
-                </label>
-                {ingredientes.map((ingrediente, index) => (
-                    <div key={index} className="flex mb-2">
-                        <input
-                            type="text"
-                            placeholder="Ingrediente"
-                            value={ingrediente.nombre}
-                            onChange={(e) => handleChangeIngrediente(index, e.target.value)}
-                            className="border mb-2 p-2 flex-1"
-                            required
-                        />
-                        <button
-                            type="button"
-                            onClick={() => handleQuitarIngrediente(index)}
-                            className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                            Quitar
-                        </button>
-                    </div>
-                ))}
-                <button
-                    type="button"
-                    onClick={handleAgregarIngrediente}
-                    className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    Agregar Ingrediente
-                </button>
-            </div>
+    <label className="block text-gray-700 text-sm font-bold mb-2">
+        Ingredientes:
+    </label>
+    {ingredientes.map((ingrediente, index) => (
+        <div key={index} className="flex items-center mb-2">
+            <Select
+                options={ingredientesOptions}
+                className="basic-single"
+                classNamePrefix="select"
+                placeholder="Selecciona un ingrediente"
+                onChange={(selectedOption) => handleSelectIngredienteChange(selectedOption, index)}
+                value={ingrediente.id_ingrediente ? { value: ingrediente.id_ingrediente, label: ingrediente.nombre } : null}
+            />
+            <input
+                type="text"
+                placeholder="Cantidad"
+                value={ingrediente.cantidad}
+                onChange={(e) => handleCantidadChange(index, e.target.value)}
+                className="ml-2 shadow appearance-none border rounded w-20 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            <button
+                type="button"
+                onClick={() => handleQuitarIngrediente(index)}
+                className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+            >
+                Quitar
+            </button>
+        </div>
+    ))}
+    <button
+        type="button"
+        onClick={handleAgregarIngrediente}
+        className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+    >
+        Agregar Ingrediente
+    </button>
+</div>
+
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">

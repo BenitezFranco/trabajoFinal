@@ -14,6 +14,8 @@ const comentariosRoutes = require('./comentarios');
 
 const router = new Router();
 
+const Ingrediente = require('../models/Ingrediente');
+
 // Rutas de autenticación
 router.post('/register', authController.register);
 router.post('/login', authController.login);
@@ -53,5 +55,17 @@ router.get('/perfil/:id', authenticate, obtenerPerfil);
 router.get('/receta/:id/promedio', obtenerPromedioCalificacion);
 router.get('/seguidores', authenticate, obtenerSeguidores);
 router.post('/upload', subirImagen);
+
+// Ingredientes
+router.get('/api/ingredientes', async (ctx) => {
+    try {
+        const ingredientes = await Ingrediente.findAll();
+        ctx.body = ingredientes;
+    } catch (error) {
+        ctx.status = 500;
+        ctx.body = { error: 'Error al obtener ingredientes' };
+    }
+});
+
 
 module.exports = router;
