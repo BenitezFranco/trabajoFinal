@@ -82,16 +82,16 @@ const obtenerReceta = async (ctx) => {
             },
             attributes: ['id_ingrediente', 'cantidad'] // Asegúrate de obtener también la cantidad
         });
-        
+
         const idsIng = idsIngrediente.map(item => item.id_ingrediente);
-        
+
         const ingredientes = await Ingrediente.findAll({
             where: {
                 id_ingrediente: { [Op.in]: idsIng }
             },
             attributes: ['id_ingrediente', 'nombre'] // Incluye id_ingrediente para la comparación
         });
-        
+
         const ingredientesConCantidad = idsIngrediente.map(item => {
             const ingredienteEncontrado = ingredientes.find(ingrediente => ingrediente.id_ingrediente === item.id_ingrediente);
             return {
@@ -99,7 +99,7 @@ const obtenerReceta = async (ctx) => {
                 cantidad: item.cantidad // Cantidad del ingrediente
             };
         }).filter(item => item.nombre);
-        
+
 
         if (!usuario) {
             ctx.status = 404;
@@ -218,5 +218,113 @@ const obtenerPromedioCalificacion = async (ctx) => {
     }
 };
 
+async function categoriaSimilar(idReceta) {
+    // Convertir idReceta a Number para asegurar la comparación correcta
+    const idRecetaNumber = Number(idReceta);
 
-module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion };
+    // Obtener las categorías de la receta específica
+    const categoriasReceta = await RecetaCategoria.findAll({
+        where: {
+            id_receta: idRecetaNumber
+        },
+        attributes: ['id_categoria']
+    });
+
+    const setCategoriasReceta = new Set(categoriasReceta.map(c => c.id_categoria));
+
+    // Obtener las categorías de todas las recetas
+    const todasLasRecetas = await RecetaCategoria.findAll({
+        attributes: ['id_receta', 'id_categoria']
+    });
+
+    // Crear un diccionario para almacenar las categorías de cada receta
+    const mapaRecetas = new Map();
+
+    todasLasRecetas.forEach((receta) => {
+        if (!mapaRecetas.has(receta.id_receta)) {
+            mapaRecetas.set(receta.id_receta, new Set());
+        }
+        mapaRecetas.get(receta.id_receta).add(receta.id_categoria);
+    });
+
+    // Calcular el coeficiente de Jaccard para cada receta
+    const similitudes = [];
+
+    mapaRecetas.forEach((categorias, id) => {
+        // Asegúrate de comparar con el tipo correcto
+        if (Number(id) !== idRecetaNumber) {
+            const interseccion = new Set([...categorias].filter(x => setCategoriasReceta.has(x)));
+            const union = new Set([...categorias, ...setCategoriasReceta]);
+            const jaccard = interseccion.size / union.size;
+
+            similitudes.push({ id_receta: id, similitud: jaccard });
+        }
+    });
+
+    // Ordenar las recetas por similitud en orden descendente
+    similitudes.sort((a, b) => b.similitud - a.similitud);
+
+    // Retornar las 20 más similares
+    return similitudes.slice(0, 20);
+}
+
+
+async function calcularSimilitudIngredientes(idReceta, recetasFiltradas) {
+    const ingredientesRecetaBase = await RecetaIngrediente.findAll({
+        where: { id_receta: idReceta },
+        attributes: ['id_ingrediente']
+    });
+
+    const setIngredientesBase = new Set(ingredientesRecetaBase.map(i => i.id_ingrediente));
+    const similitudesIngredientes = [];
+
+    for (const receta of recetasFiltradas) {
+        if (receta.id_receta !== idReceta) {
+        const ingredientesReceta = await RecetaIngrediente.findAll({
+            where: { id_receta: receta.id_receta },
+            attributes: ['id_ingrediente']
+        });
+
+        const setIngredientes = new Set(ingredientesReceta.map(i => i.id_ingrediente));
+        const interseccion = new Set([...setIngredientes].filter(i => setIngredientesBase.has(i)));
+        const union = new Set([...setIngredientesBase, ...setIngredientes]);
+        const jaccard = interseccion.size / union.size;
+
+        similitudesIngredientes.push({ id_receta: receta.id_receta, similitud: jaccard });
+    }
+    }
+
+    // Ordenar y devolver las 5 recetas más similares por ingredientes
+    similitudesIngredientes.sort((a, b) => b.similitud - a.similitud);
+    return similitudesIngredientes.filter(receta => receta.id_receta !== idReceta).slice(0, 5);
+}
+
+// Controlador principal para obtener recetas similares
+const obtenerSimilares = async (ctx) => {
+
+    try {
+        const idReceta = ctx.params.id;
+        const topSimilaresPorCategoria = await categoriaSimilar(idReceta);
+        console.log(topSimilaresPorCategoria);
+        const topSimilaresPorIngredientes = await calcularSimilitudIngredientes(idReceta, topSimilaresPorCategoria);
+
+        const similaresIds = topSimilaresPorIngredientes.map(receta => receta.id_receta);
+
+        const recetasSimilares = await Receta.findAll({
+            where: {
+                id_receta: similaresIds
+            }
+        });
+
+        ctx.body = recetasSimilares;
+
+    } catch (error) {
+        console.error("Error en obtenerSimilares:", error);
+        ctx.status = 500;
+        ctx.body = { error: "Error interno en el servidor" };
+    }
+
+};
+
+
+module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion, obtenerSimilares };

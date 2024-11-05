@@ -2,7 +2,7 @@
 const Router = require('koa-router');
 const authController = require('../controllers/authController');
 const authenticate = require('../middleware/authMiddleware');
-const { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion } = require('../controllers/recetaController');
+const { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion, obtenerSimilares } = require('../controllers/recetaController');
 const { buscarRecetasYUsuarios } = require('../controllers/searchController');
 const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario, obtenerPerfil, obtenerSeguidores } = require('../controllers/seguimientoController');
 const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos } = require('../controllers/favoritoController');
@@ -55,6 +55,7 @@ router.get('/perfil/:id', authenticate, obtenerPerfil);
 router.get('/receta/:id/promedio', obtenerPromedioCalificacion);
 router.get('/seguidores', authenticate, obtenerSeguidores);
 router.post('/upload', subirImagen);
+router.get('/recetasSimilares/:id', obtenerSimilares);
 
 // Ingredientes
 router.get('/api/ingredientes', async (ctx) => {

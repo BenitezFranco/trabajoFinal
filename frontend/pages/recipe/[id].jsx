@@ -4,6 +4,7 @@ import Rating from '@/components/rating/Rating';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import Comentarios from '@/components/comentario/Comentarios';
+import RecetasSimilares from '@/components/receta/recetasSimilares/RecetasSimilares';
 
 const RecipePage = () => {
     const router = useRouter();
@@ -164,6 +165,7 @@ const RecipePage = () => {
                     {/* Sección de comentarios */}
                     <Comentarios recetaId={id} autorRecetaId={receta.id_usuario} />
 
+                    <RecetasSimilares id={id} token={localStorage.getItem('token')}/>
                     <button
                         onClick={() => router.back()}
                         className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
