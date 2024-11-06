@@ -14,7 +14,6 @@ const Receta_Ingrediente = sequelize.define('Receta_Ingrediente', {
     },
     cantidad: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
     }
 }, {

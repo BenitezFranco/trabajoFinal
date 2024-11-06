@@ -29,7 +29,6 @@ const recetas = [
                 
             ],
         dificultad: "Fácil",
-        tiempo_preparacion: 20,
         id_usuario: 1
     },
     {
@@ -271,34 +270,60 @@ const recetas = [
 
 
 const insertarRecetas = async () => {
+    const categorias = [
+        { titulo: "Ensalada César", categorias: [1, 8,7] },
+        { titulo: "Tarta de manzana", categorias: [3,6,13] },
+        { titulo: "Pasta al pesto", categorias: [8,9,10] },
+        { titulo: "Sopa de tomate", categorias: [2,7,15] },
+        { titulo: "Tacos de pollo", categorias: [11] },
+        { titulo: "Brownies de chocolate", categorias: [3,6,13] },
+        { titulo: "Quiche de espinacas", categorias: [8,9] },
+        { titulo: "Smoothie de frutas", categorias: [3,12,13] },
+        { titulo: "Pancakes", categorias: [3,6,13] },
+        { titulo: "Guiso de lentejas", categorias: [8,9,10] },
+        { titulo: "Pizza Margherita", categorias: [8,9,10] },
+        { titulo: "Muffins de arándano", categorias: [3,6,13] },
+        { titulo: "Enchiladas", categorias: [11] },
+        { titulo: "Risotto de champiñones", categorias: [1,8,9,10] },
+        { titulo: "Burgers vegetarianas", categorias: [1,2,8,9,10] },
+        { titulo: "Tarta de queso", categorias: [3,6,13] },
+        { titulo: "Curry de verduras", categorias: [1,2,8,9,10] },
+        { titulo: "Sushi", categorias: [8,9,10] },
+    ];
+    
+    // Aquí puedes definir las categorías para cada receta
+    const ingredientes = [
+        { titulo: "Ensalada César", ingredientes: [19, 31,58,296], cantidades: ["2 tazas", "1 pechuga de pollo", "1/2 taza","1/2 taza"] },
+        { titulo: "Tarta de manzana", ingredientes: [64,40,43,297,54],cantidades:["2 piezas","1/2 taza","1 cucharadita","1 base","2 cucharadas"] },
+        { titulo: "Pasta al pesto", ingredientes: [38,15,53,58,298],cantidades:["250 g","1 taza","1/4 taza","1/2 taza","1/4 taza"]},
+        { titulo: "Sopa de tomate", ingredientes: [1,2,119,57,15], cantidades:["3 piezas","1/2 pieza","2 tazas","1/4 taza","al gusto"] },
+        { titulo: "Tacos de pollo", ingredientes: [169,31,2,23,299], cantidades:["4 piezas","200 g","1/4 pieza","al gusto","al gusto"] },
+        { titulo: "Brownies de chocolate", ingredientes: [205,54,40,39,29], cantidades:["1 taza","1/2 taza","1/2 taza","1/2 taza","2 piezas"] },
+        { titulo: "Quiche de espinacas", ingredientes: [6,30,55,29,297], cantidades:["2 tazas","1/2 taza","1/2 taza","3 piezas","1 base"]},
+        { titulo: "Smoothie de frutas", ingredientes: [300,301,56,61,302], cantidades:["1 pieza","1 taza","1/2 taza","1 cucharadita","al gusto"] },
+        { titulo: "Pancakes", ingredientes: [39,55,29,303,54], cantidades:["1 taza","1/2 taza","1 pieza","1 cucharadita","2 cucharadas"] },
+        { titulo: "Guiso de lentejas", ingredientes: [35,5,2,7,119], cantidades:["1 taza","2 piezas","1/2 piezas","1 diente","2 taza"] },
+        { titulo: "Pizza Margherita", ingredientes: [99,127,178,15,53], cantidades:["1 base","1/2 taza","1 taza","al gusto","al gusto"] },
+        { titulo: "Muffins de arándano", ingredientes: [39,40,55,29,304], cantidades:["1 taza","1/2 taza","1/2 taza","1 pieza","1/2 taza"] },
+        { titulo: "Enchiladas", ingredientes: [169,32,299,58,57], cantidades:["4 piezas","200 g","1/2 taza","1/4 taza","al gusto"] },
+        { titulo: "Risotto de champiñones", ingredientes: [37,13,118,58,54], cantidades:["1 taza","200 g","2 taza","1/2 taza","2 cucharadas"] },
+        { titulo: "Burgers vegetarianas", ingredientes: [121,6,98,19,305], cantidades:["1 taza","1/2 taza","2 piezas","al gusto","al gusto"] },
+        { titulo: "Tarta de queso", ingredientes: [307,40,29,173,216], cantidades:["500 g","1/2 taza","2 piezas","1/4 taza","1 taza (trituradas)"] },
+        { titulo: "Curry de verduras", ingredientes: [11,5,10,140,183], cantidades:["1 taza","1 taza","1 taza","1 taza","1 cucharada"] },
+        { titulo: "Sushi", ingredientes: [37,163,104,20,309], cantidades:["200 g","1 hoja","100 g","1/4 pieza","al gusto"] },
+    ];
     for (const receta of recetas) {
         // Inserta la receta y obtén el ID
         const [nuevaReceta, creada] = await Receta.findOrCreate({
             where: { titulo: receta.titulo },
-            defaults: receta
+            defaults: {
+                ...receta,
+                fecha_publicacion: new Date().toISOString().split('T')[0]
+            }
         });
 
         // Aquí puedes definir las categorías para cada receta
-        const categorias = [
-            { titulo: "Ensalada César", categorias: [1, 8] },
-            { titulo: "Tarta de manzana", categorias: [6] },
-            { titulo: "Pasta al pesto", categorias: [6] },
-            { titulo: "Sopa de tomate", categorias: [6] },
-            { titulo: "Tacos de pollo", categorias: [6] },
-            { titulo: "Brownies de chocolate", categorias: [6] },
-            { titulo: "Quiche de espinacas", categorias: [6] },
-            { titulo: "Smoothie de frutas", categorias: [6] },
-            { titulo: "Pancakes", categorias: [6] },
-            { titulo: "Guiso de lentejas", categorias: [6] },
-            { titulo: "Pizza Margherita", categorias: [6] },
-            { titulo: "Muffins de arándano", categorias: [6] },
-            { titulo: "Enchiladas", categorias: [6] },
-            { titulo: "Risotto de champiñones", categorias: [6] },
-            { titulo: "Burgers vegetarianas", categorias: [6] },
-            { titulo: "Tarta de queso", categorias: [6] },
-            { titulo: "Curry de verduras", categorias: [6] },
-            { titulo: "Sushi", categorias: [6] },
-        ];
+        
 
         // Encuentra las categorías correspondientes a la receta actual
         const recetaCategorias = categorias.find(c => c.titulo === receta.titulo)?.categorias || [];
@@ -310,15 +335,28 @@ const insertarRecetas = async () => {
                 id_categoria: idCategoria
             });
         }
-    }
-};
 
-// Llamar a la función para insertar las recetas y categorías
-insertarRecetas().then(() => {
-    console.log('Recetas y categorías insertadas exitosamente.');
-}).catch(error => {
-    console.error('Error al insertar recetas y categorías:', error);
-});
+        // Encuentra los ingredientes correspondientes a la receta actual
+        const recetaIngredientesData = ingredientes.find(c => c.titulo === receta.titulo);
+        const recetaIngredientes = recetaIngredientesData ? recetaIngredientesData.ingredientes : [];
+        const cantidades = recetaIngredientesData ? recetaIngredientesData.cantidades : [];
+
+        console.log("titulo: ",nuevaReceta.titulo);
+        console.log(" ",recetaIngredientes.length);
+        // Inserta los ingredientes para la receta
+        for (let i = 0; i < recetaIngredientes.length; i++) {
+            await Receta_Ingrediente.findOrCreate({
+                where: {
+                    id_receta: nuevaReceta.id_receta,
+                    id_ingrediente: recetaIngredientes[i]
+                },
+                defaults: {
+                    cantidad: cantidades[i] // Asignar la cantidad correspondiente
+                }
+            });
+        }
+    };
+};
 
 
 const insertIngredientes = async () => {
@@ -366,7 +404,7 @@ const insertIngredientes = async () => {
         { nombre: 'Jalapeño' }, { nombre: 'Wasabi' }, { nombre: 'Alga nori' }, { nombre: 'Sésamo negro' },
         { nombre: 'Sésamo blanco' }, { nombre: 'Aceite de sésamo' }, { nombre: 'Vinagre de arroz' }, { nombre: 'Pan pita' },
         { nombre: 'Tortilla de maíz' }, { nombre: 'Tortilla de trigo' }, { nombre: 'Nata para montar' }, { nombre: 'Manteca' },
-        { nombre: 'Crema agria' }, { nombre: 'Queso azul' }, { nombre: 'Queso feta' }, { nombre: 'Queso brie' },
+        { nombre: 'Crema ácida' }, { nombre: 'Queso azul' }, { nombre: 'Queso feta' }, { nombre: 'Queso brie' },
         { nombre: 'Queso gouda' }, { nombre: 'Queso mozzarella' }, { nombre: 'Queso camembert' }, { nombre: 'Queso ricota' },
         { nombre: 'Yogur griego' }, { nombre: 'Salsa de yogur' }, { nombre: 'Curry en polvo' }, { nombre: 'Masala' },
         { nombre: 'Semillas de mostaza' }, { nombre: 'Aceite de canola' }, { nombre: 'Aceite de girasol' }, { nombre: 'Aceite de palma' },
@@ -396,7 +434,11 @@ const insertIngredientes = async () => {
         { nombre: 'Smoothie de frutas' }, { nombre: 'Batido de verduras' },{ nombre: 'Sangría' }, { nombre: 'Margarita' }, { nombre: 'Mojito' },
         { nombre: 'Piña colada' }, { nombre: 'Cuba libre' }, { nombre: 'Bloody Mary' },{ nombre: 'Daiquiri' }, 
         { nombre: 'Whisky' }, { nombre: 'Ron' },{ nombre: 'Vodka' }, { nombre: 'Ginebra' }, 
-        { nombre: 'Tequila' },{ nombre: 'Agua' },];
+        { nombre: 'Tequila' },{ nombre: 'Agua' },{nombre:'Crutones'},{nombre:'Masa para tarta'},
+        {nombre: 'Piñones'},{nombre: 'Salsa'},{nombre: 'Banana'},{nombre: 'Frutos rojos'},
+        {nombre: 'Hielo'},{nombre: 'Polvo de hornear'},{nombre: 'Arándanos'},{nombre:'Mayonesa vegana'},
+        {nombre: 'Mayonesa'},{nombre: 'Queso Crema'},{nombre: 'Salsa de soya'},
+    ];
 
         try {
             for (const ingrediente of ingredientes) {
@@ -476,6 +518,7 @@ const syncDatabase = async () => {
         await insertUsuario(); // Inserta usuarios
         await insertCategoria(); // Inserta categorías
         await insertIngredientes();//Inserta Ingredientes
+        await insertarRecetas();//Inserta Recetas
        console.log('Base de datos sincronizada correctamente.');
     } catch (error) {
         console.error('Error al sincronizar la base de datos:', error);
