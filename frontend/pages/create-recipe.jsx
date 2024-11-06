@@ -46,16 +46,19 @@ const CreateRecipe = () => {
         const fetchIngredientes = async () => {
             try {
                 const response = await fetch('http://localhost:3000/api/ingredientes');
-                if (!response.ok) {
-                    throw new Error('Error al obtener los ingredientes');
-                }
-                const ingredientes = await response.json();
+                if (response.status === 200) {
+                    const ingredientes = await response.json();
                 // Formatear los ingredientes para el Select
                 const options = ingredientes.map(ingrediente => ({
                     value: ingrediente.id_ingrediente,
                     label: ingrediente.nombre,
                 }));
                 setIngredientesOptions(options);
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
+                }
             } catch (error) {
                 console.error('Error al obtener ingredientes:', error);
             }
@@ -177,12 +180,20 @@ const handleQuitarIngrediente = (index) => {
                 },
                 body: JSON.stringify(recetaData),
             });
-            console.log('response:', response);
-            if (response.ok) {
+
+            if (response.status === 200) {
                 setSuccessMessage('Receta creada con éxito'); // Mensaje de éxito
                 setTimeout(() => {
-                    router.push('/HomeLog'); // Redirigir al home después de un breve tiempo
-                }, 2000); // Esperar 2 segundos antes de redirigir
+                    router.push('/HomeLog'); 
+                }, 2000); 
+                } else if (response.status === 401 || response.status === 403) {
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('token');
+                router.push('/login');
+            }
+            console.log('response:', response);
+            if (response.ok) {
+                
             } else {
                 console.error('Error al crear la receta');
             }

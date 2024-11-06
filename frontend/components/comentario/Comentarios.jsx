@@ -11,12 +11,19 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
             setLoading(true);
             try {
                 const response = await fetch(`http://localhost:3000/receta/${recetaId}/comentarios`);
-                const data = await response.json();
+                if (response.status === 200) {
+                    const data = await response.json();
                 if (Array.isArray(data)) {
                     setComentarios(data);
                 } else {
                     setComentarios([]);
                 }
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
+                }
+                
             } catch (error) {
                 console.error('Error al obtener comentarios:', error);
                 setComentarios([]);

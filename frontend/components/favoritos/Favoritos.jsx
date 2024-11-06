@@ -21,12 +21,13 @@ const Favoritos = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                
-                if (response.ok) {
+                if (response.status === 200) {
                     const data = await response.json();
-                    setFavoritos(data);
-                } else {
-                    console.error('Error al obtener favoritos:', await response.json());
+                    setFavoritos(data); 
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
                 }
             } catch (error) {
                 console.error('Error al obtener favoritos:', error);

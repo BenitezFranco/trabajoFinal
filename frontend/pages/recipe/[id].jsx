@@ -32,6 +32,14 @@ const RecipePage = () => {
                             'Authorization': `Bearer ${token}`
                         }
                     });
+
+                    if (response.status === 401 || response.status === 403) {
+                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                        localStorage.removeItem('token'); // Eliminar el token inválido
+                        router.push('/login'); // Redirigir al inicio de sesión
+                        return;
+                    }
+
                     const data = await response.json();
                     setReceta(data);
 
@@ -43,9 +51,13 @@ const RecipePage = () => {
                         }
                     });
 
-                    if (favoritoResponse.ok) {
+                    if (favoritoResponse.status === 200) {
                         const favoritoData = await favoritoResponse.json();
                         setEsFavorito(favoritoData.estaEnFavoritos);
+                    } else if (favoritoResponse.status === 401 || favoritoResponse.status === 403) {
+                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                        localStorage.removeItem('token');
+                        router.push('/login');
                     }
                 } catch (error) {
                     console.error('Error al obtener la receta:', error);
@@ -77,10 +89,12 @@ const RecipePage = () => {
                 }
             });
 
-            if (response.ok) {
-                setEsFavorito(!esFavorito); // Cambiar el estado según la acción realizada
-            } else {
-                console.error('Error al actualizar favorito:', await response.json());
+            if (response.status === 200) {
+                setEsFavorito(!esFavorito);
+            } else if (response.status === 401 || response.status === 403) {
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('token');
+                router.push('/login');
             }
         } catch (error) {
             console.error('Error al actualizar favorito:', error);

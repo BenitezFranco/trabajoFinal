@@ -33,16 +33,13 @@ const PerfilUsuario = () => {
                         'Pragma': 'no-cache', // Para compatibilidad con navegadores antiguos
                     },
                 });
-                
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    console.log('Profile fetched successfully:', result);
+                if (response.status === 200) {
+                    const result = await response.json();
                     setPerfil(result);
-                } else {
-                    console.error('Error fetching profile:', result.error);
-                    setError(result.error || 'Error al obtener el perfil');
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
                 }
             } catch (error) {
                 console.error('Error fetching profile', error);
@@ -57,9 +54,16 @@ const PerfilUsuario = () => {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                const data = await response.json();
-                const followedSet = new Set(data.map((user) => user.id_usuario_seguido));
-                setFollowedUsers(followedSet); // Cargar los usuarios seguidos en el estado
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const followedSet = new Set(data.map((user) => user.id_usuario_seguido));
+                    setFollowedUsers(followedSet);
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
+                }
             } catch (error) {
                 console.error('Error al obtener seguimientos:', error);
             }
@@ -105,7 +109,7 @@ const PerfilUsuario = () => {
                 {perfil.foto_perfil && (
                     <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
                 )}
-                
+
                 {perfil.id_usuario !== currentUserId && ( // No mostrar el botón si es el propio usuario
                     <FollowButton
                         id_usuario={perfil.id_usuario}
@@ -121,11 +125,12 @@ const PerfilUsuario = () => {
                                     },
                                     body: JSON.stringify({ id_usuario_seguido: id_usuario }),
                                 });
-
-                                if (response.ok) {
-                                    setFollowedUsers((prev) => new Set([...prev, id_usuario])); // Añadir el usuario a la lista de seguidos
-                                } else {
-                                    console.error('Error al seguir usuario:', await response.text());
+                                if (response.status === 200) {
+                                    setFollowedUsers((prev) => new Set([...prev, id_usuario]));
+                                } else if (response.status === 401 || response.status === 403) {
+                                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                                    localStorage.removeItem('token');
+                                    router.push('/login');
                                 }
                             } catch (error) {
                                 console.error('Error al seguir usuario:', error);
@@ -143,14 +148,16 @@ const PerfilUsuario = () => {
                                     body: JSON.stringify({ id_usuario_seguido: id_usuario }),
                                 });
 
-                                if (response.ok) {
+                                if (response.status === 200) {
                                     setFollowedUsers((prev) => {
                                         const newSet = new Set(prev);
                                         newSet.delete(id_usuario);
                                         return newSet;
-                                    }); // Eliminar el usuario de la lista de seguidos
-                                } else {
-                                    console.error('Error al dejar de seguir usuario:', await response.text());
+                                    })
+                                } else if (response.status === 401 || response.status === 403) {
+                                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                                    localStorage.removeItem('token');
+                                    router.push('/login');
                                 }
                             } catch (error) {
                                 console.error('Error al dejar de seguir usuario:', error);

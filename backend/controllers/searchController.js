@@ -3,6 +3,7 @@ const Receta = require('../models/Receta');
 const Receta_Categoria = require('../models/Receta_Categoria');
 const Categoria = require('../models/Categoria');
 const { Op, Sequelize } = require('sequelize');
+const Receta_Ingrediente= require('../models/Receta_Ingrediente');
 
 const buscarRecetasYUsuarios = async (ctx) => {
     console.log("ctx.query: ", ctx.query);
@@ -57,6 +58,23 @@ const buscarRecetasYUsuarios = async (ctx) => {
                 recetaFilter.dificultad = {
                     [Op.in]: dificultades
                 };
+            }
+            const ingredientes = Array.isArray(ctx.query.id_ingrediente)
+    ? ctx.query.id_ingrediente
+    : ctx.query.id_ingrediente ? [ctx.query.id_ingrediente] : [];
+            if (ingredientes.length > 0) {
+                // Si hay id_categoria, buscar los id_receta correspondientes
+                const recetasConIngrediente = await Receta_Ingrediente.findAll({
+                    where: { id_ingrediente: { [Op.in]: ingredientes } },
+                    attributes: ['id_receta'],
+                    group: ['id_receta'],
+                    having: Sequelize.literal(`COUNT(id_ingrediente) = ${ingredientes.length}`)
+                });
+
+                const idsRecetas = recetasConIngrediente.map(receta => receta.id_receta);
+
+                // Configurar el filtro de id_receta en recetaFilter
+                recetaFilter.id_receta = idsRecetas; // Filtrar por id_receta
             }
 
             // Buscar recetas filtrando por los criterios definidos

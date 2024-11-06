@@ -17,14 +17,14 @@ const Seguimientos = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                const textResponse = await response.text(); // Obtener la respuesta como texto
-                console.log('Response:', textResponse);
-                if (response.ok) {
+                if (response.status === 200) {
+                    const textResponse = await response.text();
                     const data = JSON.parse(textResponse);
-
                     setSeguimientos(data);
-                } else {
-                    console.error('Error al obtener seguimientos');
+                    } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
                 }
             } catch (error) {
                 console.error('Error al obtener seguimientos:', error);

@@ -27,15 +27,14 @@ const Perfil = () => {
                         'Authorization': `Bearer ${token}`
                     },
                 });
-    
-                const result = await response.json();
-    
-                if (response.ok) {
-                    console.log('Profile fetched successfully:', result);
-                    setPerfil(result);
-                } else {
-                    console.error('Error fetching profile:', result.error);
-                    setError(result.error || 'Error al obtener el perfil');
+
+                if (response.status === 200) {
+                    const result = await response.json();
+                    setPerfil(result); 
+                    } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
                 }
             } catch (error) {
                 console.error('Error fetching profile', error);

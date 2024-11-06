@@ -22,11 +22,13 @@ const Seguidor = () => {
                     }
                 });
 
-                if (response.ok) {
+                if (response.status === 200) {
                     const data = await response.json();
                     setSeguidores(data);
-                } else {
-                    console.error('Error al obtener seguidores:', await response.json());
+                    } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
                 }
             } catch (error) {
                 console.error('Error al obtener seguidores:', error);

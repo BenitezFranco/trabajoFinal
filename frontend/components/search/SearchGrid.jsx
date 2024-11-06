@@ -17,9 +17,17 @@ const SearchGrid = ({ results }) => {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                const data = await response.json();
-                const followedSet = new Set(data.map((user) => user.id_usuario_seguido));
-                setFollowedUsers(followedSet);
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const followedSet = new Set(data.map((user) => user.id_usuario_seguido));
+                    setFollowedUsers(followedSet);    
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
+                }
+                
             } catch (error) {
                 console.error('Error al obtener seguimientos:', error);
             }
@@ -56,16 +64,12 @@ const SearchGrid = ({ results }) => {
                 body: JSON.stringify({ id_usuario_seguido: id_usuario }),
             });
 
-            if (response.status === 401 || response.status === 403 || data.error) {
-                localStorage.removeItem('token'); 
-                router.push('/login'); 
-            }
-
-            if (response.ok) {
+            if (response.status === 200) {
                 setFollowedUsers((prev) => new Set([...prev, id_usuario])); // Añadir el usuario a la lista de seguidos
-            } else {
-                    console.error(data.error || 'Error inesperado');
-
+                } else if (response.status === 401 || response.status === 403) {
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('token');
+                router.push('/login');
             }
         } catch (error) {
             console.error('Error al seguir usuario:', error);
@@ -83,15 +87,16 @@ const SearchGrid = ({ results }) => {
                 },
                 body: JSON.stringify({ id_usuario_seguido: id_usuario }),
             });
-            
-            if (response.ok) {
+            if (response.status === 200) {
                 setFollowedUsers((prev) => {
                     const newSet = new Set(prev);
                     newSet.delete(id_usuario);
                     return newSet;
-                });
-            } else {
-                console.error('Error al dejar de seguir usuario:', await response.text());
+                });    
+            } else if (response.status === 401 || response.status === 403) {
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('token');
+                router.push('/login');
             }
         } catch (error) {
             console.error('Error al dejar de seguir usuario:', error);
