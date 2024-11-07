@@ -4,7 +4,7 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import FollowButton from '@/components/followButton/FollowButton';
 import SearchGrid from '@/components/search/SearchGrid';
-
+import Favoritos from '@/components/favoritos/Favoritos';
 
 const PerfilUsuario = () => {
     const [perfil, setPerfil] = useState(null);
@@ -201,6 +201,7 @@ const PerfilUsuario = () => {
 
                     />
                 )}
+                <Favoritos />
                 {/* Mostrar recetas del creador */}
                 <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
                 {recetas.length === 0 ? (

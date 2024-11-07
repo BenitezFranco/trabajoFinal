@@ -131,7 +131,7 @@ const SearchGrid = ({ results }) => {
                     <div className="col-span-4 text-center">No hay resultados para mostrar.</div>
                 ) : (
                     currentItems.map((item) => (
-                        <div key={item.id_usuario || item.id} className="w-full">
+                        <div key={item.id_receta || item.id_usuario} className="w-full">
                             {item.nombre ? (
                                 <CardUsuario
                                     item={item}

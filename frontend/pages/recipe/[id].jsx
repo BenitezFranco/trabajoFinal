@@ -13,6 +13,8 @@ const RecipePage = () => {
     const [loading, setLoading] = useState(true);
     const [esFavorito, setEsFavorito] = useState(false); // Estado para saber si es favorito
 
+    const [favoritoCambiadoLocalmente, setFavoritoCambiadoLocalmente] = useState(false);
+
     useEffect(() => {
         if (id) {
             const fetchReceta = async () => {
@@ -22,9 +24,8 @@ const RecipePage = () => {
                     router.push('/login');
                     return;
                 }
-
+    
                 try {
-                    // Obtener los detalles de la receta
                     const response = await fetch(`http://localhost:3000/receta/${id}`, {
                         method: 'GET',
                         headers: {
@@ -32,43 +33,44 @@ const RecipePage = () => {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-
+    
                     if (response.status === 401 || response.status === 403) {
-                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                        localStorage.removeItem('token'); // Eliminar el token inválido
-                        router.push('/login'); // Redirigir al inicio de sesión
-                        return;
-                    }
-
-                    const data = await response.json();
-                    setReceta(data);
-
-                    // Verificar si la receta está en favoritos
-                    const favoritoResponse = await fetch(`http://localhost:3000/receta/${id}/favorito/estado`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-
-                    if (favoritoResponse.status === 200) {
-                        const favoritoData = await favoritoResponse.json();
-                        setEsFavorito(favoritoData.estaEnFavoritos);
-                    } else if (favoritoResponse.status === 401 || favoritoResponse.status === 403) {
                         alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                         localStorage.removeItem('token');
                         router.push('/login');
+                        return;
+                    }
+    
+                    const data = await response.json();
+                    setReceta(data);
+    
+                    // Solo actualiza si no hay cambio local.
+                    if (!favoritoCambiadoLocalmente) {
+                        const favoritoResponse = await fetch(`http://localhost:3000/receta/${id}/favorito/estado`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+    
+                        if (favoritoResponse.status === 200) {
+                            const favoritoData = await favoritoResponse.json();
+                            setEsFavorito(favoritoData.estaEnFavoritos);
+                        }
                     }
                 } catch (error) {
                     console.error('Error al obtener la receta:', error);
                 } finally {
                     setLoading(false);
+                    setFavoritoCambiadoLocalmente(false); // Resetear cambio local después de sincronizar
                 }
             };
-
+    
             fetchReceta();
         }
-    }, [id]);
+    }, [id, favoritoCambiadoLocalmente]); // Se añade la dependencia para revalidar tras cambio
+    
+    
 
     const handleFavorito = async () => {
         const token = localStorage.getItem('token');
@@ -77,10 +79,15 @@ const RecipePage = () => {
             router.push('/login');
             return;
         }
-
+    
+        // Actualización optimista
+        setEsFavorito(!esFavorito);
+        setFavoritoCambiadoLocalmente(true);
+    
         try {
             const url = `http://localhost:3000/receta/${id}/favorito`;
-            const method = esFavorito ? 'DELETE' : 'POST'; // Determina si agregar o eliminar
+            const method = esFavorito ? 'DELETE' : 'POST';
+    
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -88,19 +95,25 @@ const RecipePage = () => {
                     'Content-Type': 'application/json'
                 }
             });
-
-            if (response.status === 200) {
-                setEsFavorito(!esFavorito);
-            } else if (response.status === 401 || response.status === 403) {
-                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                localStorage.removeItem('token');
-                router.push('/login');
+    
+            console.log('Estado de respuesta del servidor:', response.status);
+    
+            if (![200, 201].includes(response.status)) {
+                throw new Error(`Error: ${response.statusText} (Código: ${response.status})`);
             }
         } catch (error) {
-            console.error('Error al actualizar favorito:', error);
+            console.error('Error al actualizar favorito:', error.message);
+            // Revertir si falla
+            setEsFavorito(esFavorito);
+            setFavoritoCambiadoLocalmente(false);
+            alert(`Hubo un problema al actualizar los favoritos: ${error.message}`);
         }
     };
+    
+    
+    
 
+    
     if (loading) return <p className="text-center text-lg">Cargando receta...</p>;
     if (!receta) return <p className="text-center text-lg text-red-500">Receta no encontrada</p>;
 

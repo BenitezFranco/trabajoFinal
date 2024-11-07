@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Seguimientos from '../seguimiento/Seguimiento';
-import Favoritos from '../favoritos/Favoritos';
 import Seguidores from '../seguidores/Seguidores'; // Nuevo componente para Seguidores
 import Footer from '../footer/Footer';
 import Header from '../header/Header';
@@ -68,15 +67,6 @@ const Home = () => {
                         </div>
                     ) : (
                         <p className="text-lg text-center">Inicia sesión para acceder a tu perfil y crear recetas.</p>
-                    )}
-                </div>
-
-                <div className="flex flex-col items-start w-1/4 pr-2 mt-8 h-full"> {/* Columna de favoritos */}
-                    <h2 className="text-xl font-semibold mb-2">Mis Favoritos</h2>
-                    {loading ? (
-                        <p>Cargando...</p>
-                    ) : (
-                        <Favoritos />
                     )}
                 </div>
             </main>

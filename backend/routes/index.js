@@ -49,7 +49,7 @@ router.get('/seguimientos', authenticate, obtenerSeguimientos);
 router.post('/unfollow', authenticate, dejarDeSeguirUsuario);
 router.post('/receta/:id/favorito', authenticate, agregarFavorito);
 router.delete('/receta/:id/favorito', authenticate, eliminarFavorito);
-router.get('/favoritos', authenticate, obtenerFavoritos);
+router.get('/favoritos/:id', authenticate, obtenerFavoritos);
 router.get('/receta/:id/favorito/estado', authenticate, estaEnFavoritos);
 router.get('/perfil/:id', authenticate, obtenerPerfil);
 router.get('/receta/:id/promedio', obtenerPromedioCalificacion);

@@ -5,7 +5,7 @@ const Favoritos = () => {
     const router = useRouter();
     const [favoritos, setFavoritos] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const { id } = router.query;
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -15,7 +15,8 @@ const Favoritos = () => {
 
         const fetchFavoritos = async () => {
             try {
-                const response = await fetch('http://localhost:3000/favoritos', {
+                console.log(id);
+                const response = await fetch(`http://localhost:3000/favoritos/${id}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`

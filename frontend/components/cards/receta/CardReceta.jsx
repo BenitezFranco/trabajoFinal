@@ -6,7 +6,6 @@ const CardReceta = ({ item }) => {
     if(item.foto_receta){
         fotoUrl = item.foto_receta;
     }
-    console.log("Imga",fotoUrl);
     return (
     <Link href={`/recipe/${item.id_receta}`} className="text-lg font-medium">
       <div className="relative h-48">

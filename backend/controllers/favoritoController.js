@@ -50,11 +50,11 @@ const eliminarFavorito = async (ctx) => {
 // Obtener las recetas favoritas del usuario
 
 const obtenerFavoritos = async (ctx) => {
-    const usuarioId = ctx.state.user.id_usuario; // Asegúrate de que el ID se esté obteniendo correctamente
+    const { id } = ctx.params; // Asegúrate de que el ID se esté obteniendo correctamente
 
     try {
         const favoritos = await Favorito.findAll({
-            where: { id_usuario: usuarioId }, // Verifica que este campo corresponda al ID del usuario
+            where: { id_usuario: id }, // Verifica que este campo corresponda al ID del usuario
             include: [{ model: Receta }], // Incluye la información de la receta
         });
 
