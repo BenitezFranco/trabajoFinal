@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import FollowButton from '@/components/followButton/FollowButton'; // Asegúrate de importar el botón de seguimiento
+import FollowButton from '@/components/followButton/FollowButton';
+import SearchGrid from '@/components/search/SearchGrid';
+
 
 const PerfilUsuario = () => {
     const [perfil, setPerfil] = useState(null);
+    const [recetas, setRecetas] = useState([]); // Estado para las recetas
     const [error, setError] = useState('');
     const [followedUsers, setFollowedUsers] = useState(new Set());
     const [currentUserId, setCurrentUserId] = useState(null);
@@ -29,13 +32,14 @@ const PerfilUsuario = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
-                        'Cache-Control': 'no-cache', // Evitar caché
-                        'Pragma': 'no-cache', // Para compatibilidad con navegadores antiguos
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
                     },
                 });
                 if (response.status === 200) {
                     const result = await response.json();
                     setPerfil(result);
+                    fetchRecetas(result.nombre); // Buscar las recetas usando el nombre del perfil
                 } else if (response.status === 401 || response.status === 403) {
                     alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                     localStorage.removeItem('token');
@@ -44,6 +48,40 @@ const PerfilUsuario = () => {
             } catch (error) {
                 console.error('Error fetching profile', error);
                 setError('Error al obtener el perfil');
+            }
+        };
+
+        const fetchRecetas = async (creadorNombre) => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('No token, redirecting to /login');
+                router.push('/login');
+                return;
+            }
+
+            console.log('Token found:', token);
+
+            try {
+                const response = await fetch(`http://localhost:3000/search?creador=${creadorNombre}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                    },
+                });
+                if (response.status === 200) {
+                    const result = await response.json();
+                    setRecetas(result); // Guardar las recetas obtenidas
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    localStorage.removeItem('token');
+                    router.push('/login');
+                }
+            } catch (error) {
+                console.error('Error fetching recipes', error);
+                setError('Error al obtener las recetas');
             }
         };
 
@@ -105,17 +143,15 @@ const PerfilUsuario = () => {
             <main className="flex-grow p-6 bg-gray-100">
                 <h1 className="text-2xl font-bold mb-4">Perfil del Usuario</h1>
                 <p>Nombre: {perfil.nombre}</p>
-                <p>Correo Electrónico: {perfil.correo_electronico}</p> {/* Corregido */}
+                <p>Correo Electrónico: {perfil.correo_electronico}</p>
                 {perfil.foto_perfil && (
                     <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
                 )}
-
-                {perfil.id_usuario !== currentUserId && ( // No mostrar el botón si es el propio usuario
+                {perfil.id_usuario !== currentUserId && (
                     <FollowButton
                         id_usuario={perfil.id_usuario}
-                        isFollowed={followedUsers.has(perfil.id_usuario)} // Verifica si se está siguiendo
+                        isFollowed={followedUsers.has(perfil.id_usuario)}
                         onFollow={async (id_usuario) => {
-                            // Lógica para seguir al usuario
                             try {
                                 const response = await fetch(`http://localhost:3000/follow`, {
                                     method: 'POST',
@@ -137,7 +173,6 @@ const PerfilUsuario = () => {
                             }
                         }}
                         onUnfollow={async (id_usuario) => {
-                            // Lógica para dejar de seguir al usuario
                             try {
                                 const response = await fetch(`http://localhost:3000/unfollow`, {
                                     method: 'POST',
@@ -163,8 +198,17 @@ const PerfilUsuario = () => {
                                 console.error('Error al dejar de seguir usuario:', error);
                             }
                         }}
+
                     />
                 )}
+                {/* Mostrar recetas del creador */}
+                <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
+                {recetas.length === 0 ? (
+                    <p>No hay recetas disponibles.</p>
+                ) : (
+                    <SearchGrid results={recetas}></SearchGrid>
+                )}
+
             </main>
             <Footer />
         </div>

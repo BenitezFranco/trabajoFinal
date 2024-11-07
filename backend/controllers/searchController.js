@@ -11,13 +11,18 @@ const buscarRecetasYUsuarios = async (ctx) => {
     let results = [];
 
     // Asegúrate de que id_categoria sea un arreglo
-    const categorias = Array.isArray(id_categoria) ? id_categoria : [id_categoria].filter(Boolean);
+    const categoriasRepetidas = Array.isArray(id_categoria) ? id_categoria : [id_categoria].filter(Boolean);
+
+    //Con set quito los repetidos
+    const categorias = [...new Set(categoriasRepetidas)];
 
     // Asegúrate de que dificultad sea un arreglo
     const dificultades = Array.isArray(dificultad) ? dificultad : [dificultad].filter(Boolean);
 
     // Asegúrate de que titulo sea un arreglo
     const titulos = Array.isArray(titulo) ? titulo : [titulo].filter(Boolean);
+
+    
 
     try {
         if (usuario) {
@@ -59,9 +64,13 @@ const buscarRecetasYUsuarios = async (ctx) => {
                     [Op.in]: dificultades
                 };
             }
-            const ingredientes = Array.isArray(ctx.query.id_ingrediente)
+            const ingredientesRepetidos = Array.isArray(ctx.query.id_ingrediente)
     ? ctx.query.id_ingrediente
     : ctx.query.id_ingrediente ? [ctx.query.id_ingrediente] : [];
+
+            const ingredientes = [...new Set(ingredientesRepetidos)];
+            
+
             if (ingredientes.length > 0) {
                 // Si hay id_categoria, buscar los id_receta correspondientes
                 const recetasConIngrediente = await Receta_Ingrediente.findAll({

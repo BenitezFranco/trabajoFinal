@@ -265,13 +265,58 @@ const recetas = [
         dificultad: "Difícil",
         tiempo_preparacion: 60,
         id_usuario: 1
+    },
+    {
+        "titulo": "Pizza Pepperoni",
+        "foto_receta": "https://pixabay.com/es/images/download/pizza-5179939_640.jpg",
+        "descripcion": "Pizza con base de tomate, queso mozzarella y rodajas de pepperoni.",
+        "instrucciones": [
+            {"paso": "Extender la masa sobre una bandeja para hornear.", "imagen": null},
+            {"paso": "Cubrir con salsa de tomate y queso mozzarella.", "imagen": null},
+            {"paso": "Añadir las rodajas de pepperoni encima.", "imagen": null},
+            {"paso": "Hornear a 220°C durante 12-15 minutos.", "imagen": null}
+        ],
+        "dificultad": "Fácil",
+        "tiempo_preparacion": 30,
+        "id_usuario": 1
+    },
+    {
+        "titulo": "Pizza Cuatro Quesos",
+        "foto_receta": "https://pixabay.com/es/images/download/pizza-3007395_640.jpg",
+        "descripcion": "Pizza cremosa con una mezcla de cuatro quesos.",
+        "instrucciones": [
+            {"paso": "Preparar la base de masa sobre una bandeja.", "imagen": null},
+            {"paso": "Untar la base con una fina capa de salsa de tomate.", "imagen": null},
+            {"paso": "Añadir mozzarella, queso azul, parmesano y queso de cabra.", "imagen": null},
+            {"paso": "Hornear a 220°C durante 10-12 minutos hasta que los quesos se derritan.", "imagen": null}
+        ],
+        "dificultad": "Media",
+        "tiempo_preparacion": 40,
+        "id_usuario": 1
+    },
+    {
+        "titulo": "Pizza Hawaiana",
+        "foto_receta": "https://pixabay.com/es/images/download/pizza-5501075_640.jpg",
+        "descripcion": "Una pizza tropical con jamón y piña.",
+        "instrucciones": [
+            {"paso": "Extender la masa y colocarla en una bandeja para hornear.", "imagen": null},
+            {"paso": "Cubrir con salsa de tomate y queso mozzarella.", "imagen": null},
+            {"paso": "Distribuir el jamón y los trozos de piña sobre la pizza.", "imagen": null},
+            {"paso": "Hornear a 200°C durante 15-18 minutos.", "imagen": null}
+        ],
+        "dificultad": "Fácil",
+        "tiempo_preparacion": 35,
+        "id_usuario": 1
     }
+    
+    
+    
 ];
 
 
 const insertarRecetas = async () => {
     const categorias = [
-        { titulo: "Ensalada César", categorias: [1, 8,7] },
+        { titulo: "Ensalada César", categorias: [14, 8,7] },
         { titulo: "Tarta de manzana", categorias: [3,6,13] },
         { titulo: "Pasta al pesto", categorias: [8,9,10] },
         { titulo: "Sopa de tomate", categorias: [2,7,15] },
@@ -289,6 +334,9 @@ const insertarRecetas = async () => {
         { titulo: "Tarta de queso", categorias: [3,6,13] },
         { titulo: "Curry de verduras", categorias: [1,2,8,9,10] },
         { titulo: "Sushi", categorias: [8,9,10] },
+        { titulo: "Pizza Pepperoni", categorias: [8,9,10] },
+        { titulo: "Pizza Cuatro Quesos", categorias: [1,8,9,10] },
+        { titulo: "Pizza Hawaiana", categorias: [8,9,10] },
     ];
     
     // Aquí puedes definir las categorías para cada receta
@@ -311,6 +359,9 @@ const insertarRecetas = async () => {
         { titulo: "Tarta de queso", ingredientes: [307,40,29,173,216], cantidades:["500 g","1/2 taza","2 piezas","1/4 taza","1 taza (trituradas)"] },
         { titulo: "Curry de verduras", ingredientes: [11,5,10,140,183], cantidades:["1 taza","1 taza","1 taza","1 taza","1 cucharada"] },
         { titulo: "Sushi", ingredientes: [37,163,104,20,309], cantidades:["200 g","1 hoja","100 g","1/4 pieza","al gusto"] },
+        {titulo: "Pizza Pepperoni", ingredientes: [99,127,178,311,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","al gusto"]},
+        {titulo: "Pizza Cuatro Quesos", ingredientes: [99,127,178,174,58,310], cantidades: ["1 base","1/4 taza","1/2 taza","1/4 taza","1/4 taza","1/4 taza"]},
+        {titulo: "Pizza Hawaiana", ingredientes: [99,127,178,312,68,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","1/2 taza","al gusto"]},
     ];
     for (const receta of recetas) {
         // Inserta la receta y obtén el ID
@@ -322,8 +373,10 @@ const insertarRecetas = async () => {
             }
         });
 
-        // Aquí puedes definir las categorías para cada receta
-        
+        if (!creada) {
+            console.log(`La receta '${receta.titulo}' ya existe. Se omite su creación.`);
+            continue; // Si la receta ya existe, salta al siguiente elemento del bucle
+        }
 
         // Encuentra las categorías correspondientes a la receta actual
         const recetaCategorias = categorias.find(c => c.titulo === receta.titulo)?.categorias || [];
@@ -437,7 +490,8 @@ const insertIngredientes = async () => {
         { nombre: 'Tequila' },{ nombre: 'Agua' },{nombre:'Crutones'},{nombre:'Masa para tarta'},
         {nombre: 'Piñones'},{nombre: 'Salsa'},{nombre: 'Banana'},{nombre: 'Frutos rojos'},
         {nombre: 'Hielo'},{nombre: 'Polvo de hornear'},{nombre: 'Arándanos'},{nombre:'Mayonesa vegana'},
-        {nombre: 'Mayonesa'},{nombre: 'Queso Crema'},{nombre: 'Salsa de soya'},
+        {nombre: 'Mayonesa'},{nombre: 'Queso Crema'},{nombre: 'Salsa de soya'},{nombre: 'Queso de cabra'},
+        {nombre: 'Pepperoni'}, {nombre:'Jamón cocido'},
     ];
 
         try {

@@ -310,13 +310,40 @@ const obtenerSimilares = async (ctx) => {
 
         const similaresIds = topSimilaresPorIngredientes.map(receta => receta.id_receta);
 
+        console.log(topSimilaresPorIngredientes.map(receta => receta.id_receta + receta.similitud));
+
         const recetasSimilares = await Receta.findAll({
             where: {
                 id_receta: similaresIds
             }
         });
 
-        ctx.body = recetasSimilares;
+        const recetasSimilaresOrdenadas = similaresIds.map(id => 
+            recetasSimilares.find(receta => receta.id_receta === id)
+        );
+
+        ctx.body = recetasSimilaresOrdenadas;
+
+    } catch (error) {
+        console.error("Error en obtenerSimilares:", error);
+        ctx.status = 500;
+        ctx.body = { error: "Error interno en el servidor" };
+    }
+
+};
+
+// Obtiene las recetas de un usuario
+const obtenerRecetas = async (ctx) => {
+
+    try {
+        const idUsuario = ctx.params.id;
+        const recetas = await Receta.findAll({
+            where: {
+                id_usuario: idUsuario
+            }
+        });
+
+        ctx.body = recetas;
 
     } catch (error) {
         console.error("Error en obtenerSimilares:", error);
@@ -327,4 +354,4 @@ const obtenerSimilares = async (ctx) => {
 };
 
 
-module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion, obtenerSimilares };
+module.exports = { crearReceta, obtenerReceta, calificarReceta, obtenerCalificacion, obtenerPromedioCalificacion, obtenerSimilares, obtenerRecetas };
