@@ -5,6 +5,7 @@ const Seguidor = () => {
     const router = useRouter();
     const [seguidores, setSeguidores] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { id } = router.query;
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -15,12 +16,13 @@ const Seguidor = () => {
 
         const fetchSeguidores = async () => {
             try {
-                const response = await fetch('http://localhost:3000/seguidores', {
+                const response = await fetch(`http://localhost:3000/seguidores/${id}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
-                    }
+                    },
                 });
+                console.log("Desde seguidores ",response);
 
                 if (response.status === 200) {
                     const data = await response.json();
@@ -41,11 +43,12 @@ const Seguidor = () => {
     }, [router]);
 
     if (loading) return <p className="text-center text-lg">Cargando seguidores...</p>;
-    if (seguidores.length === 0) return <p className="text-center text-lg">No tienes seguidores.</p>;
 
     return (
         <div className="mt-4">
-            <h3 className="text-2xl font-bold mb-4">Tus Seguidores:</h3>
+            <h3 className="text-2xl font-bold mb-4">Sus Seguidores:</h3>
+            {seguidores.length === 0 ? (<p className="text-center text-lg">No tiene seguidores.</p>
+        ):(
             <div className="max-h-[33rem] overflow-y-scroll">
                 <ul className="space-y-4">
                     {seguidores.map((seguidor) => (
@@ -60,6 +63,7 @@ const Seguidor = () => {
                     ))}
                 </ul>
             </div>
+        )}
         </div>
     );
     

@@ -10,9 +10,9 @@ const SearchGrid = ({ results }) => {
     const itemsPerPage = 4;
 
     useEffect(() => {
-        const fetchFollowedUsers = async () => {
+        const fetchFollowedUsers = async (id) => {
             try {
-                const response = await fetch('http://localhost:3000/seguimientos', {
+                const response = await fetch(`http://localhost:3000/seguimientos/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     },
@@ -47,8 +47,9 @@ const SearchGrid = ({ results }) => {
             return null;
         };
 
-        fetchFollowedUsers();
         const userId = getUserIdFromToken();
+        fetchFollowedUsers(userId);
+        
         setCurrentUserId(userId);
     }, []);
 

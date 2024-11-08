@@ -33,19 +33,6 @@ const Home = () => {
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow p-6 bg-gray-100 flex justify-between">
-                <div className="flex flex-col items-start w-1/4 pl-2 mt-8 h-full"> {/* Columna de seguimientos */}
-                    <h2 className="text-xl font-semibold mb-2">Mis Seguimientos</h2>
-                    {loading ? (
-                        <p>Cargando...</p>
-                    ) : (
-                        <>
-                            <Seguimientos />
-                            <h2 className="text-xl font-semibold mt-6">Mis Seguidores</h2> {/* Nuevo título para Seguidores */}
-                            <Seguidores /> {/* Nuevo componente de seguidores */}
-                        </>
-                    )}
-                </div>
-
                 <div className="flex flex-col items-center w-1/2"> {/* Contenido central */}
                     <h1 className="text-3xl font-bold mb-4 text-center">Bienvenido a Foodbook</h1>
                     <p className="text-lg text-center mb-8">Descubre, crea y comparte deliciosas recetas.</p>

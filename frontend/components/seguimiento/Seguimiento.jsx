@@ -5,6 +5,7 @@ const Seguimientos = () => {
     const [seguimientos, setSeguimientos] = useState([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const { id } = router.query;
 
     useEffect(() => {
         const fetchSeguimientos = async () => {
@@ -12,7 +13,8 @@ const Seguimientos = () => {
             if (!token) return;
 
             try {
-                const response = await fetch('http://localhost:3000/seguimientos', {
+                const response = await fetch(`http://localhost:3000/seguimientos/${id}`, {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -40,13 +42,11 @@ const Seguimientos = () => {
         return <p>Cargando seguimientos...</p>;
     }
 
-    if (seguimientos.length === 0) {
-        return <p>No sigues a ningún usuario aún.</p>;
-    }
-
     return (
         <div className="mt-4">
-            <h3 className="text-2xl font-bold mb-4">Usuarios que sigues:</h3>
+            <h3 className="text-2xl font-bold mb-4">Usuarios que sigue:</h3>
+            {seguimientos.length === 0 ? (<p>No sigues a ningún usuario aún.</p>
+        ):(
             <div className="max-h-[33rem] overflow-y-scroll">
             <ul className="space-y-4">
                 {seguimientos.map((seguimiento) => (
@@ -61,6 +61,7 @@ const Seguimientos = () => {
                 ))}                
                 </ul>
             </div>
+        )}
         </div>
     );
 

@@ -5,6 +5,8 @@ import Footer from '@/components/footer/Footer';
 import FollowButton from '@/components/followButton/FollowButton';
 import SearchGrid from '@/components/search/SearchGrid';
 import Favoritos from '@/components/favoritos/Favoritos';
+import Seguidores from '@/components/seguidores/Seguidores';
+import Seguimientos from '@/components/seguimiento/Seguimiento';
 
 const PerfilUsuario = () => {
     const [perfil, setPerfil] = useState(null);
@@ -85,9 +87,10 @@ const PerfilUsuario = () => {
             }
         };
 
-        const fetchFollowedUsers = async () => {
+        const fetchFollowedUsers = async (usuario) => {
             try {
-                const response = await fetch('http://localhost:3000/seguimientos', {
+
+                const response = await fetch(`http://localhost:3000/seguimientos/${usuario}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     },
@@ -125,7 +128,7 @@ const PerfilUsuario = () => {
             fetchPerfil();
             const userId = getUserIdFromToken(); // Obtener el ID del usuario autenticado desde el token
             setCurrentUserId(userId);
-            fetchFollowedUsers(); // Cargar los usuarios seguidos
+            fetchFollowedUsers(userId); // Cargar los usuarios seguidos
         }
     }, [router, id]);
 
@@ -136,80 +139,91 @@ const PerfilUsuario = () => {
     if (!perfil) {
         return <p>Cargando perfil...</p>;
     }
-
+    console.log(followedUsers.has(perfil.id_usuario));
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow p-6 bg-gray-100">
-                <h1 className="text-2xl font-bold mb-4">Perfil del Usuario</h1>
-                <p>Nombre: {perfil.nombre}</p>
-                <p>Correo Electrónico: {perfil.correo_electronico}</p>
-                {perfil.foto_perfil && (
-                    <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
-                )}
-                {perfil.id_usuario !== currentUserId && (
-                    <FollowButton
-                        id_usuario={perfil.id_usuario}
-                        isFollowed={followedUsers.has(perfil.id_usuario)}
-                        onFollow={async (id_usuario) => {
-                            try {
-                                const response = await fetch(`http://localhost:3000/follow`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                    },
-                                    body: JSON.stringify({ id_usuario_seguido: id_usuario }),
-                                });
-                                if (response.status === 200) {
-                                    setFollowedUsers((prev) => new Set([...prev, id_usuario]));
-                                } else if (response.status === 401 || response.status === 403) {
-                                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                                    localStorage.removeItem('token');
-                                    router.push('/login');
+            <div className="grid grid-cols-5 grid-rows-3 gap-4">
+                <div className="">
+                    <Seguimientos />
+                    <Seguidores />
+                </div>
+                <div className="col-span-3">
+                    <h1 className="text-2xl font-bold mb-4">Perfil del Usuario</h1>
+                    <p>Nombre: {perfil.nombre}</p>
+                    <p>Correo Electrónico: {perfil.correo_electronico}</p>
+                    {perfil.foto_perfil && (
+                        <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
+                    )}
+                    {perfil.id_usuario !== currentUserId && (
+                        <FollowButton
+                            id_usuario={perfil.id_usuario}
+                            isFollowed={followedUsers.has(perfil.id_usuario)}
+                            onFollow={async (id_usuario) => {
+                                try {
+                                    const response = await fetch(`http://localhost:3000/follow`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                        },
+                                        body: JSON.stringify({ id_usuario_seguido: id_usuario }),
+                                    });
+                                    if (response.status === 200) {
+                                        setFollowedUsers((prev) => new Set([...prev, id_usuario]));
+                                    } else if (response.status === 401 || response.status === 403) {
+                                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                                        localStorage.removeItem('token');
+                                        router.push('/login');
+                                    }
+                                } catch (error) {
+                                    console.error('Error al seguir usuario:', error);
                                 }
-                            } catch (error) {
-                                console.error('Error al seguir usuario:', error);
-                            }
-                        }}
-                        onUnfollow={async (id_usuario) => {
-                            try {
-                                const response = await fetch(`http://localhost:3000/unfollow`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                    },
-                                    body: JSON.stringify({ id_usuario_seguido: id_usuario }),
-                                });
+                            }}
+                            onUnfollow={async (id_usuario) => {
+                                try {
+                                    const response = await fetch(`http://localhost:3000/unfollow`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                        },
+                                        body: JSON.stringify({ id_usuario_seguido: id_usuario }),
+                                    });
 
-                                if (response.status === 200) {
-                                    setFollowedUsers((prev) => {
-                                        const newSet = new Set(prev);
-                                        newSet.delete(id_usuario);
-                                        return newSet;
-                                    })
-                                } else if (response.status === 401 || response.status === 403) {
-                                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                                    localStorage.removeItem('token');
-                                    router.push('/login');
+                                    if (response.status === 200) {
+                                        setFollowedUsers((prev) => {
+                                            const newSet = new Set(prev);
+                                            newSet.delete(id_usuario);
+                                            return newSet;
+                                        })
+                                    } else if (response.status === 401 || response.status === 403) {
+                                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                                        localStorage.removeItem('token');
+                                        router.push('/login');
+                                    }
+                                } catch (error) {
+                                    console.error('Error al dejar de seguir usuario:', error);
                                 }
-                            } catch (error) {
-                                console.error('Error al dejar de seguir usuario:', error);
-                            }
-                        }}
+                            }}
 
-                    />
-                )}
-                <Favoritos />
+                        />
+                    )}
+                </div>
+                <div className="col-start-5">
+                    <Favoritos />
+                </div>
                 {/* Mostrar recetas del creador */}
-                <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
-                {recetas.length === 0 ? (
-                    <p>No hay recetas disponibles.</p>
-                ) : (
-                    <SearchGrid results={recetas}></SearchGrid>
-                )}
-
+                <div className="col-span-5 row-span-2 row-start-2">
+                    <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
+                    {recetas.length === 0 ? (
+                        <p>No hay recetas disponibles.</p>
+                    ) : (
+                        <SearchGrid results={recetas}></SearchGrid>
+                    )}
+                </div>
+                </div>       
             </main>
             <Footer />
         </div>

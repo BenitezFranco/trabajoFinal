@@ -40,11 +40,11 @@ const seguirUsuario = async (ctx) => {
 
 // Función para obtener la lista de usuarios seguidos
 const obtenerSeguimientos = async (ctx) => {
-    const id_usuario_seguidor = ctx.state.user.id_usuario;
+    const id_seguidor = ctx.params.id;
 
     try {
         const seguimientos = await Seguimiento.findAll({
-            where: { id_usuario_seguidor },
+            where: { id_usuario_seguidor:id_seguidor },
             include: {
                 model: Usuario,
                 as: 'seguido', // Alias para la relación
@@ -112,11 +112,11 @@ const obtenerPerfil = async (ctx) => {
 
 
 const obtenerSeguidores = async (ctx) => {
-    const id_usuario_seguido = ctx.state.user.id_usuario; // Usuario autenticado
+    const id_seguido = ctx.params.id; // Usuario autenticado
 
     try {
         const seguidores = await Seguimiento.findAll({
-            where: { id_usuario_seguido }, // Buscar quienes siguen al usuario autenticado
+            where: { id_usuario_seguido: id_seguido }, // Buscar quienes siguen al usuario autenticado
             include: {
                 model: Usuario,
                 as: 'seguidor', // Alias para la relación

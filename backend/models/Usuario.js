@@ -17,12 +17,20 @@ const Usuario = sequelize.define('Usuario', {
         unique: true,
         allowNull: false,
     },
+    es_visible: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     contrasena: {
         type: DataTypes.STRING,
         allowNull: false,
     },
     foto_perfil: {
         type: DataTypes.STRING,
+    },
+    presentacion: {
+        type: DataTypes.STRING,
+        defaultValue: '' 
     }
 }, {
     tableName: 'Usuario',
