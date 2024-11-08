@@ -31,7 +31,12 @@ const Usuario = sequelize.define('Usuario', {
     presentacion: {
         type: DataTypes.STRING,
         defaultValue: '' 
-    }
+    },
+    descripcion_breve: {
+        type: DataTypes.STRING,
+        defaultValue: ''
+    },
+
 }, {
     tableName: 'Usuario',
     timestamps: false,
