@@ -48,7 +48,7 @@ const obtenerSeguimientos = async (ctx) => {
             include: {
                 model: Usuario,
                 as: 'seguido', // Alias para la relación
-                attributes: ['id_usuario', 'nombre']
+                attributes: ['id_usuario', 'nombre', 'foto_perfil']
             }
         });
 
@@ -120,7 +120,7 @@ const obtenerSeguidores = async (ctx) => {
             include: {
                 model: Usuario,
                 as: 'seguidor', // Alias para la relación
-                attributes: ['id_usuario', 'nombre']
+                attributes: ['id_usuario', 'nombre', 'foto_perfil']
             }
         });
 

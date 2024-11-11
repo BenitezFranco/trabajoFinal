@@ -27,6 +27,7 @@ const Usuario = sequelize.define('Usuario', {
     },
     foto_perfil: {
         type: DataTypes.STRING,
+        defaultValue: 'http://localhost:3000/uploads/default-image.png'
     },
     presentacion: {
         type: DataTypes.STRING,

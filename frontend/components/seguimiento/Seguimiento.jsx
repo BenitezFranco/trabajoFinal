@@ -23,7 +23,7 @@ const Seguimientos = () => {
                     const textResponse = await response.text();
                     const data = JSON.parse(textResponse);
                     setSeguimientos(data);
-                    } else if (response.status === 401 || response.status === 403) {
+                } else if (response.status === 401 || response.status === 403) {
                     alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                     localStorage.removeItem('token');
                     router.push('/login');
@@ -36,35 +36,47 @@ const Seguimientos = () => {
         };
 
         fetchSeguimientos();
-    }, []);
+    }, [id, router]);
 
     if (loading) {
-        return <p>Cargando seguimientos...</p>;
+        return <p className="text-center text-lg">Cargando seguimientos...</p>;
     }
 
     return (
-        <div className="mt-4">
-            <h3 className="text-2xl font-bold mb-4">Usuarios que sigue:</h3>
-            {seguimientos.length === 0 ? (<p>No sigues a ningún usuario aún.</p>
-        ):(
-            <div className="max-h-[33rem] overflow-y-scroll">
-            <ul className="space-y-4">
-                {seguimientos.map((seguimiento) => (
-                    <li key={seguimiento.id_seguimiento} className="flex items-center p-4 bg-gray-200 rounded-lg shadow hover:bg-gray-100 transition duration-200 transition-transform transform hover:scale-95">
-                        <span
-                            onClick={() => router.push(`/perfil/${seguimiento.id_usuario_seguido}`)}
-                            className="cursor-pointer text-blue-500 hover:underline font-semibold"
-                        >
-                            {seguimiento.seguido.nombre}
-                        </span>
-                    </li>
-                ))}                
-                </ul>
-            </div>
-        )}
+        <div className="mt-6">
+            <h3 className="text-2xl font-bold mb-6">Usuarios que sigues:</h3>
+            {seguimientos.length === 0 ? (
+                <p className="text-center text-lg">No sigues a ningún usuario aún.</p>
+            ) : (
+                <div className="max-h-[33rem] overflow-y-scroll space-y-4">
+                    <ul className="grid gap-6">
+                        {seguimientos.map((seguimiento) => (
+                            <li
+                                key={seguimiento.id_seguimiento}
+                                onClick={() => router.push(`/perfil/${seguimiento.id_usuario_seguido}`)}
+                                className="flex items-center p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105 cursor-pointer"
+                            >
+                                {/* Imagen de perfil o imagen predeterminada */ console.log (seguimiento.seguido)}
+                                
+                                <div className="flex-shrink-0">
+                                    <img
+                                        src={seguimiento.seguido.foto_perfil || 'http://localhost:3000/uploads/default-image.png'}
+                                        
+                                        alt={`${seguimiento.seguido.nombre} avatar`}
+                                        className="w-12 h-12 rounded-full border-2 border-blue-400"
+                                    />
+                                </div>
+                                <div className="ml-4">
+                                    <h4 className="text-lg font-semibold text-blue-500 hover:underline">{seguimiento.seguido.nombre}</h4>
+                                    <p className="text-sm text-gray-600">Sigues desde {seguimiento.fecha_seguimiento}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
-
 };
 
 export default Seguimientos;
