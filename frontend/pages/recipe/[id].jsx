@@ -125,29 +125,31 @@ const RecipePage = () => {
             <Header />
             <div className="grid grid-cols-5 grid-rows-5 gap-4 p-6">
                 {/* Sección de opciones (izquierda) */}
-    <div className="flex flex-col items-center bg-gray-100 p-6 rounded-lg shadow-lg mt-2">
-        {/* Nombre del autor */}
-        <p className="text-lg font-semibold mb-3 text-center">
-            <strong>Autor:</strong> {receta.nombre_usuario}
-        </p>
+                <div className="flex flex-col items-center bg-gray-100 p-6 rounded-lg shadow-lg mt-2">
+                    {/* Nombre del autor */}
+                    <p className="text-lg font-semibold mb-3 text-center">
+                        <strong>Autor:</strong> {receta.nombre_usuario}
+                    </p>
 
-        {/* Imagen del autor */}
-        <img
-            src={receta.foto_perfil}
-            alt="Imagen del Autor"
-            className="rounded-full w-24 h-24 mt-3 border-4 border-gray-300 shadow-md"
-        />
+                    {/* Imagen del autor */}
+                    <img
+                        src={receta.foto_perfil}
+                        alt="Imagen del Autor"
+                        className="rounded-full w-24 h-24 mt-3 border-4 border-gray-300 shadow-md"
+                    />
 
-        {/* Calificación */}
-        <Rating recetaId={id} className="mb-4" />
+                    {/* Calificación */}
+                    <Rating recetaId={id} className="mb-4" />
 
-        {/* Botón de favorito con mayor separación superior */}
-        <FontAwesomeIcon
-            icon={esFavorito ? fullHeart : emptyHeart}
-            onClick={handleFavorito}
-            className={`text-3xl cursor-pointer mb-4 mt-6 ${esFavorito ? 'text-red-500' : 'text-gray-400 hover:text-red-500'} transition-transform duration-300 transform active:scale-110`}
-        />
-    </div>
+                    {/* Botón de favorito con animación de rebote y escalado */}
+                    <FontAwesomeIcon
+                        icon={esFavorito ? fullHeart : emptyHeart}
+                        onClick={handleFavorito}
+                        className={`text-3xl cursor-pointer mb-4 mt-6 ${esFavorito ? 'text-red-500' : 'text-gray-400 hover:text-red-500'} 
+    transition-all duration-300 transform active:scale-110 animate-bounce`}
+                    />
+
+                </div>
 
 
 
