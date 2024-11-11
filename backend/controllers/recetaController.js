@@ -41,6 +41,7 @@ const crearReceta = async (ctx) => {
 };
 
 // Obtener una receta por ID
+// Obtener una receta por ID
 const obtenerReceta = async (ctx) => {
     try {
         const recetaId = ctx.params.id;
@@ -56,7 +57,7 @@ const obtenerReceta = async (ctx) => {
 
         const usuario = await Usuario.findOne({
             where: { id_usuario: receta.id_usuario },
-            attributes: ['nombre']
+            attributes: ['nombre', 'foto_perfil'] // Incluye foto_perfil aquí
         });
 
         const idsCategoria = await RecetaCategoria.findAll({
@@ -64,7 +65,7 @@ const obtenerReceta = async (ctx) => {
                 id_receta: receta.id_receta
             },
             attributes: ['id_categoria']
-        })
+        });
 
         const ids = idsCategoria.map(item => item.id_categoria);
 
@@ -75,12 +76,11 @@ const obtenerReceta = async (ctx) => {
             attributes: ['nombre']
         });
 
-
         const idsIngrediente = await RecetaIngrediente.findAll({
             where: {
                 id_receta: receta.id_receta
             },
-            attributes: ['id_ingrediente', 'cantidad'] // Asegúrate de obtener también la cantidad
+            attributes: ['id_ingrediente', 'cantidad']
         });
 
         const idsIng = idsIngrediente.map(item => item.id_ingrediente);
@@ -89,17 +89,16 @@ const obtenerReceta = async (ctx) => {
             where: {
                 id_ingrediente: { [Op.in]: idsIng }
             },
-            attributes: ['id_ingrediente', 'nombre'] // Incluye id_ingrediente para la comparación
+            attributes: ['id_ingrediente', 'nombre']
         });
 
         const ingredientesConCantidad = idsIngrediente.map(item => {
             const ingredienteEncontrado = ingredientes.find(ingrediente => ingrediente.id_ingrediente === item.id_ingrediente);
             return {
-                nombre: ingredienteEncontrado ? ingredienteEncontrado.nombre : null, // Nombre del ingrediente
-                cantidad: item.cantidad // Cantidad del ingrediente
+                nombre: ingredienteEncontrado ? ingredienteEncontrado.nombre : null,
+                cantidad: item.cantidad
             };
         }).filter(item => item.nombre);
-
 
         if (!usuario) {
             ctx.status = 404;
@@ -110,8 +109,9 @@ const obtenerReceta = async (ctx) => {
         const recetaConUsuario = {
             ...receta.toJSON(),
             nombre_usuario: usuario.nombre,
+            foto_perfil: usuario.foto_perfil, // Agrega la foto de perfil aquí
             categorias: categorias.map(categoria => categoria.nombre),
-            ingredientes: ingredientesConCantidad // Aquí envías la lista con nombres y cantidades
+            ingredientes: ingredientesConCantidad
         };
 
         ctx.status = 200;
@@ -122,6 +122,7 @@ const obtenerReceta = async (ctx) => {
         ctx.body = { error: 'Error al obtener la receta' };
     }
 };
+
 
 // Calificar una receta
 
