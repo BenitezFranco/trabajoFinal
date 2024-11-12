@@ -144,7 +144,7 @@ const PerfilUsuario = () => {
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow p-6 bg-gray-100">
-                <div className="grid grid-cols-5 grid-rows-3 gap-4">
+                <div className="grid grid-cols-5 grid-rows-2 gap-4">
                     <div className="">
                         <Seguimientos />
                         <Seguidores />
@@ -152,18 +152,21 @@ const PerfilUsuario = () => {
                     <div className="col-span-3">
                         <div className="bg-gray-100">
                             <div className="container mx-auto py-8">
-                                <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-                                    {/* Perfil */}
-                                    <div className="col-span-4 sm:col-span-3">
-                                        <div className="bg-white shadow rounded-lg p-6 space-y-6 max-w-lg mx-auto sm:max-w-none">
-                                            <div className="flex flex-col items-center space-y-4">
-                                                {perfil.foto_perfil && (
-                                                    <img
-                                                        src={perfil.foto_perfil}
-                                                        alt="Foto de perfil"
-                                                        className="w-32 h-32 bg-gray-300 rounded-full mb-4"
-                                                    />
-                                                )}
+                                <div className="grid grid-cols-1 grid-rows-2 gap-6 px-4">
+                                    {/* Primer div: Imagen a la izquierda y texto a la derecha */}
+                                    <div className="bg-white shadow rounded-lg p-6">
+                                        <div className="flex items-center space-x-6">
+                                            {/* Imagen */}
+                                            {perfil.foto_perfil && (
+                                                <img
+                                                    src={perfil.foto_perfil}
+                                                    alt="Foto de perfil"
+                                                    className="w-32 h-32 bg-gray-300 rounded-full"
+                                                />
+                                            )}
+
+                                            {/* Información del perfil */}
+                                            <div className="flex flex-col justify-start space-y-4">
                                                 <h1 className="text-xl font-bold">{perfil.nombre}</h1>
                                                 <p className="text-gray-700">{perfil.descripcion_breve}</p>
 
@@ -233,12 +236,11 @@ const PerfilUsuario = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Información adicional (Sobre mí) */}
-                                    <div className="col-span-4 sm:col-span-9">
-                                        <div className="bg-white shadow rounded-lg p-6 space-y-4">
-                                            <h2 className="text-xl font-bold mb-4">Sobre mi</h2>
-                                            <p className="text-gray-700">{perfil.presentacion}</p>
-                                        </div>
+
+                                    {/* Segundo div: Sección Sobre mí */}
+                                    <div className="bg-white shadow rounded-lg p-6 break-words">
+                                        <h2 className="text-xl font-bold mb-4">Sobre mi</h2>
+                                        <p className="text-gray-700">{perfil.presentacion}</p>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +251,7 @@ const PerfilUsuario = () => {
                         <Favoritos />
                     </div>
                     {/* Mostrar recetas del creador */}
-                    <div className="col-span-5 row-span-2 row-start-2">
+                    <div className="col-span-5 row-start-2">
                         <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
                         {recetas.length === 0 ? (
                             <p>No hay recetas disponibles.</p>

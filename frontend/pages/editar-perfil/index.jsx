@@ -99,7 +99,7 @@ const EditarPerfil = () => {
                     router.push(`/perfil/${perfil.id_usuario}`);
                 }, 2000);
             } else {
-                setError('Error al actualizar el perfil. Inténtalo de nuevo más tarde.');
+                setError('Error al actualizar el perfil. Inténtalo de nuevo más tarde.',error);
             }
         } catch (error) {
             console.error('Error al actualizar el perfil', error);
@@ -146,6 +146,7 @@ const EditarPerfil = () => {
                             name="descripcion_breve"
                             value={perfil.descripcion_breve}
                             onChange={handleInputChange}
+                            maxLength="30"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
@@ -157,6 +158,7 @@ const EditarPerfil = () => {
                             name="presentacion"
                             value={perfil.presentacion}
                             onChange={handleInputChange}
+                            maxLength="250"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
