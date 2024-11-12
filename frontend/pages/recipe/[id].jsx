@@ -123,7 +123,7 @@ const RecipePage = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <div className="grid grid-cols-5 grid-rows-5 gap-4 p-6">
+            <div className="grid grid-cols-5 auto-rows-min gap-4 p-6">
                 {/* Sección de opciones (izquierda) */}
                 <div className="flex flex-col items-center bg-gray-100 p-6 rounded-lg shadow-lg mt-2">
                     {/* Nombre del autor */}
@@ -146,15 +146,12 @@ const RecipePage = () => {
                         icon={esFavorito ? fullHeart : emptyHeart}
                         onClick={handleFavorito}
                         className={`text-3xl cursor-pointer mb-4 mt-6 ${esFavorito ? 'text-red-500' : 'text-gray-400 hover:text-red-500'} 
-    transition-all duration-300 transform active:scale-110 animate-bounce`}
+                transition-all duration-300 transform active:scale-110 animate-bounce`}
                     />
-
                 </div>
 
-
-
                 {/* Contenido principal de la receta (centro) */}
-                <div className="col-span-3 row-span-5 bg-white rounded-lg shadow-lg p-6">
+                <div className="col-span-3 bg-white rounded-lg shadow-lg p-6">
                     <h1 className="text-3xl font-bold text-center mb-4">{receta.titulo}</h1>
                     {receta.foto_receta && (
                         <img
@@ -199,10 +196,12 @@ const RecipePage = () => {
                 </div>
 
                 {/* Recetas similares (derecha) */}
-                <div className="row-span-5 col-start-5 bg-gray-100 p-4 rounded-lg">
+                <div className="col-span-1 bg-gray-100 p-4 rounded-lg">
                     <RecetasSimilares id={id} token={localStorage.getItem('token')} />
                 </div>
             </div>
+
+
             <Footer />
         </div>
     );
