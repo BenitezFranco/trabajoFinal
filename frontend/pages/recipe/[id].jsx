@@ -143,17 +143,20 @@ const RecipePage = () => {
                     <p className="text-lg font-semibold mb-3 text-center">
                         <strong>Autor:</strong> {receta.nombre_usuario}
                     </p>
-    
-                    {/* Imagen del autor */}
-                    <img
-                        src={receta.foto_perfil}
-                        alt="Imagen del Autor"
-                        className="rounded-full w-22 h-22 mt-3 border-4 border-gray-300 shadow-md"
-                    />
-    
+
+                    <div className="flex justify-center">
+                        <img
+                            src={receta.foto_perfil}
+                            alt="Imagen del Autor"
+                            className="fixed-size rounded-full mt-3 border-4 border-gray-300 shadow-md"
+                        />
+                    </div>
+
+
+
                     {/* Calificación */}
                     <Rating recetaId={id} className="mb-4" />
-    
+
                     {/* Corazón favorito centrado */}
                     <div className="flex justify-center items-center mt-6">
                         <FontAwesomeIcon
@@ -164,12 +167,12 @@ const RecipePage = () => {
                         />
                     </div>
                 </div>
-    
+
                 {/* Contenido principal de la receta (centro) */}
                 <div className="col-span-6 row-span-4 col-start-4 bg-white rounded-lg shadow-lg p-6 space-y-6">
                     {/* Título */}
                     <h1 className="text-3xl font-bold text-center text-gray-800">{receta.titulo}</h1>
-    
+
                     {/* Imagen de la receta */}
                     {receta.foto_receta && (
                         <div className="relative h-72">
@@ -180,11 +183,11 @@ const RecipePage = () => {
                             />
                         </div>
                     )}
-    
+
                     {/* Descripción */}
                     <div className="space-y-4">
                         <p className="text-lg font-medium mb-2 text-gray-800"><strong>Descripción:</strong> {receta.descripcion}</p>
-    
+
                         {/* Ingredientes */}
                         <p className="text-lg font-medium mb-2 text-gray-800"><strong>Ingredientes:</strong></p>
                         <ul className="list-disc list-inside pl-6 space-y-2">
@@ -194,7 +197,7 @@ const RecipePage = () => {
                                 </li>
                             ))}
                         </ul>
-    
+
                         {/* Instrucciones */}
                         <p className="text-lg font-medium mb-2 text-gray-800"><strong>Instrucciones:</strong></p>
                         <ol className="list-decimal list-inside pl-6 space-y-2">
@@ -212,15 +215,15 @@ const RecipePage = () => {
                             )}
                         </ol>
                     </div>
-    
+
                     {/* Detalles adicionales */}
                     <div className="space-y-2">
                         <p className="text-lg font-medium text-gray-800"><strong>Dificultad: </strong>{receta.dificultad} {renderDificultadIcon()}</p>
                         <p className="text-lg font-medium text-gray-800"><strong>Tiempo de Preparación:</strong> {receta.tiempo_preparacion} minutos</p>
                     </div>
-    
+
                     {/* Categorías */}
-                    <div className="flex flex-wrap gap-3">  
+                    <div className="flex flex-wrap gap-3">
                         <p className="text-lg font-medium text-gray-800"><strong>Categorías:</strong></p>
                         {categorias.map((categoria, index) => (
                             <span key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-md cursor-pointer hover:bg-blue-300 transition-colors">
@@ -228,27 +231,27 @@ const RecipePage = () => {
                             </span>
                         ))}
                     </div>
-    
+
                     {/* Comentarios */}
                     <Comentarios recetaId={id} autorRecetaId={receta.id_usuario} />
                 </div>
-    
+
                 {/* Recetas similares (derecha) */}
                 <div className="col-span-3 row-span-6 col-start-10 bg-white p-6 rounded-lg shadow-lg">
                     {/* Título de la sección */}
                     <h2 className="text-lg text-center font-semibold text-gray-800 mb-4">Recetas Similares</h2>
-    
+
                     {/* Recetas Similares Component */}
                     <RecetasSimilares id={id} token={localStorage.getItem('token')} />
                 </div>
-    
+
             </div>
-    
+
             <Footer />
         </div>
     );
-    
-    
+
+
 
 };
 

@@ -26,3 +26,8 @@ body::before {
     opacity: 0.1; /* Ajusta la opacidad si es necesario */
     pointer-events: none; /* Para que no interfiera con el contenido */
 }
+
+.fixed-size {
+    width: 112px;
+    height: 112px;
+}
