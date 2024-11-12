@@ -8,6 +8,7 @@ const { seguirUsuario, obtenerSeguimientos, dejarDeSeguirUsuario, obtenerPerfil,
 const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos } = require('../controllers/favoritoController');
 const Usuario = require('../models/Usuario');
 const { subirImagen } = require('../controllers/uploadController');
+const {editarUsuario, obtenerUsuario}=require('../controllers/usuarioController');
 
 // Importar las rutas de comentarios
 const comentariosRoutes = require('./comentarios');
@@ -21,19 +22,8 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 // Ruta protegida para obtener el perfil del usuario
-router.get('/perfil', authenticate, async (ctx) => {
-    const usuarioId = ctx.state.user.id_usuario;
-    const usuario = await Usuario.findByPk(usuarioId, {
-        attributes: ['id_usuario', 'nombre', 'correo_electronico', 'foto_perfil']
-    });
-
-    if (usuario) {
-        ctx.body = usuario;
-    } else {
-        ctx.status = 404;
-        ctx.body = { error: 'Usuario no encontrado' };
-    }
-});
+router.get('/perfil', authenticate, obtenerUsuario);
+router.put('/editar-perfil/:id', authenticate,editarUsuario);
 
 // Usar las rutas de comentarios
 router.use(comentariosRoutes.routes());

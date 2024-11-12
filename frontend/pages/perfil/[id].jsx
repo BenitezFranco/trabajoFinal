@@ -144,86 +144,120 @@ const PerfilUsuario = () => {
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow p-6 bg-gray-100">
-            <div className="grid grid-cols-5 grid-rows-3 gap-4">
-                <div className="">
-                    <Seguimientos />
-                    <Seguidores />
-                </div>
-                <div className="col-span-3">
-                    <h1 className="text-2xl font-bold mb-4">Perfil del Usuario</h1>
-                    <p>Nombre: {perfil.nombre}</p>
-                    <p>Correo Electrónico: {perfil.correo_electronico}</p>
-                    {perfil.foto_perfil && (
-                        <img src={perfil.foto_perfil} alt="Foto de perfil" className="mt-4" />
-                    )}
-                    {perfil.id_usuario !== currentUserId && (
-                        <FollowButton
-                            id_usuario={perfil.id_usuario}
-                            isFollowed={followedUsers.has(perfil.id_usuario)}
-                            onFollow={async (id_usuario) => {
-                                try {
-                                    const response = await fetch(`http://localhost:3000/follow`, {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                        },
-                                        body: JSON.stringify({ id_usuario_seguido: id_usuario }),
-                                    });
-                                    if (response.status === 200) {
-                                        setFollowedUsers((prev) => new Set([...prev, id_usuario]));
-                                    } else if (response.status === 401 || response.status === 403) {
-                                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                                        localStorage.removeItem('token');
-                                        router.push('/login');
-                                    }
-                                } catch (error) {
-                                    console.error('Error al seguir usuario:', error);
-                                }
-                            }}
-                            onUnfollow={async (id_usuario) => {
-                                try {
-                                    const response = await fetch(`http://localhost:3000/unfollow`, {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                                        },
-                                        body: JSON.stringify({ id_usuario_seguido: id_usuario }),
-                                    });
+                <div className="grid grid-cols-5 grid-rows-3 gap-4">
+                    <div className="">
+                        <Seguimientos />
+                        <Seguidores />
+                    </div>
+                    <div className="col-span-3">
+                        <div className="bg-gray-100">
+                            <div className="container mx-auto py-8">
+                                <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+                                    {/* Perfil */}
+                                    <div className="col-span-4 sm:col-span-3">
+                                        <div className="bg-white shadow rounded-lg p-6 space-y-6 max-w-lg mx-auto sm:max-w-none">
+                                            <div className="flex flex-col items-center space-y-4">
+                                                {perfil.foto_perfil && (
+                                                    <img
+                                                        src={perfil.foto_perfil}
+                                                        alt="Foto de perfil"
+                                                        className="w-32 h-32 bg-gray-300 rounded-full mb-4"
+                                                    />
+                                                )}
+                                                <h1 className="text-xl font-bold">{perfil.nombre}</h1>
+                                                <p className="text-gray-700">{perfil.descripcion_breve}</p>
 
-                                    if (response.status === 200) {
-                                        setFollowedUsers((prev) => {
-                                            const newSet = new Set(prev);
-                                            newSet.delete(id_usuario);
-                                            return newSet;
-                                        })
-                                    } else if (response.status === 401 || response.status === 403) {
-                                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                                        localStorage.removeItem('token');
-                                        router.push('/login');
-                                    }
-                                } catch (error) {
-                                    console.error('Error al dejar de seguir usuario:', error);
-                                }
-                            }}
+                                                {/* Correo visible */}
+                                                {perfil.es_visible && <p className="text-gray-700">{perfil.correo_electronico}</p>}
 
-                        />
-                    )}
+                                                {/* Botón Follow/Unfollow */}
+                                                {perfil.id_usuario !== currentUserId && (
+                                                    <FollowButton
+                                                        id_usuario={perfil.id_usuario}
+                                                        isFollowed={followedUsers.has(perfil.id_usuario)}
+                                                        onFollow={async (id_usuario) => {
+                                                            try {
+                                                                const response = await fetch(`http://localhost:3000/follow`, {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                                                    },
+                                                                    body: JSON.stringify({ id_usuario_seguido: id_usuario }),
+                                                                });
+                                                                if (response.status === 200) {
+                                                                    setFollowedUsers((prev) => new Set([...prev, id_usuario]));
+                                                                } else if (response.status === 401 || response.status === 403) {
+                                                                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                                                                    localStorage.removeItem('token');
+                                                                    router.push('/login');
+                                                                }
+                                                            } catch (error) {
+                                                                console.error('Error al seguir usuario:', error);
+                                                            }
+                                                        }}
+                                                        onUnfollow={async (id_usuario) => {
+                                                            try {
+                                                                const response = await fetch(`http://localhost:3000/unfollow`, {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                                                    },
+                                                                    body: JSON.stringify({ id_usuario_seguido: id_usuario }),
+                                                                });
+
+                                                                if (response.status === 200) {
+                                                                    setFollowedUsers((prev) => {
+                                                                        const newSet = new Set(prev);
+                                                                        newSet.delete(id_usuario);
+                                                                        return newSet;
+                                                                    });
+                                                                } else if (response.status === 401 || response.status === 403) {
+                                                                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                                                                    localStorage.removeItem('token');
+                                                                    router.push('/login');
+                                                                }
+                                                            } catch (error) {
+                                                                console.error('Error al dejar de seguir usuario:', error);
+                                                            }
+                                                        }}
+                                                    />
+                                                )}
+                                                {perfil.id_usuario === currentUserId && (
+                                                    <a href='/editar-perfil'>
+                                                        <button
+                                                            className={`py-1 px-3 rounded bg-green-500 hover:bg-green-600 text-white font-bold`}>Editar</button>
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Información adicional (Sobre mí) */}
+                                    <div className="col-span-4 sm:col-span-9">
+                                        <div className="bg-white shadow rounded-lg p-6 space-y-4">
+                                            <h2 className="text-xl font-bold mb-4">Sobre mi</h2>
+                                            <p className="text-gray-700">{perfil.presentacion}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-start-5">
+                        <Favoritos />
+                    </div>
+                    {/* Mostrar recetas del creador */}
+                    <div className="col-span-5 row-span-2 row-start-2">
+                        <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
+                        {recetas.length === 0 ? (
+                            <p>No hay recetas disponibles.</p>
+                        ) : (
+                            <SearchGrid results={recetas}></SearchGrid>
+                        )}
+                    </div>
                 </div>
-                <div className="col-start-5">
-                    <Favoritos />
-                </div>
-                {/* Mostrar recetas del creador */}
-                <div className="col-span-5 row-span-2 row-start-2">
-                    <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
-                    {recetas.length === 0 ? (
-                        <p>No hay recetas disponibles.</p>
-                    ) : (
-                        <SearchGrid results={recetas}></SearchGrid>
-                    )}
-                </div>
-                </div>       
             </main>
             <Footer />
         </div>
