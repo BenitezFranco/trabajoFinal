@@ -62,7 +62,7 @@ const recetas = [
             ],
         dificultad: "Fácil",
         tiempo_preparacion: 30,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Sopa de tomate",
@@ -94,7 +94,7 @@ const recetas = [
             ],
         dificultad: "Media",
         tiempo_preparacion: 25,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Brownies de chocolate",
@@ -128,7 +128,7 @@ const recetas = [
             ],
         dificultad: "Media",
         tiempo_preparacion: 50,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Smoothie de frutas",
@@ -155,7 +155,7 @@ const recetas = [
             ],
         dificultad: "Fácil",
         tiempo_preparacion: 20,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Guiso de lentejas",
@@ -182,7 +182,7 @@ const recetas = [
             ],
         dificultad: "Difícil",
         tiempo_preparacion: 90,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Muffins de arándano",
@@ -205,7 +205,7 @@ const recetas = [
             ],
         dificultad: "Media",
         tiempo_preparacion: 45,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Risotto de champiñones",
@@ -229,7 +229,7 @@ const recetas = [
             ],
         dificultad: "Media",
         tiempo_preparacion: 30,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Tarta de queso",
@@ -252,7 +252,7 @@ const recetas = [
         ],
         dificultad: "Media",
         tiempo_preparacion: 40,
-        id_usuario: 1
+        id_usuario: 2
     },
     {
         titulo: "Sushi",
@@ -267,18 +267,18 @@ const recetas = [
         id_usuario: 1
     },
     {
-        "titulo": "Pizza Pepperoni",
-        "foto_receta": "https://pixabay.com/es/images/download/pizza-5179939_640.jpg",
-        "descripcion": "Pizza con base de tomate, queso mozzarella y rodajas de pepperoni.",
-        "instrucciones": [
+        titulo: "Pizza Pepperoni",
+        foto_receta: "https://pixabay.com/es/images/download/pizza-5179939_640.jpg",
+        descripcion: "Pizza con base de tomate, queso mozzarella y rodajas de pepperoni.",
+        instrucciones: [
             {"paso": "Extender la masa sobre una bandeja para hornear.", "imagen": null},
             {"paso": "Cubrir con salsa de tomate y queso mozzarella.", "imagen": null},
             {"paso": "Añadir las rodajas de pepperoni encima.", "imagen": null},
             {"paso": "Hornear a 220°C durante 12-15 minutos.", "imagen": null}
         ],
-        "dificultad": "Fácil",
-        "tiempo_preparacion": 30,
-        "id_usuario": 1
+        dificultad: "Fácil",
+        tiempo_preparacion: 30,
+        id_usuario: 2
     },
     {
         "titulo": "Pizza Cuatro Quesos",
@@ -306,7 +306,7 @@ const recetas = [
         ],
         "dificultad": "Fácil",
         "tiempo_preparacion": 35,
-        "id_usuario": 1
+        "id_usuario": 2
     }
     
     
@@ -358,10 +358,10 @@ const insertarRecetas = async () => {
         { titulo: "Burgers vegetarianas", ingredientes: [121,6,98,19,305], cantidades:["1 taza","1/2 taza","2 piezas","al gusto","al gusto"] },
         { titulo: "Tarta de queso", ingredientes: [307,40,29,173,216], cantidades:["500 g","1/2 taza","2 piezas","1/4 taza","1 taza (trituradas)"] },
         { titulo: "Curry de verduras", ingredientes: [11,5,10,140,183], cantidades:["1 taza","1 taza","1 taza","1 taza","1 cucharada"] },
-        { titulo: "Sushi", ingredientes: [37,163,104,20,309], cantidades:["200 g","1 hoja","100 g","1/4 pieza","al gusto"] },
-        {titulo: "Pizza Pepperoni", ingredientes: [99,127,178,311,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","al gusto"]},
-        {titulo: "Pizza Cuatro Quesos", ingredientes: [99,127,178,174,58,310], cantidades: ["1 base","1/4 taza","1/2 taza","1/4 taza","1/4 taza","1/4 taza"]},
-        {titulo: "Pizza Hawaiana", ingredientes: [99,127,178,312,68,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","1/2 taza","al gusto"]},
+        { titulo: "Sushi", ingredientes: [37,163,104,20,308], cantidades:["200 g","1 hoja","100 g","1/4 pieza","al gusto"] },
+        {titulo: "Pizza Pepperoni", ingredientes: [99,127,178,310,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","al gusto"]},
+        {titulo: "Pizza Cuatro Quesos", ingredientes: [99,127,178,174,58,309], cantidades: ["1 base","1/4 taza","1/2 taza","1/4 taza","1/4 taza","1/4 taza"]},
+        {titulo: "Pizza Hawaiana", ingredientes: [99,127,178,311,68,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","1/2 taza","al gusto"]},
     ];
     for (const receta of recetas) {
         // Inserta la receta y obtén el ID
@@ -513,6 +513,11 @@ const insertUsuario = async () => {
             nombre: 'Franco',
             correo_electronico: 'franco@franco.com',
             contrasena: 'franco123',
+        },
+        {
+            nombre: 'Santi',
+            correo_electronico: 'santi@santi.com',
+            contrasena: 'santi123',
         },
     ];
 
