@@ -15,7 +15,7 @@ const Footer = () => {
 
                 {/* Redes sociales */}
                 <div className="flex space-x-6 mt-4 md:mt-0">
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition duration-200">
+                    <a href="https://github.com/BenitezFranco/trabajoFinal" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition duration-200">
                         <i className="fab fa-github text-2xl"></i>
                     </a>
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition duration-200">

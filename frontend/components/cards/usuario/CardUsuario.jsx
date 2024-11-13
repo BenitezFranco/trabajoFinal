@@ -13,7 +13,7 @@ const CardUsuario = ({ item, currentUserId, followedUsers, handleFollow, handleU
                 {item.nombre}
             </h5>
             <span className="text-sm text-gray-500">
-                {item.profession || 'No profession provided'}
+                {item.descripcion_breve || ' '}
             </span>
             <div className="flex mt-4">
                 {item.id_usuario !== currentUserId && (
