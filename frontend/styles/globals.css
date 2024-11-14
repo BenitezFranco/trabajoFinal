@@ -31,3 +31,7 @@ body::before {
     width: 112px;
     height: 112px;
 }
+
+body {
+    font-family: 'Roboto', sans-serif;
+  }

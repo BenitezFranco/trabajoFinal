@@ -8,6 +8,7 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import Comentarios from '@/components/comentario/Comentarios';
 import RecetasSimilares from '@/components/receta/recetasSimilares/RecetasSimilares';
+import Link from 'next/link';
 
 const RecipePage = () => {
     const router = useRouter();
@@ -140,18 +141,21 @@ const RecipePage = () => {
                 {/* Sección de opciones (izquierda) */}
                 <div className="col-span-3 row-span-2 bg-gray-100 p-6 rounded-lg shadow-lg">
                     {/* Nombre del autor */}
-                    <p className="text-lg font-semibold mb-3 text-center">
-                        <strong>Autor:</strong> {receta.nombre_usuario}
-                    </p>
+                    <Link href={`/perfil/${receta.id_usuario}`}>
+    <div className="p-4 flex items-center bg-gray-100 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105 cursor-pointer">
+        <p className="text-lg font-semibold m-5 text-center">
+            {receta.nombre_usuario}
+        </p>
 
-                    <div className="flex justify-center">
-                        <img
-                            src={receta.foto_perfil}
-                            alt="Imagen del Autor"
-                            className="fixed-size rounded-full mt-3 border-4 border-gray-300 shadow-md"
-                        />
-                    </div>
-
+        <div className="flex justify-center">
+            <img
+                src={receta.foto_perfil}
+                alt="Imagen del Autor"
+                className="fixed-size rounded-full mt-3 border-4 border-gray-300 shadow-md"
+            />
+        </div>
+    </div>
+</Link>
 
 
                     {/* Calificación */}
