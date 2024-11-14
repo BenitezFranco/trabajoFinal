@@ -26,10 +26,11 @@ const FollowButton = ({ id_usuario, isFollowed, onFollow, onUnfollow }) => {
     return (
         <button
             onClick={handleClick}
-            className={`py-1 px-3 rounded ${followed
-                ? 'bg-red-500 hover:bg-red-600'
-                : 'bg-green-500 hover:bg-green-600'
-                } text-white font-bold`}
+            className={`py-2 px-4 rounded-lg transition-all duration-200 ease-in-out 
+                ${followed
+                    ? 'bg-gray-300 hover:bg-red-200 hover:bg-opacity-60 text-gray-800'
+                    : 'bg-blue-200 hover:bg-green-200 hover:bg-opacity-60 text-blue-800'}
+                font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300`}
         >
             {followed ? 'Dejar de seguir' : 'Seguir'}
         </button>

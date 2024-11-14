@@ -252,7 +252,7 @@ const PerfilUsuario = () => {
                     </div>
                     {/* Mostrar recetas del creador */}
                     <div className="col-span-5 row-start-2">
-                        <h2 className="text-xl font-bold mt-6 mb-4">Recetas del Usuario</h2>
+                        <h2 className="text-xl text-center font-bold mt-6 mb-4">Recetas del Usuario</h2>
                         {recetas.length === 0 ? (
                             <p>No hay recetas disponibles.</p>
                         ) : (
