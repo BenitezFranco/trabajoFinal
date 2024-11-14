@@ -49,7 +49,7 @@ router.post('/upload', subirImagen);
 router.get('/recetasSimilares/:id', obtenerSimilares);
 
 
-//router.get('/buscar-recetas', buscarRecetasSemanal)
+router.get('/buscar-recetas', buscarRecetasSemanal)
 // Ingredientes
 router.get('/api/ingredientes', async (ctx) => {
     try {
