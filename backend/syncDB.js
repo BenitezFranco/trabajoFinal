@@ -29,6 +29,7 @@ const recetas = [
                 
             ],
         dificultad: "Fácil",
+        tiempo_preparacion: 40,
         id_usuario: 1
     },
     {

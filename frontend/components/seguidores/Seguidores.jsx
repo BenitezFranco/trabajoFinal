@@ -53,9 +53,9 @@ const Seguidor = () => {
 
     return (
         <div className="mt-6">
-            <h3 className="text-2xl font-bold mb-6">Sus Seguidores:</h3>
+            <h3 className="text-2xl font-bold mb-6">Seguidores</h3>
             {seguidores.length === 0 ? (
-                <p className="text-center text-lg">No tiene seguidores.</p>
+                <p className="text-center text-lg">Sin seguidores</p>
             ) : (
                 <div className="max-h-[33rem] overflow-y-scroll space-y-4">
                     <ul className="grid gap-6">

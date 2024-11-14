@@ -19,10 +19,10 @@ const CardReceta = ({ item }) => {
                 </div>
                 <div className="p-4">
                     <h2 className="text-2xl font-bold mb-2 transition-all duration-200 hover:text-blue-500">{item.titulo}</h2>
-                    <p className="text-sm text-gray-600 mb-1">Descripción: {item.descripcion}</p>
+                    <p className="text-sm text-gray-600 mb-1">{item.descripcion}</p>
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
                         <FaFireAlt className="text-yellow-500" />  {/* Ícono de dificultad */}
-                        <span>Dificultad: {item.dificultad}</span>
+                        <span>{item.dificultad}</span>
                     </div>
                 </div>
             </div>
