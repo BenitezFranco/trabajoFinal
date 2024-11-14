@@ -149,7 +149,6 @@ const recetas = [
         descripcion: "Esponjosos pancakes para el desayuno.",
         instrucciones: [
                 {"paso":"Mezclar harina, huevo, leche y polvo de hornear.", "imagen": null},
-                ,
                 {"paso":"Cocinar en una sartén caliente y servir con sirope.", "imagen": null},
                 
             ],

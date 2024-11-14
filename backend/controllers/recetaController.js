@@ -41,7 +41,6 @@ const crearReceta = async (ctx) => {
 };
 
 // Obtener una receta por ID
-// Obtener una receta por ID
 const obtenerReceta = async (ctx) => {
     try {
         const recetaId = ctx.params.id;

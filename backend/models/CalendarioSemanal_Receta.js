@@ -4,13 +4,16 @@ const CalendarioSemanal = require('./CalendarioSemanal');
 const Receta = require('./Receta');
 
 const CalendarioSemanal_Receta = sequelize.define('CalendarioSemanal_Receta', {
+    id_rel_cal_rec: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
     id_calendario: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
     },
     id_receta: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
     }
 }, {
     tableName: 'CalendarioSemanal_Receta',

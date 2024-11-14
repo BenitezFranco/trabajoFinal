@@ -6,7 +6,6 @@ const { Op, Sequelize } = require('sequelize');
 const Receta_Ingrediente= require('../models/Receta_Ingrediente');
 
 const buscarRecetasYUsuarios = async (ctx) => {
-    console.log("ctx.query: ", ctx.query);
     const { titulo, ingredientes, dificultad, creador, usuario, id_categoria } = ctx.query;
     let results = [];
 
@@ -107,4 +106,4 @@ const buscarRecetasYUsuarios = async (ctx) => {
     }
 };
 
-module.exports = { buscarRecetasYUsuarios };
+module.exports = { buscarRecetasYUsuarios};
