@@ -27,7 +27,7 @@ const RecipePage = () => {
                     router.push('/login');
                     return;
                 }
-    
+
                 try {
                     const response = await fetch(`http://localhost:3000/receta/${id}`, {
                         method: 'GET',
@@ -36,21 +36,21 @@ const RecipePage = () => {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-    
+
                     if (response.status === 401 || response.status === 403) {
                         alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                         localStorage.removeItem('token');
                         router.push('/login');
                         return;
                     }
-    
+
                     const data = await response.json();
                     setReceta(data);
-    
+
                     // Reinicia la calificación y el estado de favorito
                     setEsFavorito(false);
                     setFavoritoCambiadoLocalmente(false);
-    
+
                     if (!favoritoCambiadoLocalmente) {
                         const favoritoResponse = await fetch(`http://localhost:3000/receta/${id}/favorito/estado`, {
                             method: 'GET',
@@ -58,7 +58,7 @@ const RecipePage = () => {
                                 'Authorization': `Bearer ${token}`
                             }
                         });
-    
+
                         if (favoritoResponse.status === 200) {
                             const favoritoData = await favoritoResponse.json();
                             setEsFavorito(favoritoData.estaEnFavoritos);
@@ -71,10 +71,13 @@ const RecipePage = () => {
                     setFavoritoCambiadoLocalmente(false);
                 }
             };
-    
+
             fetchReceta();
         }
     }, [id, favoritoCambiadoLocalmente]); // Dependencia de 'id' para recargar la receta
+
+
+
 
     const handleFavorito = async () => {
         const token = localStorage.getItem('token');
@@ -137,15 +140,19 @@ const RecipePage = () => {
                 return null;
         }
     };
-
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
             <div className="grid grid-cols-12 grid-rows-6 gap-12 p-6">
+                {/* Sección de opciones (izquierda) */}
                 <div className="col-span-3 row-span-2 bg-gray-100 p-6 rounded-lg shadow-lg">
+                    {/* Nombre del autor */}
                     <Link href={`/perfil/${receta.id_usuario}`}>
                         <div className="p-4 flex items-center bg-gray-100 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105 cursor-pointer">
-                            <p className="text-lg font-semibold m-5 text-center">{receta.nombre_usuario}</p>
+                            <p className="text-lg font-semibold m-5 text-center">
+                                {receta.nombre_usuario}
+                            </p>
+
                             <div className="flex justify-center">
                                 <img
                                     src={receta.foto_perfil}
@@ -156,8 +163,11 @@ const RecipePage = () => {
                         </div>
                     </Link>
 
-                    <Rating recetaId={id} key={id} className="mb-4" />
 
+                    {/* Calificación */}
+                    <Rating recetaId={id} className="mb-4" />
+
+                    {/* Corazón favorito centrado */}
                     <div className="flex justify-center items-center mt-6">
                         <FontAwesomeIcon
                             icon={esFavorito ? fullHeart : emptyHeart}
