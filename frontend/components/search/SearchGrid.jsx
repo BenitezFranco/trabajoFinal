@@ -6,8 +6,11 @@ const SearchGrid = ({ results }) => {
     const [followedUsers, setFollowedUsers] = useState(new Set());
     const [currentUserId, setCurrentUserId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(false); // Estado para manejar la carga
-    const itemsPerPage = 4;
+    const [loading, setLoading] = useState(false);
+    const [showResults, setShowResults] = useState(false); 
+    const [loadedImages, setLoadedImages] = useState({}); 
+
+    const itemsPerPage = 3;
 
     useEffect(() => {
         const fetchFollowedUsers = async (id) => {
@@ -27,7 +30,6 @@ const SearchGrid = ({ results }) => {
                     localStorage.removeItem('token');
                     router.push('/login');
                 }
-                
             } catch (error) {
                 console.error('Error al obtener seguimientos:', error);
             }
@@ -53,7 +55,6 @@ const SearchGrid = ({ results }) => {
         setCurrentUserId(userId);
     }, []);
 
-    // Manejar el seguimiento de un usuario
     const handleFollow = async (id_usuario) => {
         try {
             const response = await fetch(`http://localhost:3000/follow`, {
@@ -66,8 +67,8 @@ const SearchGrid = ({ results }) => {
             });
 
             if (response.status === 200) {
-                setFollowedUsers((prev) => new Set([...prev, id_usuario])); // Añadir el usuario a la lista de seguidos
-                } else if (response.status === 401 || response.status === 403) {
+                setFollowedUsers((prev) => new Set([...prev, id_usuario]));
+            } else if (response.status === 401 || response.status === 403) {
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                 localStorage.removeItem('token');
                 router.push('/login');
@@ -77,7 +78,6 @@ const SearchGrid = ({ results }) => {
         }
     };
 
-    // Manejar el dejar de seguir a un usuario
     const handleUnfollow = async (id_usuario) => {
         try {
             const response = await fetch(`http://localhost:3000/unfollow`, {
@@ -93,7 +93,7 @@ const SearchGrid = ({ results }) => {
                     const newSet = new Set(prev);
                     newSet.delete(id_usuario);
                     return newSet;
-                });    
+                });
             } else if (response.status === 401 || response.status === 403) {
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                 localStorage.removeItem('token');
@@ -106,16 +106,21 @@ const SearchGrid = ({ results }) => {
 
     useEffect(() => {
         setCurrentPage(1);
+        setShowResults(false);
+        setTimeout(() => setShowResults(true), 100); 
     }, [results]);
 
-    const handlePageChange = (pageNumber) => {
-        setLoading(true); // Activar "cargando"
-        setCurrentPage(pageNumber);
+    const handleImageLoad = (id) => {
+        setLoadedImages((prev) => ({ ...prev, [id]: true }));
+    };
 
-        // Simular un pequeño retraso para mostrar el estado "cargando" (si es necesario)
+    const handlePageChange = (pageNumber) => {
+        setLoading(true);
+        setCurrentPage(pageNumber);
         setTimeout(() => {
             setLoading(false);
-        }, 300); // Esto es opcional y depende de si necesitas un pequeño retraso para la transición
+            setShowResults(true); 
+        }, 300);
     };
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -124,15 +129,18 @@ const SearchGrid = ({ results }) => {
     const totalPages = Math.ceil(results.length / itemsPerPage);
 
     return (
-        <div className='max-w-6xl mx-auto mt-24 px-4 pb-8'> {/* Estilos con Tailwind */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center pt-11">
+        <div className="max-w-6xl mx-auto mt-8 px-4 pb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-items-center pt-6">
                 {loading ? (
-                    <div className="col-span-4 text-center">Cargando...</div>
+                    <div className="col-span-3 text-center">Cargando...</div>
                 ) : currentItems.length === 0 ? (
-                    <div className="col-span-4 text-center">No hay resultados para mostrar.</div>
+                    <div className="col-span-3 text-center">No hay resultados para mostrar.</div>
                 ) : (
                     currentItems.map((item) => (
-                        <div key={item.id_receta || item.id_usuario} className="w-full">
+                        <div
+                            key={item.id_receta || item.id_usuario}
+                            className={`w-full transition-opacity duration-500 ${showResults ? 'opacity-100' : 'opacity-0'} max-w-xs`}
+                        >
                             {item.nombre ? (
                                 <CardUsuario
                                     item={item}
@@ -140,11 +148,15 @@ const SearchGrid = ({ results }) => {
                                     followedUsers={followedUsers}
                                     handleFollow={handleFollow}
                                     handleUnfollow={handleUnfollow}
+                                    onLoadImage={() => handleImageLoad(item.id_usuario)}
+                                    loaded={loadedImages[item.id_usuario]} 
                                 />
                             ) : (
-                                <div className="w-full h-full max-w-xs">
-                                    <CardReceta item={item} />
-                                </div>
+                                <CardReceta
+                                    item={item}
+                                    onLoadImage={() => handleImageLoad(item.id_receta)}
+                                    loaded={loadedImages[item.id_receta]} 
+                                />
                             )}
                         </div>
                     ))
@@ -155,7 +167,8 @@ const SearchGrid = ({ results }) => {
                     className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    style={{ visibility: currentPage === 1 ? 'hidden' : 'visible' }}>
+                    style={{ visibility: currentPage === 1 ? 'hidden' : 'visible' }}
+                >
                     Anterior
                 </button>
                 <span className="px-4 py-2 text-gray-700">
@@ -165,13 +178,13 @@ const SearchGrid = ({ results }) => {
                     className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    style={{ visibility: currentPage === totalPages ? 'hidden' : 'visible' }}>
+                    style={{ visibility: currentPage === totalPages ? 'hidden' : 'visible' }}
+                >
                     Siguiente
                 </button>
             </div>
         </div>
     );
-
 };
 
 export default SearchGrid;

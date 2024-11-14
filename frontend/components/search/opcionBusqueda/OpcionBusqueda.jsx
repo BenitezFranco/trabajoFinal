@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-    
 const OpcionBusqueda = ({ index, filter, term, onFilterChange, onTermChange, onRemove }) => {
     const [ingredientes, setIngredientes] = useState([]);
     const categorias = [
@@ -27,6 +26,7 @@ const OpcionBusqueda = ({ index, filter, term, onFilterChange, onTermChange, onR
         { value: 'Media', label: 'Media' },
         { value: 'Difícil', label: 'Difícil' },
     ];
+
     useEffect(() => {
         // Llamada a la API para obtener ingredientes
         const fetchIngredientes = async () => {
@@ -34,11 +34,11 @@ const OpcionBusqueda = ({ index, filter, term, onFilterChange, onTermChange, onR
                 const response = await fetch('http://localhost:3000/api/ingredientes');
                 if (response.status === 200) {
                     const ingredientes = await response.json();
-                const options = ingredientes.map(ingrediente => ({
-                    value: ingrediente.id_ingrediente,
-                    label: ingrediente.nombre,
-                }));
-                setIngredientes(options);
+                    const options = ingredientes.map(ingrediente => ({
+                        value: ingrediente.id_ingrediente,
+                        label: ingrediente.nombre,
+                    }));
+                    setIngredientes(options);
                 } else if (response.status === 401 || response.status === 403) {
                     alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                     localStorage.removeItem('token');
@@ -51,6 +51,7 @@ const OpcionBusqueda = ({ index, filter, term, onFilterChange, onTermChange, onR
 
         fetchIngredientes();
     }, []);
+
     const handleTermChange = (selectedOption) => {
         // Si se selecciona una opción, actualiza el término con el valor de la opción
         onTermChange(index, selectedOption ? selectedOption.value : '');
@@ -108,14 +109,30 @@ const OpcionBusqueda = ({ index, filter, term, onFilterChange, onTermChange, onR
                 />
             )}
 
-            <button
-                type="button"
-                onClick={() => onRemove(index)}
-                className="bg-red-500 text-white px-3 py-1 rounded-lg"
-                disabled={index === 0} // Deshabilitar si es el primer elemento para que siempre quede uno
-            >
-                -
-            </button>
+            {/* Botón de eliminar solo si no es el primer filtro */}
+            {index > 0 && (
+                <button
+                    type="button"
+                    onClick={() => onRemove(index)}
+                    className="bg-red-500 text-white rounded-full p-2 transition-all duration-300 transform hover:bg-red-600 hover:scale-105 focus:outline-none"
+                    aria-label="Eliminar filtro"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
+            )}
         </div>
     );
 };
