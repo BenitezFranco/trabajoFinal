@@ -9,7 +9,7 @@ const { agregarFavorito, eliminarFavorito, obtenerFavoritos, estaEnFavoritos } =
 const Usuario = require('../models/Usuario');
 const { subirImagen } = require('../controllers/uploadController');
 const {editarUsuario, obtenerUsuario}=require('../controllers/usuarioController');
-const {buscarRecetasSemanal} = require('../controllers/semanalController');
+const {crearCalendario} = require('../controllers/semanalController');
 
 // Importar las rutas de comentarios
 const comentariosRoutes = require('./comentarios');
@@ -49,7 +49,7 @@ router.post('/upload', subirImagen);
 router.get('/recetasSimilares/:id', obtenerSimilares);
 
 
-router.get('/buscar-recetas', buscarRecetasSemanal)
+router.post('/crearCalendario',authenticate, crearCalendario);
 // Ingredientes
 router.get('/api/ingredientes', async (ctx) => {
     try {

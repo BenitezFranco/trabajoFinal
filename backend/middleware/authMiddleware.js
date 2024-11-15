@@ -30,7 +30,7 @@ const authenticate = async (ctx, next) => {
         // Si el token no ha expirado, verificamos si necesitamos renovarlo
         // En este caso, solo renovamos si el token va a expirar en menos de 10 minutos
         if (decoded.exp - currentTime < 600) { // 600 segundos = 10 minutos
-            const newToken = jwt.sign({ userId: decoded.userId }, JWT_SECRET, { expiresIn: '1h' });
+            const newToken = jwt.sign({ userId: decoded.userId }, JWT_SECRET, { expiresIn: '10h' });
 
             // Colocamos el nuevo token en la cabecera de la respuesta
             ctx.set('Authorization', `Bearer ${newToken}`);

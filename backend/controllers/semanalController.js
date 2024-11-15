@@ -1,52 +1,40 @@
-const Receta = require('../models/Receta');
-const Receta_Categoria = require('../models/Receta_Categoria');
-const { Op, Sequelize } = require('sequelize');
+const CalendarioSemanal = require ('../models/CalendarioSemanal');
+const CalendarioSemanalReceta= require('../models/CalendarioSemanal_Receta');
 
-const buscarRecetasSemanal = async (ctx) => {
-    const { tipo_busqueda, cantidad, primera, segunda, tercera } = ctx.query;
+const crearCalendario = async (ctx) => {
 
-    const diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
-
-    const primeraFiltro = Array.isArray(primera) ? primera : [primera].filter(Boolean);
-
-    const segundaFiltro = Array.isArray(segunda) ? segunda : [segunda].filter(Boolean);
-
-    const terceraFiltro = Array.isArray(tercera) ? tercera : [tercera].filter(Boolean);
-
-    const categoriasFiltro= [primeraFiltro,segundaFiltro,terceraFiltro];
-
-    let recetasPorDia = {
-        'lunes': [], 'martes': [], 'miércoles': [], 
-        'jueves': [], 'viernes': [], 'sábado': [], 'domingo': []
-    };
-
+    const idsRecetas = ctx.request.body.idsRecetas;
+    const id_usuario = ctx.state.user.id_usuario;
     try {
-        let recetasCategoria;
-        for (let i=0;i<cantidad;i++){
-            if(tipo_busqueda==='filtrado'){
-                recetasCategoria = await Receta_Categoria.findAll({
-                    where: {
-                        id_categoria: { [Op.in]: categoriasFiltro[i] },
-                    }});
-            }else{
-                recetasCategoria = await Receta_Categoria.findAll();
-            }
-
-            let recetas = recetasCategoria.map((r) => r.id_receta);
-
-            while (recetas.length < 7) { recetas.push(...recetas.slice(0, 7 - recetas.length)); }
-
-            for (let dia of diasSemana) { const recetaAleatoria = recetas.splice(Math.floor(Math.random() * recetas.length), 1)[0]; const receta = await Receta.findOne({ where: { id_receta: recetaAleatoria } }); recetasPorDia[dia].push(receta); }
-        }
-
-        ctx.body = recetasPorDia;
-
+        const nuevoCalendario = await CalendarioSemanal.create({id_usuario: id_usuario});
+        
+        idsRecetas.map( async (id)=> await CalendarioSemanalReceta.create({
+            id_calendario: nuevoCalendario.id_calendario,
+            id_receta:id
+        }))
+        
+        ctx.body = { message: 'Calendario creado exitosamente' };
     } catch (error) {
-        console.error("Error: ", error);
-        ctx.status = 500;
-        ctx.body = { error: 'Error al obtener las recetas' };
+        console.error("Error al crear el calendario:", error);
     }
 };
 
+const obtenerCalendario = async(ctx)=>{
+    const usuario = ctx.state.user.id_usuario;
+    const calendarios= await CalendarioSemanal.findAll({
+        where: {
+            id_usuario: usuario,
+            completado:false},
+            order:id_calendario
+        });
+    if (!calendarios) {
+        ctx.status = 404;
+        ctx.body = { error: 'Calendarios no encontrados' };
+        return;
+    }
 
-module.exports = { buscarRecetasSemanal };
+
+}
+
+module.exports = { crearCalendario };
+

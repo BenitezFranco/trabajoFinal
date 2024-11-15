@@ -7,6 +7,13 @@ const CalendarioSemanal = sequelize.define('CalendarioSemanal', {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    completado:{
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    pareja: {
+        type: DataTypes.INTEGER,
     }
 }, {
     tableName: 'CalendarioSemanal',
