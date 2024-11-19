@@ -6,7 +6,7 @@ const CardUsuario = ({ item, currentUserId, followedUsers, handleFollow, handleU
         <div className="flex flex-col items-center pb-10 bg-white rounded-lg shadow-md p-6">
             <img 
                 className="w-24 h-24 mb-3 rounded-full shadow-lg" 
-                src={item.image || "http://localhost:3000/uploads/default-image.png"} 
+                src={item.foto_perfil || "http://localhost:3000/uploads/default-image.png"} 
                 alt={`Imagen del usuario ${item.nombre}`} 
             />
             <h5 className="mb-1 text-xl font-medium text-gray-900">
