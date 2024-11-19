@@ -7,6 +7,7 @@ import {
   faSignOutAlt,
   faUser,
   faPlus,
+  faCalendarAlt
 } from "@fortawesome/free-solid-svg-icons"; // Íconos importados
 
 const Header = () => {
@@ -112,7 +113,7 @@ const Header = () => {
                 {" "}
                 {/* group para aplicar hover */}
                 <FontAwesomeIcon
-                  icon={faSearch}
+                  icon={faCalendarAlt}
                   className="text-white group-hover:text-blue-300"
                 />
                 <span className="text-white group-hover:text-blue-300">
