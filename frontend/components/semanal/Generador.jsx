@@ -3,12 +3,15 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import SearchGrid from "../search/SearchGrid";
 import OpcionBusqueda from "../search/opcionBusqueda/OpcionBusqueda";
+import { useRouter } from 'next/router';  // Asegúrate de importar useRouter
 
 const Generador = () => {
+  const router = useRouter();  // Inicializamos el router
   const [opcionesBusqueda, setOpcionesBusqueda] = useState([{ filter: "titulo", term: "" }]);
   const [results, setResults] = useState([]);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");  // Estado para el mensaje de éxito
 
   // Función para seleccionar aleatoriamente los resultados
   const getRandomResults = (results) => {
@@ -85,9 +88,19 @@ const Generador = () => {
         },
         body: JSON.stringify({ idsRecetas }),
       });
-      if (!response.ok) { throw new Error("Error en la respuesta del servidor"); }
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
       const data = await response.json();
       console.log("Calendario creado:", data);
+
+      // Mostrar mensaje de éxito
+      setSuccessMessage("Calendario creado con éxito!");
+
+      // Redirigir después de 2 segundos
+      setTimeout(() => {
+        router.push("http://localhost:3001/calendario-semanal");
+      }, 2000);
     } catch (error) {
       console.error("Error al crear el calendario:", error);
       setErrorMessage("Error al crear el calendario");
@@ -106,7 +119,7 @@ const Generador = () => {
         <div className="grid grid-cols-7 grid-rows-4 gap-6 max-w-6xl mx-auto">
           {/* Sección de Búsqueda */}
           <div className="col-span-3 row-span-4 bg-white p-6 rounded-xl shadow-lg">
-            <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Buscar Recetas</            h1>
+            <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Buscar Recetas</h1>
 
             {/* Formulario de búsqueda */}
             <form onSubmit={handleSearch} className="mb-6">
@@ -166,6 +179,19 @@ const Generador = () => {
             ) : null}
           </div>
         </div>
+
+        {/* Mostrar mensaje de éxito o error */}
+        {successMessage && (
+          <div className="text-green-600 text-center mt-4">
+            <p>{successMessage}</p>
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="text-red-600 text-center mt-4">
+            <p>{errorMessage}</p>
+          </div>
+        )}
       </div>
       <Footer />
     </div>
