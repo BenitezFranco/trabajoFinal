@@ -44,7 +44,7 @@ const CalendarioSemanal = () => {
     }, []);
 
     const handleDelete = async (id_calendario) => {
-        const confirm = window.confirm(`¿Estás seguro de que deseas borrar el calendario con ID ${id_calendario}?`);
+        const confirm = window.confirm(`¿Estás seguro de que deseas borrar el calendario?`);
         if (!confirm) return;
 
         try {
