@@ -155,7 +155,7 @@ const Generador = () => {
                   onClick={handleVerTodas}
                   className="bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 hover:bg-gray-200 focus:outline-none transition duration-300 transform hover:scale-105"
                 >
-                  Ver Todas
+                  Calendario Aleatorio
                 </button>
               </div>
             </form>
