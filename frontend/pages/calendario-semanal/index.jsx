@@ -80,11 +80,7 @@ const CalendarioSemanal = () => {
                 {calendarios.length === 0 ? (
                     <div className="text-center">
                         <p className="text-xl font-medium text-gray-700">No hay calendarios disponibles.</p>
-                        <Link
-                            href="/calendario-semanal/generar"
-                            className="inline-block mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-                            Generar Nuevo Calendario
-                        </Link>
+                        
                     </div>
                 ) : (
                     calendarios.map((calendario, index) => (
