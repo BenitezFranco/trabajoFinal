@@ -6,11 +6,11 @@ const CardReceta = ({ item }) => {
     if (item.foto_receta) {
         fotoUrl = item.foto_receta;
     }
-
+    //h-48
     return (
         <Link href={`/recipe/${item.id_receta}`} className="text-lg font-medium">
             <div className="relative rounded-lg shadow-sm hover:scale-102 transform transition-all duration-200 hover:shadow-lg hover:bg-gray-50">
-                <div className="relative h-48 overflow-hidden rounded-t-lg transition-all duration-200 hover:opacity-80">
+                <div className="relative h-full overflow-hidden rounded-t-lg transition-all duration-200 hover:opacity-80">
                     <img 
                         src={fotoUrl} 
                         alt={`Imagen de ${item.titulo}`} 

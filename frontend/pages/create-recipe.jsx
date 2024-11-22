@@ -283,6 +283,7 @@ const CreateRecipe = () => {
             {ingredientes.map((ingrediente, index) => (
               <div key={index} className="flex items-center mb-2">
                 <Select
+                  required
                   options={ingredientesOptions}
                   className="basic-single"
                   classNamePrefix="select"
@@ -300,6 +301,7 @@ const CreateRecipe = () => {
                   }
                 />
                 <input
+                  required
                   type="text"
                   placeholder="Cantidad"
                   value={ingrediente.cantidad}
@@ -414,6 +416,7 @@ const CreateRecipe = () => {
               Categorías:
             </label>
             <Select
+              required
               isMulti
               options={categoriasOptions}
               className="basic-multi-select"
