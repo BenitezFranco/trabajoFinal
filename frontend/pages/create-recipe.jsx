@@ -5,7 +5,11 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import PasoInstruccion from "@/components/receta/pasoInstruccion/PasoInstruccion";
 import { uploadImage } from "@/utils/funcion";
+
+
 import Select from "react-select";
+
+
 
 const CreateRecipe = () => {
   const [formData, setFormData] = useState({
@@ -226,66 +230,67 @@ const CreateRecipe = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-00">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
       <Header />
-
+  
       {/* Main content */}
       <main className="flex-grow flex flex-col items-center p-6">
-        <h1 className="text-4xl font-bold mb-8">Crear Receta</h1>
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-8">Crear Receta</h1>
         {successMessage && (
-          <div className="mb-4 text-green-600">{successMessage}</div> // Mensaje de éxito
+          <div className="mb-4 text-green-600 font-semibold">{successMessage}</div>
         )}
+  
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="w-full max-w-2xl bg-white shadow-lg rounded-xl px-8 pt-6 pb-8 mb-4"
         >
-          {/* Resto del formulario... */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Título:
-            </label>
+          {/* Título */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Título:</label>
             <input
               type="text"
               name="titulo"
               value={formData.titulo}
               onChange={handleChange}
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="foto_receta">Foto de la Receta:</label>
+  
+          {/* Foto de la receta */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Foto de la Receta:</label>
             <input
               type="file"
               name="foto_receta"
               accept="image/*"
               onChange={handleImageChange}
+              className="w-full py-2 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Descripción:
-            </label>
+  
+          {/* Descripción */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
             <textarea
               name="descripcion"
               value={formData.descripcion}
               onChange={handleChange}
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Ingredientes:
-            </label>
+  
+          {/* Ingredientes */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Ingredientes:</label>
             {ingredientes.map((ingrediente, index) => (
-              <div key={index} className="flex items-center mb-2">
+              <div key={index} className="flex items-center mb-4">
                 <Select
                   required
                   options={ingredientesOptions}
-                  className="basic-single"
+                  className="basic-single flex-grow"
                   classNamePrefix="select"
                   placeholder="Selecciona un ingrediente"
                   onChange={(selectedOption) =>
@@ -306,12 +311,12 @@ const CreateRecipe = () => {
                   placeholder="Cantidad"
                   value={ingrediente.cantidad}
                   onChange={(e) => handleCantidadChange(index, e.target.value)}
-                  className="ml-2 shadow appearance-none border rounded w-20 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="ml-4 w-28 py-2 px-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   type="button"
                   onClick={() => handleQuitarIngrediente(index)}
-                  className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                  className="ml-4 bg-transparent border-2 border-red-500 hover:bg-red-500 hover:text-white text-red-500 font-semibold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-300"
                 >
                   Quitar
                 </button>
@@ -320,16 +325,15 @@ const CreateRecipe = () => {
             <button
               type="button"
               onClick={handleAgregarIngrediente}
-              className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              className="mt-4 bg-transparent border-2 border-green-500 hover:bg-green-500 hover:text-white text-green-500 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
             >
               Agregar Ingrediente
             </button>
           </div>
-
-          <div className="mb-4">
-            <h2 className="block text-gray-700 text-sm font-bold mb-2">
-              Instrucciones:
-            </h2>
+  
+          {/* Instrucciones */}
+          <div className="mb-6">
+            <h2 className="block text-gray-700 text-sm font-bold mb-2">Instrucciones:</h2>
             {pasos.map((paso, index) => (
               <PasoInstruccion
                 key={index}
@@ -339,43 +343,43 @@ const CreateRecipe = () => {
                 handleImagenChange={handleImagenChange}
               />
             ))}
-            <button
-              type="button"
-              onClick={handleAddPaso}
-              className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Agregar Paso
-            </button>
-            <button
-              type="button"
-              onClick={handleRemovePaso}
-              className="mt-2 ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              disabled={pasos.length <= 1} // Deshabilitado si solo hay un paso
-            >
-              Borrar Último Paso
-            </button>
+            <div className="flex mt-4 gap-4">
+              <button
+                type="button"
+                onClick={handleAddPaso}
+                className="bg-transparent border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
+              >
+                Agregar Paso
+              </button>
+              <button
+                type="button"
+                onClick={handleRemovePaso}
+                className="bg-transparent border-2 border-red-500 hover:bg-red-500 hover:text-white text-red-500 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
+                disabled={pasos.length <= 1} // Deshabilitado si solo hay un paso
+              >
+                Borrar Último Paso
+              </button>
+            </div>
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Tiempo de Preparación (minutos):
-            </label>
+  
+          {/* Tiempo de preparación */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Tiempo de Preparación (minutos):</label>
             <input
               type="text"
               name="tiempo_preparacion"
               value={formData.tiempo_preparacion}
               onChange={handleChange}
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Dificultad:
-            </label>
-            <div className="flex items-center">
-              <label className="mr-4">
+  
+          {/* Dificultad */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Dificultad:</label>
+            <div className="flex gap-6">
+              <label className="flex items-center">
                 <input
                   type="radio"
                   name="dificultad"
@@ -386,7 +390,7 @@ const CreateRecipe = () => {
                 />
                 Fácil
               </label>
-              <label className="mr-4">
+              <label className="flex items-center">
                 <input
                   type="radio"
                   name="dificultad"
@@ -397,7 +401,7 @@ const CreateRecipe = () => {
                 />
                 Media
               </label>
-              <label className="mr-4">
+              <label className="flex items-center">
                 <input
                   type="radio"
                   name="dificultad"
@@ -410,11 +414,10 @@ const CreateRecipe = () => {
               </label>
             </div>
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Categorías:
-            </label>
+  
+          {/* Categorías */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Categorías:</label>
             <Select
               required
               isMulti
@@ -428,21 +431,22 @@ const CreateRecipe = () => {
               )}
             />
           </div>
-
+  
+          {/* Botón de enviar */}
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="w-full bg-transparent border-2 border-blue-600 hover:bg-blue-600 hover:text-white text-blue-600 font-semibold py-3 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
           >
             Crear Receta
           </button>
         </form>
       </main>
-
+  
       {/* Footer */}
       <Footer />
     </div>
   );
+  
 };
 
 export default CreateRecipe;
