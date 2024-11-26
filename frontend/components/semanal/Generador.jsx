@@ -115,7 +115,7 @@ const Generador = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-grow bg-gray-100 p-6">
+      <div className="flex-grow bg-gray-100 p-6" role="main">
         <div className="grid grid-cols-7 grid-rows-4 gap-6 max-w-6xl mx-auto">
           {/* Sección de Búsqueda */}
           <div className="col-span-3 row-span-4 bg-white p-6 rounded-xl shadow-lg">
@@ -125,6 +125,10 @@ const Generador = () => {
             <form onSubmit={handleSearch} className="mb-6">
               <div className="flex flex-col space-y-4">
                 {opcionesBusqueda.map((opcion, index) => (
+                  <>
+                  <label for="filtros" class="text-gray-700 font-medium">
+                          Filtrar por:
+                        </label>
                   <OpcionBusqueda
                     key={index}
                     index={index}
@@ -134,6 +138,7 @@ const Generador = () => {
                     onTermChange={handleTermChange}
                     onRemove={handleRemoveOption}
                   />
+                  </>
                 ))}
                 <button
                   type="button"

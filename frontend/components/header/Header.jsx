@@ -7,7 +7,7 @@ import {
   faSignOutAlt,
   faUser,
   faPlus,
-  faCalendarAlt
+  faCalendarAlt,
 } from "@fortawesome/free-solid-svg-icons"; // Íconos importados
 
 const Header = () => {
@@ -47,9 +47,14 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-800 text-white p-4 flex justify-between items-center" role="navigation">
+    <header
+      className="bg-blue-800 text-white p-4 flex justify-between items-center"
+      role="navigation"
+    >
       <Link href="/HomeLog" passHref>
-        <h1 className="p-2 rounded-full flex items-center group text-lg font-bold cursor-pointer">FoodBook</h1>
+        <h1 className="p-2 rounded-full flex items-center group text-lg font-bold cursor-pointer">
+          FoodBook
+        </h1>
       </Link>
 
       {/* Menú del Header */}
@@ -71,34 +76,34 @@ const Header = () => {
         {isAuthenticated && (
           <>
             <Link href={`/perfil/${userId}`} passHref>
-          <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
-            {" "}
-            {/* group para aplicar hover */}
-            <FontAwesomeIcon
-                icon={faUser}
-                className="text-white group-hover:text-blue-300"
-              />
-              <span className="text-white ml-2 group-hover:text-blue-300">
-                Perfil
-              </span>{" "}
-            {/* Cambia el color del texto e icono */}
-          </div>
-        </Link>
+              <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
+                {" "}
+                {/* group para aplicar hover */}
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="text-white group-hover:text-blue-300"
+                />
+                <span className="text-white ml-2 group-hover:text-blue-300">
+                  Perfil
+                </span>{" "}
+                {/* Cambia el color del texto e icono */}
+              </div>
+            </Link>
 
-        <Link href={`/create-recipe`} passHref>
-          <div className=" flex items-center space-x-2 cursor-pointer group p-2 rounded-full flex items-center group">
-            {" "}
-            {/* group para aplicar hover */}
-            <FontAwesomeIcon
-                icon={faPlus}
-                className="text-white group-hover:text-green-300"
-              />
-              <span className="text-white ml-2 group-hover:text-green-300">
-                Crear receta
-              </span>{" "}
-            {/* Cambia el color del texto e icono */}
-          </div>
-        </Link>
+            <Link href={`/create-recipe`} passHref>
+              <div className=" flex items-center space-x-2 cursor-pointer group p-2 rounded-full flex items-center group">
+                {" "}
+                {/* group para aplicar hover */}
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  className="text-white group-hover:text-green-300"
+                />
+                <span className="text-white ml-2 group-hover:text-green-300">
+                  Crear receta
+                </span>{" "}
+                {/* Cambia el color del texto e icono */}
+              </div>
+            </Link>
             <Link href="/calendario-semanal" passHref>
               <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
                 {" "}
@@ -115,21 +120,25 @@ const Header = () => {
             </Link>
           </>
         )}
-        <Link href="#" passHref onClick={(e) => {
-      e.preventDefault(); // Previene la acción predeterminada del enlace
-      handleLogout(); // Llama a la función de cierre de sesión
-    }}>  
-    <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
-    {" "}
-    <FontAwesomeIcon
-      icon={faSignOutAlt}
-      className="text-white group-hover:text-red-300"
-    />
-    <span className="text-white ml-2 group-hover:text-red-300">
-      Cerrar sesión
-    </span>{" "}
-    </div>
-</Link>
+        <Link
+          href="#"
+          passHref
+          onClick={(e) => {
+            e.preventDefault(); // Previene la acción predeterminada del enlace
+            handleLogout(); // Llama a la función de cierre de sesión
+          }}
+        >
+          <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
+            {" "}
+            <FontAwesomeIcon
+              icon={faSignOutAlt}
+              className="text-white group-hover:text-red-300"
+            />
+            <span className="text-white ml-2 group-hover:text-red-300">
+              Cerrar sesión
+            </span>{" "}
+          </div>
+        </Link>
       </div>
     </header>
   );
