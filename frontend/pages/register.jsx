@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router'; // Importar useRouter
 import { validarCorreoElectronico, validarContrasena } from '@/utils/funcion'; // Asegúrate de que solo se importa una vez
-
+import CustomHead from "@/components/head/CustomHead";
 const Register = () => {
     const [formData, setFormData] = useState({
         nombre: '',
@@ -79,6 +79,7 @@ const Register = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <CustomHead title={'Registro'} description={'Accede a nuestro catálogo de recetas creando un nuevo usuario'}></CustomHead>
             <div className="max-w-md w-full bg-white p-6 shadow-md rounded-lg">
                 <h1 className="text-2xl font-bold mb-6 text-gray-800">Registro</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">

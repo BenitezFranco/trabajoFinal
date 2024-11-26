@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { uploadImage } from '@/utils/funcion';
+import CustomHead from "@/components/head/CustomHead";
 
 const EditarPerfil = () => {
     const [perfil, setPerfil] = useState(null);
@@ -119,6 +120,7 @@ const EditarPerfil = () => {
 
     return (
         <div className="flex flex-col min-h-screen">
+            <CustomHead title={'Editar Perfil'} description={'Página para editar tu perfil'}/>
             <Header />
             <main className="flex-grow p-6 bg-gray-100">
                 <h1 className="text-2xl font-bold mb-4">Editar Perfil</h1>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import CustomHead from "@/components/head/CustomHead";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -45,6 +46,7 @@ const Login = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
+                        <CustomHead title={'Iniciar Sesión'} description={'Inicia sesión para poder ver las recetas'}></CustomHead>
             <div className="max-w-md w-full bg-white p-6 shadow-md rounded-lg">
                 <h1 className="text-2xl font-bold mb-6 text-gray-800">Iniciar Sesión</h1>
                 {error && <p className="text-red-600 mb-4">{error}</p>}

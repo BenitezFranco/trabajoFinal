@@ -6,7 +6,7 @@ import Footer from "@/components/footer/Footer";
 import CardRecetaC from "@/components/cards/receta/CardRecetaC";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { FaPlus } from 'react-icons/fa';
-
+import CustomHead from "@/components/head/CustomHead";
 // Importación para íconos de Heroicons
 
 const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
@@ -73,6 +73,7 @@ const CalendarioSemanal = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
+            <CustomHead title={'Calendario Semanal'} description={'En está pagina puedes ver tus calendarios semanales'}/>
             <Header />
             <main className="flex-grow max-w-7xl mx-auto p-6">
                 <h1 className="text-center text-4xl font-bold text-gray-800 mb-8">Calendario Semanal</h1>

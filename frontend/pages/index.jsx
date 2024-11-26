@@ -1,5 +1,6 @@
 
 import { useRouter } from "next/navigation";
+import CustomHead from "@/components/head/CustomHead";
 
 export default function Home() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 gap-8 bg-gray-100">
+                              <CustomHead title={'Página de inicio'} description={'Desde esta página puedes crear un usuario o ingresar con tu cuenta'}></CustomHead>
       <h1 className="text-4xl font-bold text-gray-900">Bienvenido a Foodbook</h1>
       <p className="text-lg text-gray-700">Conéctate para explorar y compartir recetas</p>
       <div className="flex flex-col gap-4">
