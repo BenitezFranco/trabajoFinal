@@ -30,7 +30,7 @@ exports.login = async (ctx) => {
             return;
         }
         
-        const token = jwt.sign({ id_usuario: usuario.id_usuario }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id_usuario: usuario.id_usuario }, JWT_SECRET, { expiresIn: '7d' });
         ctx.status = 200;
         ctx.body = { token };
     } catch (error) {
