@@ -1,3 +1,4 @@
+import CustomHead from "@/components/head/CustomHead";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
@@ -230,7 +231,9 @@ const CreateRecipe = () => {
   ];
 
   return (
+
     <div className="flex flex-col min-h-screen bg-gray-100">
+      <CustomHead title={'Crear Receta'} description={'Pagina para crear recetas'}/>
       {/* Header */}
       <Header />
   
