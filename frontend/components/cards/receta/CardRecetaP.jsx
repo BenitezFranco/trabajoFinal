@@ -9,7 +9,7 @@ const CardReceta = ({ item }) => {
         <Link 
             href={`/recipe/${item.id_receta}`} 
             title={item.titulo} 
-            aria-label={`Link para la receta: ${item.titulo}`} 
+            aria-label={`${item.titulo} ${item.descripcion} ${item.dificultad}`} 
             className="text-lg font-medium"
         >
             <div className="relative rounded-lg shadow-sm hover:scale-102 transform transition-all duration-200 hover:shadow-lg hover:bg-gray-50">

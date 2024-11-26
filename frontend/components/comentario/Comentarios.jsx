@@ -86,7 +86,7 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
 
     return (
         <div className="mt-4">
-            <h3 className="text-lg font-medium mb-4">Comentarios:</h3>
+            <p className="text-lg font-medium mb-4">Comentarios:</p>
             {loading ? (
                 <p>Cargando comentarios...</p>
             ) : (
@@ -107,7 +107,7 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
                                     {comentario.Usuario ? comentario.Usuario.nombre : ''}
                                 </p>
                                 <p>{comentario.texto}</p>
-                                <button onClick={() => handleReply(comentario.id_comentario)} className="text-blue-500">
+                                <button onClick={() => handleReply(comentario.id_comentario)} className="text-blue-600">
                                     Responder
                                 </button>
 
@@ -159,7 +159,7 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
 
             <button
                 onClick={() => handleSubmitComentario()}
-                className="mt-2 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600"
+                className="mt-2 bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-500"
             >
                 Enviar comentario
             </button>

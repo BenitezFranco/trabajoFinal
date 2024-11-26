@@ -151,10 +151,11 @@ const EditarPerfil = () => {
     
                             {/* Descripción breve */}
                             <div className="mb-6">
-                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                <label className="block text-gray-700 text-sm font-medium mb-2" for='descripcion'>
                                     Descripción breve:
                                 </label>
                                 <textarea
+                                    id='descripcion'
                                     name="descripcion_breve"
                                     value={perfil.descripcion_breve}
                                     onChange={handleInputChange}
@@ -165,10 +166,11 @@ const EditarPerfil = () => {
     
                             {/* Presentación */}
                             <div className="mb-6">
-                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                <label className="block text-gray-700 text-sm font-medium mb-2" for='presentacion'>
                                     Presentación:
                                 </label>
                                 <textarea
+                                    id='presentacion'
                                     name="presentacion"
                                     value={perfil.presentacion}
                                     onChange={handleInputChange}
@@ -179,10 +181,11 @@ const EditarPerfil = () => {
     
                             {/* Mostrar correo */}
                             <div className="mb-6 flex items-center">
-                                <label className="block text-gray-700 text-sm font-medium mb-2 mr-2">
+                                <label className="block text-gray-700 text-sm font-medium mb-2 mr-2" for='correo visible'>
                                     Mostrar correo
                                 </label>
                                 <input
+                                    id='correo visible'
                                     type="checkbox"
                                     checked={perfil.es_visible}
                                     onChange={handleCheckboxChange}
@@ -195,7 +198,7 @@ const EditarPerfil = () => {
                             <div className="text-center">
                                 <button
                                     type="submit"
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+                                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
                                     disabled={cargando}
                                     onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                                 >

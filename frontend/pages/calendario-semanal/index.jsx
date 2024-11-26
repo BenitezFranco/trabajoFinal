@@ -92,7 +92,7 @@ const CalendarioSemanal = () => {
                                 </h2>
                                 <button
                                     onClick={() => handleDelete(calendario.id_calendario)}
-                                    className="flex items-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
+                                    className="flex items-center bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition">
                                     <TrashIcon className="h-5 w-5 mr-2" />
                                     Borrar
                                 </button>
@@ -123,7 +123,7 @@ const CalendarioSemanal = () => {
                 <div className="text-center mt-6">
                     <Link
                         href="/calendario-semanal/generar"
-                        className="inline-flex items-center px-6 py-3 border-2 border-blue-500 text-blue-500 font-medium rounded-lg hover:bg-green-500 hover:text-white hover:border-green-500 transition duration-200"
+                        className="inline-flex items-center px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-green-600 hover:text-white hover:border-green-600 transition duration-200"
                     >
                         <FaPlus className="mr-2" />
                         Generar Nuevo Calendario

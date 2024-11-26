@@ -439,6 +439,7 @@ const CreateRecipe = () => {
           <button
             type="submit"
             className="w-full bg-transparent border-2 border-blue-600 hover:bg-blue-600 hover:text-white text-blue-600 font-semibold py-3 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             Crear Receta
           </button>

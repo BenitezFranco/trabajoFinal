@@ -66,7 +66,7 @@ const OpcionBusqueda = ({
 
   return (
     <div className="flex space-x-2 mb-4">
-      <select
+      <select id='filtros'
         value={filter} // Este valor debe estar sincronizado con el estado
         onChange={(e) => onFilterChange(index, e.target.value)}
         className="border border-gray-300 rounded-lg px-2 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"

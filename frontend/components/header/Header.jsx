@@ -21,16 +21,6 @@ const Header = () => {
     router.push("/login"); // Redirigir al login utilizando router.push
   };
 
-  const handlePerfilClick = () => {
-    if (userId) {
-      router.push(`/perfil/${userId}`);
-    }
-  };
-
-  const handleCrearRecetaClick = () => {
-    router.push("/create-recipe");
-  };
-
   // Verifica si el usuario está autenticado
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -125,19 +115,21 @@ const Header = () => {
             </Link>
           </>
         )}
-
-        <button
-          onClick={handleLogout}
-          className="p-2 rounded-full flex items-center group" // group para aplicar hover
-        >
-          <FontAwesomeIcon
-            icon={faSignOutAlt}
-            className="text-white group-hover:text-red-300"
-          />
-          <span className="text-white ml-2 group-hover:text-red-300">
-            Cerrar sesión
-          </span>
-        </button>
+        <Link href="#" passHref onClick={(e) => {
+      e.preventDefault(); // Previene la acción predeterminada del enlace
+      handleLogout(); // Llama a la función de cierre de sesión
+    }}>  
+    <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
+    {" "}
+    <FontAwesomeIcon
+      icon={faSignOutAlt}
+      className="text-white group-hover:text-red-300"
+    />
+    <span className="text-white ml-2 group-hover:text-red-300">
+      Cerrar sesión
+    </span>{" "}
+    </div>
+</Link>
       </div>
     </header>
   );

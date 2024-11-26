@@ -112,7 +112,7 @@ const Rating = ({ recetaId }) => {
 
     return (
         <div className="mt-4">
-            <h3 className="text-lg font-medium mb-2">Calificar esta receta:</h3>
+            <p className="text-lg font-medium mb-2">Calificar esta receta:</p>
 
             {/* Mostrar el mensaje de éxito si existe */}
             {successMessage && (
@@ -131,6 +131,7 @@ const Rating = ({ recetaId }) => {
             <div className="flex space-x-2 mb-4">
                 {[1, 2, 3, 4, 5].map((value) => (
                     <button
+                    aria-label={'Boton calificación value'}
                         key={value}
                         onClick={() => handleRating(value)}
                         className={`p-2 rounded-full border ${value <= rating ? 'bg-yellow-400' : 'bg-gray-300'
@@ -158,7 +159,7 @@ const Rating = ({ recetaId }) => {
 
             {/* Mostrar el promedio de calificaciones */}
             <div className="mt-4">
-    <h4 className="text-lg font-medium mb-2">Promedio de calificaciones:</h4>
+    <p className="text-lg font-medium mb-2">Promedio de calificaciones:</p>
     <div className="flex items-center">
         {Array.from({ length: 5 }, (_, index) => {
             const isFull = promedio >= index + 1;  // Estrella llena

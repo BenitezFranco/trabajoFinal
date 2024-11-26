@@ -6,8 +6,8 @@ const Footer = () => {
             <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
                 {/* Información del grupo y enlaces de navegación */}
                 <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
-                    <p className="text-lg font-semibold">Grupo 27</p>
-                    <div className="flex space-x-4">
+                    <div className="flex space-x-8">
+                        <p className="text-lg font-semibold">Grupo 27</p>
                         <a href="#contact" className="hover:text-gray-400">Contacto</a>
                         <a href="#terms" className="hover:text-gray-400">Términos</a>
                         <a href="#privacy" className="hover:text-gray-400">Privacidad</a>
