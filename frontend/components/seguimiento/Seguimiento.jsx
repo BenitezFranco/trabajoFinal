@@ -44,7 +44,7 @@ const Seguimientos = () => {
 
     return (
         <div className="mt-6">
-            <h3 className="text-2xl font-bold mb-6">Seguidos</h3>
+            <p className="text-2xl font-bold mb-6">Seguidos</p>
             {seguimientos.length === 0 ? (
                 <p className="text-center text-lg">Sin seguidos</p>
             ) : (
@@ -67,8 +67,7 @@ const Seguimientos = () => {
                                     />
                                 </div>
                                 <div className="ml-4">
-                                    <h4 className="text-lg font-semibold text-blue-500 hover:underline">{seguimiento.seguido.nombre}</h4>
-                                    <p className="text-sm text-gray-600">Sigues desde {seguimiento.fecha_seguimiento}</p>
+                                    <p className="text-lg font-semibold text-blue-800 hover:underline">{seguimiento.seguido.nombre}</p>
                                 </div>
                             </li>
                         ))}

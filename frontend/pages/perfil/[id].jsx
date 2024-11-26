@@ -144,8 +144,8 @@ const PerfilUsuario = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <CustomHead title={`Perfil de ${perfil.nombre}`} description={`Pagina de perfil del usuario ${perfil.nombre}`}/>
-            <Header />
-            <main className="flex-grow p-6 bg-gray-100">
+            <Header/>
+            <main role="main" className="flex-grow p-6 bg-gray-100">
                 <div className="grid grid-cols-5 grid-rows-2 gap-4">
                     <div className="">
                         <Seguimientos />
@@ -232,7 +232,7 @@ const PerfilUsuario = () => {
                                                 {perfil.id_usuario === currentUserId && (
                                                     <a href='/editar-perfil'>
                                                         <button
-                                                            className={`py-1 px-3 rounded bg-green-500 hover:bg-green-600 text-white font-bold`}>Editar</button>
+                                                            className={`py-1 px-3 rounded bg-green-700 hover:bg-green-600 text-white font-bold`}>Editar</button>
                                                     </a>
                                                 )}
                                             </div>

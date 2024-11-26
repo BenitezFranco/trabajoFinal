@@ -57,15 +57,15 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <header className="bg-blue-800 text-white p-4 flex justify-between items-center" role="navigation">
       <Link href="/HomeLog" passHref>
-        <h1 className="text-lg font-bold cursor-pointer">FoodBook</h1>
+        <h1 className="p-2 rounded-full flex items-center group text-lg font-bold cursor-pointer">FoodBook</h1>
       </Link>
 
       {/* Menú del Header */}
       <div className="flex items-center space-x-4">
         <Link href="/search" passHref>
-          <div className="flex items-center space-x-2 cursor-pointer group">
+          <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
             {" "}
             {/* group para aplicar hover */}
             <FontAwesomeIcon
@@ -80,36 +80,37 @@ const Header = () => {
         {/* Otros botones, si el usuario está autenticado */}
         {isAuthenticated && (
           <>
-            <button
-              onClick={handlePerfilClick}
-              className="p-2 rounded-full flex items-center group" // group para aplicar hover
-              aria-label="Ir al perfil"
-            >
-              <FontAwesomeIcon
+            <Link href={`/perfil/${userId}`} passHref>
+          <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
+            {" "}
+            {/* group para aplicar hover */}
+            <FontAwesomeIcon
                 icon={faUser}
                 className="text-white group-hover:text-blue-300"
               />
               <span className="text-white ml-2 group-hover:text-blue-300">
                 Perfil
-              </span>
-            </button>
+              </span>{" "}
+            {/* Cambia el color del texto e icono */}
+          </div>
+        </Link>
 
-            <button
-              onClick={handleCrearRecetaClick}
-              className="p-2 rounded-full flex items-center group" // group para aplicar hover
-              aria-label="Crear receta"
-            >
-              <FontAwesomeIcon
+        <Link href={`/create-recipe`} passHref>
+          <div className=" flex items-center space-x-2 cursor-pointer group p-2 rounded-full flex items-center group">
+            {" "}
+            {/* group para aplicar hover */}
+            <FontAwesomeIcon
                 icon={faPlus}
                 className="text-white group-hover:text-green-300"
               />
               <span className="text-white ml-2 group-hover:text-green-300">
                 Crear receta
-              </span>
-            </button>
-
+              </span>{" "}
+            {/* Cambia el color del texto e icono */}
+          </div>
+        </Link>
             <Link href="/calendario-semanal" passHref>
-              <div className="flex items-center space-x-2 cursor-pointer group">
+              <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
                 {" "}
                 {/* group para aplicar hover */}
                 <FontAwesomeIcon
@@ -128,7 +129,6 @@ const Header = () => {
         <button
           onClick={handleLogout}
           className="p-2 rounded-full flex items-center group" // group para aplicar hover
-          aria-label="Cerrar sesión"
         >
           <FontAwesomeIcon
             icon={faSignOutAlt}

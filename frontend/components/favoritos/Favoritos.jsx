@@ -47,7 +47,7 @@ const Favoritos = () => {
 
     return (
         <div className="mt-6">
-            <h3 className="text-2xl font-bold mb-6">Recetas Favoritas</h3>
+            <p className="text-2xl font-bold mb-6">Recetas Favoritas</p>
             {favoritos.length === 0 ? (
                 <p className="text-center text-lg">No tiene recetas favoritas.</p>
             ) : (
@@ -67,9 +67,9 @@ const Favoritos = () => {
                             
                             {/* Contenedor del título */}
                             <div className="flex-grow">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                <p className="text-lg font-semibold text-gray-800 mb-2">
                                     {favorito.Recetum.titulo}
-                                </h3>
+                                </p>
                             </div>
                         </div>
                     ))}

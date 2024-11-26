@@ -53,7 +53,7 @@ const Seguidor = () => {
 
     return (
         <div className="mt-6">
-            <h3 className="text-2xl font-bold mb-6">Seguidores</h3>
+            <p className="text-2xl font-bold mb-6">Seguidores</p>
             {seguidores.length === 0 ? (
                 <p className="text-center text-lg">Sin seguidores</p>
             ) : (
@@ -74,9 +74,7 @@ const Seguidor = () => {
                                     />
                                 </div>
                                 <div className="ml-4">
-                                    <h4 className="text-lg font-semibold text-blue-500 hover:underline">{seguidor.seguidor.nombre}</h4>
-                                    <p className="text-sm text-gray-600">Seguidor desde {seguidor.fecha_seguimiento}</p>
-                                </div>
+                                    <p className="text-lg font-semibold text-blue-800 hover:underline">{seguidor.seguidor.nombre}</p>                                </div>
                             </li>
                         ))}
                     </ul>

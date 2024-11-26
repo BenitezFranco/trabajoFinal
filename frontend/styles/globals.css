@@ -35,3 +35,10 @@ body::before {
 body {
     font-family: 'Roboto', sans-serif;
   }
+
+.text-sm, p {
+    line-height: 1.5;
+  }
+a, button{
+    min-width: 44px; min-height: 44px;
+}
