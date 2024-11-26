@@ -45,7 +45,6 @@ const Register = () => {
             return;
         } else if (!validarContrasena(formData.contrasena)) {
             setErrorContrasena('La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula, un número y un carácter especial (por ejemplo: !, @, #, $, %, &, *).');
-
             return;
         } else {
             setErrorContrasena(''); // Limpiar el error si las contraseñas coinciden y son válidas
@@ -74,6 +73,10 @@ const Register = () => {
         }
     };
 
+    const handleBackToHome = () => {
+        router.push('/'); // Redirigir a la página de inicio
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="max-w-md w-full bg-white p-6 shadow-md rounded-lg">
@@ -84,7 +87,7 @@ const Register = () => {
                         <input
                             type="text"
                             id="nombre"
-                            name="nombre" // Nombre del campo para que el estado se actualice correctamente
+                            name="nombre"
                             className="border border-gray-300 p-2 w-full rounded-md text-gray-900 focus:ring focus:ring-blue-200"
                             value={formData.nombre}
                             onChange={handleChange}
@@ -96,7 +99,7 @@ const Register = () => {
                         <input
                             type="email"
                             id="correo_electronico"
-                            name="correo_electronico" // Nombre del campo para que el estado se actualice correctamente
+                            name="correo_electronico"
                             className="border border-gray-300 p-2 w-full rounded-md text-gray-900 focus:ring focus:ring-blue-200"
                             value={formData.correo_electronico}
                             onChange={handleChangeEmail}
@@ -111,7 +114,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="contrasena"
-                            name="contrasena" // Nombre del campo para que el estado se actualice correctamente
+                            name="contrasena"
                             className="border border-gray-300 p-2 w-full rounded-md text-gray-900 focus:ring focus:ring-blue-200"
                             value={formData.contrasena}
                             onChange={handleChange}
@@ -123,7 +126,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="repetir_contrasena"
-                            name="repetir_contrasena" // Nombre del campo para que el estado se actualice correctamente
+                            name="repetir_contrasena"
                             className="border border-gray-300 p-2 w-full rounded-md text-gray-900 focus:ring focus:ring-blue-200"
                             value={formData.repetir_contrasena}
                             onChange={handleChange}
@@ -140,6 +143,12 @@ const Register = () => {
                         Registrar
                     </button>
                 </form>
+                <button
+                    onClick={handleBackToHome}
+                    className="mt-4 bg-gray-500 text-white font-bold py-2 px-4 rounded-md w-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                    Volver a Inicio
+                </button>
             </div>
         </div>
     );

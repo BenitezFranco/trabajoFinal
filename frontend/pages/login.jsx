@@ -1,4 +1,3 @@
-//login.jsx
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -38,6 +37,10 @@ const Login = () => {
             console.error('Error al iniciar sesión', error);
             setError('Error al iniciar sesión');
         }
+    };
+
+    const handleGoBack = () => {
+        router.push('/');
     };
 
     return (
@@ -81,6 +84,12 @@ const Login = () => {
                         Iniciar Sesión
                     </button>
                 </form>
+                <button
+                    onClick={handleGoBack}
+                    className="mt-4 bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-md w-full hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                    Volver a Inicio
+                </button>
             </div>
         </div>
     );
