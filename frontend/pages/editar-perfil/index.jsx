@@ -120,94 +120,96 @@ const EditarPerfil = () => {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <CustomHead title={'Editar Perfil'} description={'Página para editar tu perfil'}/>
+            <CustomHead title={'Editar Perfil'} description={'Página para editar tu perfil'} />
             <Header />
-            <main className="flex-grow p-6 bg-gray-100">
-                <h1 className="text-2xl font-bold mb-4">Editar Perfil</h1>
-                {mensaje && <p className="text-green-600 mb-4">{mensaje}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <p>
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                                Nombre: {perfil.nombre}
-                            </label>
-                        </p>
+            <main className="grid grid-cols-8 grid-rows-5 gap-4 p-6 bg-gray-100">
+                <div className="col-span-8 row-span-5 flex justify-center items-center"> {/* Centrado de contenido */}
+                    <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg"> {/* Fondo blanco con bordes redondeados y sombra */}
+                        <h1 className="text-3xl font-semibold mb-6 text-center text-blue-600">Editar Perfil</h1>
+                        {mensaje && <p className="text-green-600 mb-4 text-center">{mensaje}</p>}
+                        <form onSubmit={handleSubmit}>
+                            {/* Foto de perfil al principio */}
+                            <div className="mb-6 text-center">
+                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                    Foto de perfil:
+                                </label>
+                                <input
+                                    type="file"
+                                    name="foto_perfil"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="py-2 px-3 border rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                {perfil.foto_perfil && (
+                                    <img
+                                        src={perfil.foto_perfil}
+                                        alt="Foto de perfil"
+                                        className="mt-4 w-32 h-32 rounded-full object-cover mx-auto border-4 border-blue-500 shadow-lg"
+                                    />
+                                )}
+                            </div>
+    
+                            {/* Descripción breve */}
+                            <div className="mb-6">
+                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                    Descripción breve:
+                                </label>
+                                <textarea
+                                    name="descripcion_breve"
+                                    value={perfil.descripcion_breve}
+                                    onChange={handleInputChange}
+                                    maxLength="30"
+                                    className="shadow-sm appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+    
+                            {/* Presentación */}
+                            <div className="mb-6">
+                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                    Presentación:
+                                </label>
+                                <textarea
+                                    name="presentacion"
+                                    value={perfil.presentacion}
+                                    onChange={handleInputChange}
+                                    maxLength="250"
+                                    className="shadow-sm appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+    
+                            {/* Mostrar correo */}
+                            <div className="mb-6 flex items-center">
+                                <label className="block text-gray-700 text-sm font-medium mb-2 mr-2">
+                                    Mostrar correo
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    checked={perfil.es_visible}
+                                    onChange={handleCheckboxChange}
+                                    className="mr-2 leading-tight"
+                                />
+                                <span className="text-sm text-gray-700">Marcar para hacerlo visible</span>
+                            </div>
+    
+                            {/* Botón de guardar */}
+                            <div className="text-center">
+                                <button
+                                    type="submit"
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+                                    disabled={cargando}
+                                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                                >
+                                    {cargando ? 'Guardando...' : 'Guardar Cambios'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div className="mb-4">
-                        <p>
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                                Correo Electrónico: {perfil.correo_electronico}
-                            </label>
-                        </p>
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Descripción breve:
-                        </label>
-                        <textarea
-                            name="descripcion_breve"
-                            value={perfil.descripcion_breve}
-                            onChange={handleInputChange}
-                            maxLength="30"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Presentación:
-                        </label>
-                        <textarea
-                            name="presentacion"
-                            value={perfil.presentacion}
-                            onChange={handleInputChange}
-                            maxLength="250"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Foto de perfil:
-                        </label>
-                        <input
-                            type="file"
-                            name="foto_perfil"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="py-2 px-3"
-                        />
-                        {perfil.foto_perfil && (
-                            <img
-                                src={perfil.foto_perfil}
-                                alt="Foto de perfil"
-                                className="mt-4 w-32 h-32 rounded-full object-cover"
-                            />
-                        )}
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Mostrar correo
-                        </label>
-                        <input
-                            type="checkbox"
-                            checked={perfil.es_visible}
-                            onChange={handleCheckboxChange}
-                            className="mr-2 leading-tight"
-                        />
-                        <span className="text-sm text-gray-700">Marcar para hacerlo visible</span>
-                    </div>
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        disabled={cargando}
-                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                    >
-                        {cargando ? 'Guardando...' : 'Guardar Cambios'}
-                    </button>
-                </form>
+                </div>
             </main>
             <Footer />
         </div>
     );
+    
 };
 
 export default EditarPerfil;

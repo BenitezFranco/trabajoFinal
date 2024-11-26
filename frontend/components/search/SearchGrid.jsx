@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import CardReceta from '../cards/receta/CardReceta';
+import CardReceta from '../cards/receta/CardRecetaP';
 import CardUsuario from '../cards/usuario/CardUsuario';
 
 const SearchGrid = ({ results }) => {
