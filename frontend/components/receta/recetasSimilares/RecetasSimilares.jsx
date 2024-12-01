@@ -1,6 +1,6 @@
 // components/RecetasSimilares.js
 import { useEffect, useState } from 'react';
-import CardReceta from '@/components/cards/receta/CardReceta';
+import CardReceta from '@/components/cards/receta/CardRecetaP';
 
 const RecetasSimilares = ({ id, token }) => {
     const [recetas, setRecetas] = useState([]);

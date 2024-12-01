@@ -12,6 +12,8 @@ const Generador = () => {
   const [searchSubmitted, setSearchSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");  // Estado para el mensaje de éxito
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
 
   // Función para seleccionar aleatoriamente los resultados
   const getRandomResults = (results) => {
@@ -77,6 +79,7 @@ const Generador = () => {
 
   // Nueva función para manejar la creación del calendario
   const handleCrearCalendario = async () => {
+    setIsButtonDisabled(true); // Deshabilita el botón al iniciar la acción
     const token = localStorage.getItem("token");
     try {
       const idsRecetas = results.map((receta) => receta.id_receta);
@@ -93,10 +96,9 @@ const Generador = () => {
       }
       const data = await response.json();
       console.log("Calendario creado:", data);
-
-      // Mostrar mensaje de éxito
+  
       setSuccessMessage("Calendario creado con éxito!");
-
+  
       // Redirigir después de 2 segundos
       setTimeout(() => {
         router.push("http://localhost:3001/calendario-semanal");
@@ -104,8 +106,10 @@ const Generador = () => {
     } catch (error) {
       console.error("Error al crear el calendario:", error);
       setErrorMessage("Error al crear el calendario");
+      setIsButtonDisabled(false); // Reactiva el botón si hay un error
     }
   };
+  
 
   const handleVerTodas = () => {
     setOpcionesBusqueda([{ filter: "titulo", term: "" }]);
@@ -172,12 +176,18 @@ const Generador = () => {
               <div>
                 <SearchGrid results={results} />
                 <button
-                  type="button"
-                  onClick={handleCrearCalendario}
-                  className="bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 hover:bg-gray-200 focus:outline-none transition duration-300 transform hover:scale-105"
-                >
-                  Crear Calendario
-                </button>
+  type="button"
+  onClick={handleCrearCalendario}
+  disabled={isButtonDisabled}
+  className={`bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 focus:outline-none transition duration-300 transform ${
+    isButtonDisabled
+      ? "opacity-50 cursor-not-allowed"
+      : "hover:bg-gray-200 hover:scale-105"
+  }`}
+>
+  Crear Calendario
+</button>
+
               </div>
             ) : searchSubmitted && results.length === 0 ? (
               <p className="text-gray-500 text-center">No se encontraron resultados</p>
