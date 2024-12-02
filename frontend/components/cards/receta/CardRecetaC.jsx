@@ -53,7 +53,7 @@ const CardRecetaC = ({ item }) => {
             <div className="p-2 text-center">
                 <h3
                     className={`text-lg font-bold mb-1 transition-all duration-200 ${
-                        isCompleted ? 'text-gray-500' : 'hover:text-blue-500 truncate'
+                        isCompleted ? 'text-gray-600' : 'hover:text-blue-600 truncate'
                     }`}
                     style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} // Truncar título largo
                 >

@@ -307,7 +307,96 @@ const recetas = [
         "dificultad": "Fácil",
         "tiempo_preparacion": 35,
         "id_usuario": 2
-    }
+    },{
+        titulo: "Ensalada de Pollo y Aguacate",
+        foto_receta: "https://pixabay.com/es/images/download/vegetable-salad-320719_640.jpg",
+        descripcion: "Una ensalada fresca y saludable, perfecta para el almuerzo, con pollo a la parrilla, aguacate cremoso y una vinagreta ligera.",
+        instrucciones: [
+                {"paso":"Cocinar las pechugas de pollo a la parrilla o a la plancha, sazonadas con sal y pimienta, hasta que estén doradas y completamente cocidas. Cortar el pollo en tiras.", "imagen": null}
+                ,
+                {"paso":"En un bol grande, mezclar las hojas verdes con el tomate, pepino y aguacate.", "imagen": null}
+                ,
+                {"paso":"En un tazón pequeño, preparar la vinagreta mezclando el aceite de oliva, jugo de limón, mostaza, sal y pimienta.", "imagen": null}
+                ,
+                {"paso":"Agregar el pollo a la ensalada, verter la vinagreta por encima y mezclar todo suavemente.", "imagen": null}
+                
+            ],
+        dificultad: "Media",
+        tiempo_preparacion: 30,
+        id_usuario: 3
+    },
+    {
+        titulo: "Ensalada Griega",
+        foto_receta: "https://pixabay.com/es/images/download/salad-2430919_640.jpg",
+        descripcion: "Una ensalada refrescante con pepino, tomate, aceitunas y queso feta, ideal para los días calurosos.",
+        instrucciones: [
+                {"paso":"Cortar el pepino y los tomates en rodajas.", "imagen": null}
+                ,
+                {"paso":"Mezclar en un bol con las aceitunas y el queso feta.", "imagen": null}
+                ,
+                {"paso":"Aderezar con aceite de oliva, jugo de limón, sal y pimienta.", "imagen": null}
+                ,
+                {"paso":"Revolver bien y servir.", "imagen": null}
+                
+            ],
+        dificultad: "Fácil",
+        tiempo_preparacion: 20,
+        id_usuario: 3
+    },
+    {
+        titulo: "Ensalada de Atún",
+        foto_receta: "https://pixabay.com/es/images/download/salad-1088411_640.jpg",
+        descripcion: "Una ensalada rápida y nutritiva con atún, zanahoria y maíz, ideal para un almuerzo ligero.",
+        instrucciones: [
+                {"paso":"Escurrir el atún y desmenuzarlo.", "imagen": null}
+                ,
+                {"paso":"Mezclar el atún con la lechuga, zanahoria y maíz.", "imagen": null}
+                ,
+                {"paso":"Agregar la mayonesa y la mostaza.", "imagen": null}
+                ,
+                {"paso":"Sazonar con sal y pimienta, y mezclar bien.", "imagen": null}
+                
+            ],
+        dificultad: "Fácil",
+        tiempo_preparacion: 15,
+        id_usuario: 3
+    },
+    {
+        titulo: "Ensalada de Quinoa",
+        foto_receta: "https://pixabay.com/es/images/download/quinoa-2011771_640.jpg",
+        descripcion: "Una clásica ensalada César con pollo a la parrilla.",
+        instrucciones: [
+                {"paso":"Cocinar la quinoa según las instrucciones del paquete.", "imagen": null}
+                ,
+                {"paso":"Mezclar la quinoa cocida con los pepinos, pimientos, cebolla y garbanzos.", "imagen": null}
+                ,
+                {"paso":"Aderezar con aceite de oliva, jugo de limón, sal y pimienta.", "imagen": null}
+                ,
+                {"paso":"Revolver y servir.", "imagen": null}
+                
+            ],
+        dificultad: "Media",
+        tiempo_preparacion: 30,
+        id_usuario: 3
+    },
+    {
+        titulo: "Ensalada de Espinacas y Fresas",
+        foto_receta: "https://img.freepik.com/foto-gratis/ensalada-deliciosa_144627-14776.jpg?t=st=1733158569~exp=1733162169~hmac=221170472962cd4e2ca752b83de2a64643a7ce3c304ad8531b15871cfd89180d&w=360",
+        descripcion: "Una ensalada ligera y fresca con espinacas, fresas y nueces, perfecta para acompañar una comida o como plato principal.",
+        instrucciones: [
+                {"paso":"Lavar las espinacas y colocarlas en un bol.", "imagen": null}
+                ,
+                {"paso":"Agregar las fresas, las nueces y el queso de cabra.", "imagen": null}
+                ,
+                {"paso":"Preparar el aderezo mezclando vinagre balsámico y miel.", "imagen": null}
+                ,
+                {"paso":"Verter el aderezo sobre la ensalada y mezclar.", "imagen": null}
+                
+            ],
+        dificultad: "Fácil",
+        tiempo_preparacion: 20,
+        id_usuario: 3
+    },
     
     
     
@@ -316,7 +405,7 @@ const recetas = [
 
 const insertarRecetas = async () => {
     const categorias = [
-        { titulo: "Ensalada César", categorias: [14, 8,7] },
+        { titulo: "Ensalada César", categorias: [14, 8,7,9] },
         { titulo: "Tarta de manzana", categorias: [3,6,13] },
         { titulo: "Pasta al pesto", categorias: [8,9,10] },
         { titulo: "Sopa de tomate", categorias: [2,7,15] },
@@ -337,6 +426,12 @@ const insertarRecetas = async () => {
         { titulo: "Pizza Pepperoni", categorias: [8,9,10] },
         { titulo: "Pizza Cuatro Quesos", categorias: [1,8,9,10] },
         { titulo: "Pizza Hawaiana", categorias: [8,9,10] },
+        { titulo: "Ensalada de Pollo y Aguacate", categorias: [14, 8,7,9] },
+        { titulo: "Ensalada Griega", categorias: [14, 8,7,9] },
+        { titulo: "Ensalada de Atún", categorias: [14, 8,7,9] },
+        { titulo: "Ensalada de Quinoa", categorias: [14, 8,7,9] },
+        { titulo: "Ensalada de Espinacas y Fresas", categorias: [14, 8,7,9] },
+        
     ];
     
     // Aquí puedes definir las categorías para cada receta
@@ -362,6 +457,12 @@ const insertarRecetas = async () => {
         {titulo: "Pizza Pepperoni", ingredientes: [99,127,178,310,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","al gusto"]},
         {titulo: "Pizza Cuatro Quesos", ingredientes: [99,127,178,174,58,309], cantidades: ["1 base","1/4 taza","1/2 taza","1/4 taza","1/4 taza","1/4 taza"]},
         {titulo: "Pizza Hawaiana", ingredientes: [99,127,178,311,68,16], cantidades: ["1 base","1/2 taza","1 taza","1/2 taza","1/2 taza","al gusto"]},
+        { titulo: "Ensalada de Pollo y Aguacate", ingredientes: [31,151,6,1,20,53,235,49], cantidades: ["aproximadamente 300 g","1 en rodajas","4 tazas","1 grande, en cubos","1/2, en rodajas","1 cucharada","de 1 limon","1 cucharadita"] },
+        { titulo: "Ensalada Griega", ingredientes: [20,1,101,30,53,235,41,42], cantidades: ["2 tazas, en rodajas","1 taza","1/2 taza","1 taza, en feta desmenuzado","1 cucharada","de 1/2 limon","al gusto","al gusto"] },
+        { titulo: "Ensalada de Atún", ingredientes: [105,19,5,26,306,49,41,42], cantidades: ["1 lata","2 tazas","1/2 taza (rallada)","1/2 taza","2 cucharadas","1 cucharada","al gusto","al gusto"] },
+        { titulo: "Ensalada de Quinoa", ingredientes: [93,20,3,195,121,53,235,41,42], cantidades: ["1 taza, cocida","1 taza, en cubos","1 taza, en cubos","1/2 taza, picada","1/2 taza, cocidos","2 cucharadas","de 1 limon","al gusto","al gusto"] },
+        { titulo: "Ensalada de Espinacas y Fresas", ingredientes: [6,74,87,309,312,61], cantidades: ["4 tazas","1 taza, en rodajas","1/2 taza, troceadas","1/4 taza, desmenuzado","2 cucharadas","1 cucharada"] },
+        
     ];
     for (const receta of recetas) {
         // Inserta la receta y obtén el ID
@@ -491,7 +592,7 @@ const insertIngredientes = async () => {
         {nombre: 'Piñones'},{nombre: 'Salsa'},{nombre: 'Banana'},{nombre: 'Frutos rojos'},
         {nombre: 'Hielo'},{nombre: 'Polvo de hornear'},{nombre: 'Arándanos'},{nombre:'Mayonesa vegana'},
         {nombre: 'Mayonesa'},{nombre: 'Queso Crema'},{nombre: 'Salsa de soya'},{nombre: 'Queso de cabra'},
-        {nombre: 'Pepperoni'}, {nombre:'Jamón cocido'},
+        {nombre: 'Pepperoni'}, {nombre:'Jamón cocido'},{nombre:'Vinagre balsámico'}
     ];
 
         try {
@@ -518,6 +619,11 @@ const insertUsuario = async () => {
             nombre: 'Santi',
             correo_electronico: 'santi@santi.com',
             contrasena: 'santi123',
+        },
+        {
+            nombre: 'Abigail',
+            correo_electronico: 'abi@abi.com',
+            contrasena: 'abigail123',
         },
     ];
 
