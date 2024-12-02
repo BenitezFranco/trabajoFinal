@@ -76,7 +76,17 @@ const CreateRecipe = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    let valor = parseInt(e.target.value, 10) || 1;
+
+      // Validar límites
+      if (value < 1) {
+        valor=1;
+      } else if (value > 300) {
+        valor=300;
+      } else {
+        valor=value;
+      }
+    setFormData({ ...formData, [name]: valor });
   };
 
   const handlePasoChange = (index, value) => {
@@ -241,7 +251,7 @@ const CreateRecipe = () => {
       <main className="flex-grow flex flex-col items-center p-6">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-8">Crear Receta</h1>
         {successMessage && (
-          <div className="mb-4 text-green-600 font-semibold">{successMessage}</div>
+          <div className="mb-4 text-green-700 font-semibold">{successMessage}</div>
         )}
   
         <form
@@ -257,7 +267,7 @@ const CreateRecipe = () => {
               value={formData.titulo}
               onChange={handleChange}
               required
-              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
           </div>
   
@@ -269,7 +279,7 @@ const CreateRecipe = () => {
               name="foto_receta"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full py-2 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full py-2 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
           </div>
   
@@ -281,7 +291,7 @@ const CreateRecipe = () => {
               value={formData.descripcion}
               onChange={handleChange}
               required
-              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             ></textarea>
           </div>
   
@@ -314,12 +324,12 @@ const CreateRecipe = () => {
                   placeholder="Cantidad"
                   value={ingrediente.cantidad}
                   onChange={(e) => handleCantidadChange(index, e.target.value)}
-                  className="ml-4 w-28 py-2 px-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="ml-4 w-28 py-2 px-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
                 <button
                   type="button"
                   onClick={() => handleQuitarIngrediente(index)}
-                  className="ml-4 bg-transparent border-2 border-red-500 hover:bg-red-500 hover:text-white text-red-500 font-semibold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-300"
+                  className="ml-4 bg-transparent border-2 border-red-600 hover:bg-red-600 hover:text-white text-red-600 font-semibold py-2 px-4 rounded-lg shadow-lg transition ease-in-out duration-300"
                 >
                   Quitar
                 </button>
@@ -328,7 +338,7 @@ const CreateRecipe = () => {
             <button
               type="button"
               onClick={handleAgregarIngrediente}
-              className="mt-4 bg-transparent border-2 border-green-500 hover:bg-green-500 hover:text-white text-green-500 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
+              className="mt-4 bg-transparent border-2 border-green-700 hover:bg-green-700 hover:text-white text-green-700 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
             >
               Agregar Ingrediente
             </button>
@@ -350,14 +360,14 @@ const CreateRecipe = () => {
               <button
                 type="button"
                 onClick={handleAddPaso}
-                className="bg-transparent border-2 border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
+                className="bg-transparent border-2 border-blue-600 hover:bg-blue-600 hover:text-white text-blue-600 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
               >
                 Agregar Paso
               </button>
               <button
                 type="button"
                 onClick={handleRemovePaso}
-                className="bg-transparent border-2 border-red-500 hover:bg-red-500 hover:text-white text-red-500 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
+                className="bg-transparent border-2 border-red-600 hover:bg-red-600 hover:text-white text-red-600 font-semibold py-2 px-6 rounded-lg shadow-lg transition ease-in-out duration-300"
                 disabled={pasos.length <= 1} // Deshabilitado si solo hay un paso
               >
                 Borrar Último Paso
@@ -367,15 +377,18 @@ const CreateRecipe = () => {
   
           {/* Tiempo de preparación */}
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Tiempo de Preparación (minutos):</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Tiempo de Preparación (minutos):
             <input
-              type="text"
-              name="tiempo_preparacion"
+    type="number"
+    min="1"
+    max="31"
+    name="tiempo_preparacion"
               value={formData.tiempo_preparacion}
-              onChange={handleChange}
-              required
-              className="w-full py-3 px-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+    onChange={handleChange}
+    required
+    className="border border-gray-300 rounded-lg p-2 ml-2"
+  />
+</label>
           </div>
   
           {/* Dificultad */}

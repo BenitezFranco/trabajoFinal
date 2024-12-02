@@ -14,6 +14,10 @@ const CalendarioSemanal_Receta = sequelize.define('CalendarioSemanal_Receta', {
     },
     id_receta: {
         type: DataTypes.INTEGER,
+    },
+    completado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     tableName: 'CalendarioSemanal_Receta',

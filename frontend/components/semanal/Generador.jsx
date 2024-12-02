@@ -3,17 +3,19 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import SearchGrid from "../search/SearchGrid";
 import OpcionBusqueda from "../search/opcionBusqueda/OpcionBusqueda";
-import { useRouter } from 'next/router';  // Asegúrate de importar useRouter
+import { useRouter } from "next/router"; // Asegúrate de importar useRouter
 
 const Generador = () => {
-  const router = useRouter();  // Inicializamos el router
-  const [opcionesBusqueda, setOpcionesBusqueda] = useState([{ filter: "titulo", term: "" }]);
+  const router = useRouter(); // Inicializamos el router
+  const [opcionesBusqueda, setOpcionesBusqueda] = useState([
+    { filter: "titulo", term: "" },
+  ]);
   const [results, setResults] = useState([]);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");  // Estado para el mensaje de éxito
+  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
+  const [recipeCount, setRecipeCount] = useState(7);
 
   // Función para seleccionar aleatoriamente los resultados
   const getRandomResults = (results) => {
@@ -23,14 +25,14 @@ const Generador = () => {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Intercambiar los elementos
     }
 
-    // Si hay menos de 7 resultados, repetir hasta llegar a 7
+    // Si hay menos resultados de los solicitados, repetir hasta completar
     const randomResults = [];
-    while (randomResults.length < 7) {
+    while (randomResults.length < recipeCount) {
       randomResults.push(...shuffled);
     }
 
-    // Retornar solo los primeros 7 resultados
-    return randomResults.slice(0, 7);
+    // Retornar solo la cantidad de recetas solicitadas
+    return randomResults.slice(0, recipeCount);
   };
 
   const handleSearch = async (e) => {
@@ -44,7 +46,9 @@ const Generador = () => {
         .map((opcion) => `${opcion.filter}=${opcion.term}`)
         .join("&");
 
-      const response = await fetch(`http://localhost:3000/search?${searchQueries}`);
+      const response = await fetch(
+        `http://localhost:3000/search?${searchQueries}`
+      );
       const data = await response.json();
 
       // Filtrar aleatoriamente los resultados y asegurarnos de que haya 7
@@ -57,7 +61,10 @@ const Generador = () => {
   };
 
   const handleAddOption = () => {
-    setOpcionesBusqueda([...opcionesBusqueda, { filter: "id_categoria", term: "" }]);
+    setOpcionesBusqueda([
+      ...opcionesBusqueda,
+      { filter: "id_categoria", term: "" },
+    ]);
   };
 
   const handleRemoveOption = (index) => {
@@ -67,7 +74,9 @@ const Generador = () => {
 
   const handleFilterChange = (index, newFilter) => {
     setOpcionesBusqueda((prevOpciones) =>
-      prevOpciones.map((opcion, i) => (i === index ? { ...opcion, filter: newFilter, term: "" } : opcion))
+      prevOpciones.map((opcion, i) =>
+        i === index ? { ...opcion, filter: newFilter, term: "" } : opcion
+      )
     );
   };
 
@@ -96,9 +105,9 @@ const Generador = () => {
       }
       const data = await response.json();
       console.log("Calendario creado:", data);
-  
+
       setSuccessMessage("Calendario creado con éxito!");
-  
+
       // Redirigir después de 2 segundos
       setTimeout(() => {
         router.push("http://localhost:3001/calendario-semanal");
@@ -109,7 +118,6 @@ const Generador = () => {
       setIsButtonDisabled(false); // Reactiva el botón si hay un error
     }
   };
-  
 
   const handleVerTodas = () => {
     setOpcionesBusqueda([{ filter: "titulo", term: "" }]);
@@ -123,25 +131,27 @@ const Generador = () => {
         <div className="grid grid-cols-7 grid-rows-4 gap-6 max-w-6xl mx-auto">
           {/* Sección de Búsqueda */}
           <div className="col-span-3 row-span-4 bg-white p-6 rounded-xl shadow-lg">
-            <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">Buscar Recetas</h1>
+            <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">
+              Buscar Recetas
+            </h1>
 
             {/* Formulario de búsqueda */}
             <form onSubmit={handleSearch} className="mb-6">
               <div className="flex flex-col space-y-4">
                 {opcionesBusqueda.map((opcion, index) => (
                   <>
-                  <label for="filtros" class="text-gray-700 font-medium">
-                          Filtrar por:
-                        </label>
-                  <OpcionBusqueda
-                    key={index}
-                    index={index}
-                    filter={opcion.filter}
-                    term={opcion.term}
-                    onFilterChange={handleFilterChange}
-                    onTermChange={handleTermChange}
-                    onRemove={handleRemoveOption}
-                  />
+                    <label for="filtros" class="text-gray-700 font-medium">
+                      Filtrar por:
+                    </label>
+                    <OpcionBusqueda
+                      key={index}
+                      index={index}
+                      filter={opcion.filter}
+                      term={opcion.term}
+                      onFilterChange={handleFilterChange}
+                      onTermChange={handleTermChange}
+                      onRemove={handleRemoveOption}
+                    />
                   </>
                 ))}
                 <button
@@ -151,6 +161,29 @@ const Generador = () => {
                 >
                   <span className="text-sm">+ Agregar Filtro</span>
                 </button>
+                <label className="text-gray-700 font-medium">
+  Cantidad de recetas:
+  <input
+    type="number"
+    min="1"
+    max="31"
+    value={recipeCount}
+    onChange={(e) => {
+      const value = parseInt(e.target.value, 10) || 1;
+
+      // Validar límites
+      if (value < 1) {
+        setRecipeCount(1);
+      } else if (value > 31) {
+        setRecipeCount(31);
+      } else {
+        setRecipeCount(value);
+      }
+    }}
+    className="border border-gray-300 rounded-lg p-2 ml-2"
+  />
+</label>
+
 
                 <button
                   type="submit"
@@ -176,21 +209,22 @@ const Generador = () => {
               <div>
                 <SearchGrid results={results} />
                 <button
-  type="button"
-  onClick={handleCrearCalendario}
-  disabled={isButtonDisabled}
-  className={`bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 focus:outline-none transition duration-300 transform ${
-    isButtonDisabled
-      ? "opacity-50 cursor-not-allowed"
-      : "hover:bg-gray-200 hover:scale-105"
-  }`}
->
-  Crear Calendario
-</button>
-
+                  type="button"
+                  onClick={handleCrearCalendario}
+                  disabled={isButtonDisabled}
+                  className={`bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 focus:outline-none transition duration-300 transform ${
+                    isButtonDisabled
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-200 hover:scale-105"
+                  }`}
+                >
+                  Crear Calendario
+                </button>
               </div>
             ) : searchSubmitted && results.length === 0 ? (
-              <p className="text-gray-500 text-center">No se encontraron resultados</p>
+              <p className="text-gray-500 text-center">
+                No se encontraron resultados
+              </p>
             ) : null}
           </div>
         </div>

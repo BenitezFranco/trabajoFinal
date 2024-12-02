@@ -31,39 +31,53 @@ const obtenerCalendario = async (ctx) => {
             },
             order: [['id_calendario', 'ASC']],
         });
-
+        
         if (!calendarios || calendarios.length === 0) {
             ctx.status = 200;
             ctx.body = [];
             return;
         }
-
+        
         const idCalendarios = calendarios.map(calendario => calendario.dataValues.id_calendario);
-
+        
         // Obtener las relaciones calendario-receta
         const calReceta = await CalendarioSemanalReceta.findAll({
             where: { id_calendario: idCalendarios },
             order: [['id_rel_cal_rec', 'ASC']],
-            attributes: ['id_calendario', 'id_receta']
+            attributes: ['id_calendario', 'id_receta', 'completado','id_rel_cal_rec']
         });
-
+        
         const idRecetas = calReceta.map(relacion => relacion.dataValues.id_receta);
-
+        
         // Obtener las recetas por sus IDs
         const recetas = await Receta.findAll({
             where: { id_receta: idRecetas }
         });
-
-        // Organizar las recetas por id_calendario
+        
+        // Organizar las recetas por id_calendario con el campo completado
         const recetasPorCalendario = idCalendarios.map(idCal => ({
             id_calendario: idCal,
             recetas: calReceta
                 .filter(rel => rel.id_calendario === idCal)
-                .map(rel => recetas.find(receta => receta.id_receta === rel.id_receta))
+                .map(rel => {
+                    // Encontrar la receta correspondiente
+                    const receta = recetas.find(r => r.id_receta === rel.id_receta);
+                    if (receta) {
+                        // Agregar el campo completado
+                        return {
+                            ...receta.dataValues,
+                            completado: rel.completado,
+                            id_rel_cal_rec: rel.id_rel_cal_rec
+                        };
+                    }
+                    return null; // Manejar casos donde la receta no se encuentra (si es necesario)
+                })
+                .filter(receta => receta !== null) // Eliminar recetas nulas si alguna no coincide
         }));
-
+        
         ctx.status = 200;
         ctx.body = recetasPorCalendario;
+        
 
     } catch (error) {
         console.error(error);
@@ -96,5 +110,24 @@ const borrarCalendario = async (ctx) => {
     }
 };
 
-module.exports = { crearCalendario, obtenerCalendario, borrarCalendario };
+const completarReceta = async (ctx) => {
+    const id_rel_cal_rec = ctx.params.id;
+
+    try {
+        const result = await CalendarioSemanalReceta.findByPk(id_rel_cal_rec);
+        if (!result) {
+            ctx.status = 404;
+            ctx.body = { error: 'Calendario no encontrado' };
+            return;
+        }
+        await result.update({ completado: true });
+        ctx.status = 200;
+        ctx.body = { message: 'Calendario-Receta actualizado correctamente' };
+    } catch (error) {
+        ctx.status = 500;
+        ctx.body = { error: 'Error al eliminar el calendario' };
+    }
+};
+
+module.exports = { crearCalendario, obtenerCalendario, borrarCalendario,completarReceta};
 
