@@ -7,27 +7,29 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
     const [respuesta, setRespuesta] = useState({});
     const [respuestaTexto, setRespuestaTexto] = useState({});
 
-    useEffect(() => {
-        const fetchComentarios = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(`http://localhost:3000/receta/${recetaId}/comentarios`);
-                if (response.status === 200) {
-                    const data = await response.json();
-                    setComentarios(Array.isArray(data) ? data : []);
-                } else if (response.status === 401 || response.status === 403) {
-                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                    localStorage.removeItem('token');
-                    router.push('/login');
-                }
-            } catch (error) {
-                console.error('Error al obtener comentarios:', error);
-                setComentarios([]);
-            } finally {
-                setLoading(false);
+    // Mueve fetchComentarios fuera de useEffect para que pueda reutilizarse
+    const fetchComentarios = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`http://localhost:3000/receta/${recetaId}/comentarios`);
+            if (response.status === 200) {
+                const data = await response.json();
+                setComentarios(Array.isArray(data) ? data : []);
+            } else if (response.status === 401 || response.status === 403) {
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('token');
+                router.push('/login');
             }
-        };
-        fetchComentarios();
+        } catch (error) {
+            console.error('Error al obtener comentarios:', error);
+            setComentarios([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchComentarios(); // Llamada inicial para cargar comentarios
     }, [recetaId]);
 
     const handleSubmitComentario = async (id_comentario_padre = null) => {
@@ -57,20 +59,7 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
             });
 
             if (response.ok) {
-                const comentarioCreado = await response.json();
-                setComentarios((prev) => {
-                    if (id_comentario_padre) {
-                        return prev.map((comentario) =>
-                            comentario.id_comentario === id_comentario_padre
-                                ? {
-                                      ...comentario,
-                                      Respuestas: [...(comentario.Respuestas || []), comentarioCreado],
-                                  }
-                                : comentario
-                        );
-                    }
-                    return [...prev, comentarioCreado];
-                });
+                await fetchComentarios(); // Recarga los comentarios después de enviar uno nuevo
 
                 // Limpia el campo de texto correspondiente
                 if (id_comentario_padre) {
@@ -91,7 +80,6 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
         setRespuesta((prev) => ({ ...prev, [id_comentario]: true }));
     };
 
-    // Obtén el ID del usuario logueado
     const usuarioLogueadoId = localStorage.getItem('usuarioId');
 
     return (
