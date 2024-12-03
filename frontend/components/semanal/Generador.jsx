@@ -16,6 +16,7 @@ const Generador = () => {
   const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [recipeCount, setRecipeCount] = useState(7);
+  const [calendarName, setCalendarName] = useState(""); // Estado para el nombre del calendario
 
   // Función para seleccionar aleatoriamente los resultados
   const getRandomResults = (results) => {
@@ -88,6 +89,11 @@ const Generador = () => {
 
   // Nueva función para manejar la creación del calendario
   const handleCrearCalendario = async () => {
+    if (!calendarName) {
+      setErrorMessage("Por favor, ingresa un nombre para el calendario.");
+      return;
+    }
+
     setIsButtonDisabled(true); // Deshabilita el botón al iniciar la acción
     const token = localStorage.getItem("token");
     try {
@@ -98,7 +104,7 @@ const Generador = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ idsRecetas }),
+        body: JSON.stringify({ idsRecetas, name: calendarName }), // Incluimos el nombre
       });
       if (!response.ok) {
         throw new Error("Error en la respuesta del servidor");
@@ -140,7 +146,7 @@ const Generador = () => {
               <div className="flex flex-col space-y-4">
                 {opcionesBusqueda.map((opcion, index) => (
                   <>
-                    <label for="filtros" class="text-gray-700 font-medium">
+                    <label for="filtros" className="text-gray-700 font-medium">
                       Filtrar por:
                     </label>
                     <OpcionBusqueda
@@ -162,28 +168,27 @@ const Generador = () => {
                   <span className="text-sm">+ Agregar Filtro</span>
                 </button>
                 <label className="text-gray-700 font-medium">
-  Cantidad de recetas:
-  <input
-    type="number"
-    min="1"
-    max="31"
-    value={recipeCount}
-    onChange={(e) => {
-      const value = parseInt(e.target.value, 10) || 1;
+                  Cantidad de recetas:
+                  <input
+                    type="number"
+                    min="1"
+                    max="31"
+                    value={recipeCount}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10) || 1;
 
-      // Validar límites
-      if (value < 1) {
-        setRecipeCount(1);
-      } else if (value > 31) {
-        setRecipeCount(31);
-      } else {
-        setRecipeCount(value);
-      }
-    }}
-    className="border border-gray-300 rounded-lg p-2 ml-2"
-  />
-</label>
-
+                      // Validar límites
+                      if (value < 1) {
+                        setRecipeCount(1);
+                      } else if (value > 31) {
+                        setRecipeCount(31);
+                      } else {
+                        setRecipeCount(value);
+                      }
+                    }}
+                    className="border border-gray-300 rounded-lg p-2 ml-2"
+                  />
+                </label>
 
                 <button
                   type="submit"
@@ -208,6 +213,19 @@ const Generador = () => {
             {searchSubmitted && results.length > 0 ? (
               <div>
                 <SearchGrid results={results} />
+                <div className="mt-4">
+                  <label htmlFor="calendarName" className="text-gray-700 font-medium">
+                    Nombre del Calendario:
+                  </label>
+                  <input
+                    id="calendarName"
+                    type="text"
+                    value={calendarName}
+                    onChange={(e) => setCalendarName(e.target.value)}
+                    className="border border-gray-300 rounded-lg p-2 w-full mt-2"
+                    placeholder="Ingresa un nombre para el calendario"
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={handleCrearCalendario}
@@ -215,32 +233,25 @@ const Generador = () => {
                   className={`bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 focus:outline-none transition duration-300 transform ${
                     isButtonDisabled
                       ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-gray-200 hover:scale-105"
+                      : "hover:bg-gray-200"
                   }`}
                 >
-                  Crear Calendario
+                  {isButtonDisabled ? "Creando..." : "Crear Calendario"}
                 </button>
+                {errorMessage && (
+                  <p className="text-red-500 mt-4">{errorMessage}</p>
+                )}
+                {successMessage && (
+                  <p className="text-green-500 mt-4">{successMessage}</p>
+                )}
               </div>
-            ) : searchSubmitted && results.length === 0 ? (
-              <p className="text-gray-500 text-center">
-                No se encontraron resultados
+            ) : (
+              <p className="text-center text-gray-700">
+                No se encontraron recetas o no se ha realizado la búsqueda aún.
               </p>
-            ) : null}
+            )}
           </div>
         </div>
-
-        {/* Mostrar mensaje de éxito o error */}
-        {successMessage && (
-          <div className="text-green-600 text-center mt-4">
-            <p>{successMessage}</p>
-          </div>
-        )}
-
-        {errorMessage && (
-          <div className="text-red-600 text-center mt-4">
-            <p>{errorMessage}</p>
-          </div>
-        )}
       </div>
       <Footer />
     </div>

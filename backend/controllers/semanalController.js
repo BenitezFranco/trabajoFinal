@@ -3,23 +3,33 @@ const CalendarioSemanalReceta= require('../models/CalendarioSemanal_Receta');
 const Receta = require('../models/Receta');
 
 const crearCalendario = async (ctx) => {
-
-    const idsRecetas = ctx.request.body.idsRecetas;
+    const { idsRecetas, name } = ctx.request.body; // Asegúrate de recibir el nombre
     const id_usuario = ctx.state.user.id_usuario;
+
     try {
-        const nuevoCalendario = await CalendarioSemanal.create({id_usuario: id_usuario});
-        
-        idsRecetas.map( async (id)=> await CalendarioSemanalReceta.create({
-            id_calendario: nuevoCalendario.id_calendario,
-            id_receta:id
-        }))
-        
-        ctx.body = { message: 'Calendario creado exitosamente' };
+        // Crear un nuevo calendario con el nombre proporcionado
+        const nuevoCalendario = await CalendarioSemanal.create({
+            id_usuario: id_usuario,
+            nombre: name, // Guardar el nombre del calendario
+        });
+
+        // Asociar las recetas al nuevo calendario
+        await Promise.all(
+            idsRecetas.map(async (id) => {
+                await CalendarioSemanalReceta.create({
+                    id_calendario: nuevoCalendario.id_calendario,
+                    id_receta: id,
+                });
+            })
+        );
+
+        ctx.body = { message: 'Calendario creado exitosamente', calendario: nuevoCalendario };
     } catch (error) {
-        console.error("Error al crear el calendario:", error);
+        console.error('Error al crear el calendario:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'Error al crear el calendario' };
     }
 };
-
 const obtenerCalendario = async (ctx) => {
     const usuario = ctx.state.user.id_usuario;
 
@@ -30,6 +40,7 @@ const obtenerCalendario = async (ctx) => {
                 id_usuario: usuario
             },
             order: [['id_calendario', 'ASC']],
+            attributes: ['id_calendario', 'nombre'] // Asegúrate de incluir el atributo 'nombre'
         });
         
         if (!calendarios || calendarios.length === 0) {
@@ -57,27 +68,25 @@ const obtenerCalendario = async (ctx) => {
         // Organizar las recetas por id_calendario con el campo completado
         const recetasPorCalendario = idCalendarios.map(idCal => ({
             id_calendario: idCal,
+            nombre: calendarios.find(cal => cal.id_calendario === idCal)?.nombre, // Obtener el nombre del calendario
             recetas: calReceta
                 .filter(rel => rel.id_calendario === idCal)
                 .map(rel => {
-                    // Encontrar la receta correspondiente
                     const receta = recetas.find(r => r.id_receta === rel.id_receta);
                     if (receta) {
-                        // Agregar el campo completado
                         return {
                             ...receta.dataValues,
                             completado: rel.completado,
                             id_rel_cal_rec: rel.id_rel_cal_rec
                         };
                     }
-                    return null; // Manejar casos donde la receta no se encuentra (si es necesario)
+                    return null;
                 })
-                .filter(receta => receta !== null) // Eliminar recetas nulas si alguna no coincide
+                .filter(receta => receta !== null)
         }));
         
         ctx.status = 200;
         ctx.body = recetasPorCalendario;
-        
 
     } catch (error) {
         console.error(error);

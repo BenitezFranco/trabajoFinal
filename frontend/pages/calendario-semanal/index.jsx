@@ -86,6 +86,7 @@ const CalendarioSemanal = () => {
             </div>
         );
 
+    console.log(calendarios);
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             <CustomHead title={'Calendario Semanal'} description={'En esta página puedes ver tus calendarios semanales'} />
@@ -98,11 +99,11 @@ const CalendarioSemanal = () => {
                         <p className="text-xl font-medium text-gray-700">No hay calendarios disponibles.</p>
                     </div>
                 ) : (
-                    calendarios.map((calendario, index) => (
+                    calendarios.map((calendario) => (
                         <div key={calendario.id_calendario} className="mb-16 bg-white rounded-lg shadow p-6">
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-2xl font-bold text-gray-800">
-                                    Calendario {index + 1}
+                                    {calendario.nombre ? calendario.nombre : `Calendario `} {/* Mostrar el nombre del calendario */}
                                 </h2>
                                 <button
                                     onClick={() => handleDelete(calendario.id_calendario)}
@@ -130,6 +131,7 @@ const CalendarioSemanal = () => {
                         </div>
                     ))
                 )}
+
                 <div className="text-center mt-6">
                     <Link
                         href="/calendario-semanal/generar"

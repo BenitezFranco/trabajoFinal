@@ -8,6 +8,11 @@ const CalendarioSemanal = sequelize.define('CalendarioSemanal', {
         autoIncrement: true,
         primaryKey: true,
     },
+    nombre: {
+        type: DataTypes.STRING,
+        defaultValue: 'calendario',
+        allowNull: false, // Asegúrate de requerir el nombre
+    },
 }, {
     tableName: 'CalendarioSemanal',
     timestamps: false,
