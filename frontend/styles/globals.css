@@ -42,3 +42,7 @@ body {
 a, button{
     min-width: 44px; min-height: 44px;
 }
+
+.select-placeholder-text {
+    color: rgb(85, 83, 83);
+    }

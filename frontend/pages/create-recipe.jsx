@@ -305,7 +305,7 @@ const CreateRecipe = () => {
                   options={ingredientesOptions}
                   className="basic-single flex-grow"
                   classNamePrefix="select"
-                  placeholder="Selecciona un ingrediente"
+                  placeholder={<div className="select-placeholder-text">Selecciona un ingrediente</div>}
                   onChange={(selectedOption) =>
                     handleSelectIngredienteChange(selectedOption, index)
                   }
@@ -440,7 +440,7 @@ const CreateRecipe = () => {
               options={categoriasOptions}
               className="basic-multi-select"
               classNamePrefix="select"
-              placeholder="Selecciona una o más categorías"
+              placeholder={<div className="select-placeholder-text">Selecciona una o más categorías</div>}
               onChange={handleSelectChange}
               value={categoriasOptions.filter((option) =>
                 formData.categorias.includes(option.value)
