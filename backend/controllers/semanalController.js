@@ -40,7 +40,7 @@ const obtenerCalendario = async (ctx) => {
                 id_usuario: usuario
             },
             order: [['id_calendario', 'ASC']],
-            attributes: ['id_calendario', 'nombre'] // Asegúrate de incluir el atributo 'nombre'
+            attributes: ['id_calendario', 'nombre','fecha'] // Asegúrate de incluir el atributo 'nombre'
         });
         
         if (!calendarios || calendarios.length === 0) {
@@ -69,6 +69,7 @@ const obtenerCalendario = async (ctx) => {
         const recetasPorCalendario = idCalendarios.map(idCal => ({
             id_calendario: idCal,
             nombre: calendarios.find(cal => cal.id_calendario === idCal)?.nombre, // Obtener el nombre del calendario
+            fecha: calendarios.find(cal => cal.id_calendario === idCal)?.fecha,
             recetas: calReceta
                 .filter(rel => rel.id_calendario === idCal)
                 .map(rel => {
