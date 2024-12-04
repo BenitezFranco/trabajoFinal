@@ -86,7 +86,7 @@ const CalendarioSemanal = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
-            <CustomHead title={'Planes de Recetas'} description={'En esta página puedes ver tus calendarios semanales'} />
+            <CustomHead title={'Plan de Recetas'} description={'En esta página puedes ver tus calendarios semanales'} />
             <Header />
             <main className="flex-grow max-w-7xl mx-auto p-6">
                 <h1 className="text-center text-4xl font-bold text-gray-800 mb-8">Plan de Recetas</h1>
