@@ -4,7 +4,7 @@ import CustomHead from "@/components/head/CustomHead";
 const GenerarCalendario= () => {
     return (
         <div>
-            <CustomHead title={'Generar Calendario Semanal'} description={'En esta página se genera un nuevo calendario semanal'}/>
+            <CustomHead title={'Generar Plan'} description={'En esta página se genera un nuevo calendario semanal'}/>
             <Generador /> 
         </div>
     );

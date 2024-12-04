@@ -44,7 +44,7 @@ const Seguimientos = () => {
 
     return (
         <div className="mt-6">
-            <p className="text-2xl font-bold mb-6">Seguidos</p>
+            <p className="text-2xl font-bold mb-6 leading-relaxed">Seguidos</p>
             {seguimientos.length === 0 ? (
                 <p className="text-center text-lg">Sin seguidos</p>
             ) : (

@@ -47,7 +47,7 @@ const Favoritos = () => {
 
     return (
         <div className="mt-6">
-            <p className="text-2xl font-bold mb-6">Recetas Favoritas</p>
+            <p className="text-2xl font-bold mb-6 leading-relaxed">Recetas Favoritas</p>
             {favoritos.length === 0 ? (
                 <p className="text-center text-lg">No tiene recetas favoritas.</p>
             ) : (

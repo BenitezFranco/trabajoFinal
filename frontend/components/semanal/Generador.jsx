@@ -116,7 +116,7 @@ const Generador = () => {
 
       // Redirigir después de 2 segundos
       setTimeout(() => {
-        router.push("http://localhost:3001/calendario-semanal");
+        router.push("http://localhost:3001/plan-recetas");
       }, 2000);
     } catch (error) {
       console.error("Error al crear el calendario:", error);

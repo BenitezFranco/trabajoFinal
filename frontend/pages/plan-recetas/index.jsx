@@ -86,7 +86,7 @@ const CalendarioSemanal = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
-            <CustomHead title={'Calendario Semanal'} description={'En esta página puedes ver tus calendarios semanales'} />
+            <CustomHead title={'Planes de Recetas'} description={'En esta página puedes ver tus calendarios semanales'} />
             <Header />
             <main className="flex-grow max-w-7xl mx-auto p-6">
                 <h1 className="text-center text-4xl font-bold text-gray-800 mb-8">Plan de Recetas</h1>
@@ -135,7 +135,7 @@ const CalendarioSemanal = () => {
 
                 <div className="text-center mt-6">
                     <Link
-                        href="/calendario-semanal/generar"
+                        href="/plan-recetas/generar"
                         className="inline-flex items-center px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-green-600 hover:text-white hover:border-green-600 transition duration-200"
                     >
                         <FaPlus className="mr-2" />

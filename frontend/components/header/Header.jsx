@@ -104,7 +104,7 @@ const Header = () => {
                 {/* Cambia el color del texto e icono */}
               </div>
             </Link>
-            <Link href="/calendario-semanal" passHref>
+            <Link href="/plan-recetas" passHref>
               <div className="p-2 rounded-full flex items-center group flex items-center space-x-2 cursor-pointer group">
                 {" "}
                 {/* group para aplicar hover */}
