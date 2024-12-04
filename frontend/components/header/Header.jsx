@@ -113,7 +113,7 @@ const Header = () => {
                   className="text-white group-hover:text-blue-300"
                 />
                 <span className="text-white group-hover:text-blue-300">
-                  Calendario Semanal
+                  Plan de Recetas
                 </span>{" "}
                 {/* Cambia el color del texto e icono */}
               </div>

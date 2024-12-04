@@ -89,7 +89,7 @@ const CalendarioSemanal = () => {
             <CustomHead title={'Calendario Semanal'} description={'En esta página puedes ver tus calendarios semanales'} />
             <Header />
             <main className="flex-grow max-w-7xl mx-auto p-6">
-                <h1 className="text-center text-4xl font-bold text-gray-800 mb-8">Calendario Semanal</h1>
+                <h1 className="text-center text-4xl font-bold text-gray-800 mb-8">Plan de Recetas</h1>
 
                 {calendarios.length === 0 ? (
                     <div className="text-center">
