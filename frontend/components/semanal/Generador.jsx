@@ -144,11 +144,11 @@ const Generador = () => {
             {/* Formulario de búsqueda */}
             <form onSubmit={handleSearch} className="mb-6">
               <div className="flex flex-col space-y-4">
-                {opcionesBusqueda.map((opcion, index) => (
-                  <>
-                    <label for="filtros" className="text-gray-700 font-medium">
+              <label for="filtros" className="text-gray-700 font-medium">
                       Filtrar por:
                     </label>
+                {opcionesBusqueda.map((opcion, index) => (
+                  <>
                     <OpcionBusqueda
                       key={index}
                       index={index}

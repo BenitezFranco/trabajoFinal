@@ -80,28 +80,31 @@ const OpcionBusqueda = ({
 
       {filter === "id_categoria" ? (
         <Select
+        inputId="filtros"
           value={term ? categorias.find((cat) => cat.value === term) : null}
           onChange={handleTermChange}
           options={categorias}
-          placeholder="Selecciona una categoría"
+          placeholder={<div className="select-placeholder-text">Selecciona una categoría</div>}
           className="w-48"
           isClearable
         />
       ) : filter === "dificultad" ? (
         <Select
+        inputId="filtros"
           value={term ? dificultades.find((dif) => dif.value === term) : null}
           onChange={handleTermChange}
           options={dificultades}
-          placeholder="Selecciona una dificultad"
+          placeholder={<div className="select-placeholder-text">Selecciona una dificultad</div>}
           className="w-48"
           isClearable
         />
       ) : filter === "id_ingrediente" ? (
         <Select
+        inputId="filtros"
           value={term ? ingredientes.find((dif) => dif.value === term) : null}
           onChange={handleTermChange}
           options={ingredientes}
-          placeholder="Selecciona un ingrediente"
+          placeholder={<div className="select-placeholder-text">Selecciona un ingrediente</div>}
           className="w-48"
           isClearable
         />

@@ -260,9 +260,10 @@ const CreateRecipe = () => {
         >
           {/* Título */}
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Título:</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" for='titulo'>Título:</label>
             <input
               type="text"
+              id='titulo'
               name="titulo"
               value={formData.titulo}
               onChange={handleChange}
@@ -285,8 +286,9 @@ const CreateRecipe = () => {
   
           {/* Descripción */}
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Descripción:</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" for='descripcion'>Descripción:</label>
             <textarea
+            id="descripcion"
               name="descripcion"
               value={formData.descripcion}
               onChange={handleChange}
@@ -297,10 +299,11 @@ const CreateRecipe = () => {
   
           {/* Ingredientes */}
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Ingredientes:</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ingredientes-0">Ingredientes:</label>
             {ingredientes.map((ingrediente, index) => (
               <div key={index} className="flex items-center mb-4">
                 <Select
+                   inputId={`ingredientes-${index}`}
                   required
                   options={ingredientesOptions}
                   className="basic-single flex-grow"
@@ -433,8 +436,9 @@ const CreateRecipe = () => {
   
           {/* Categorías */}
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Categorías:</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" for='categorias'>Categorías:</label>
             <Select
+              inputId='categorias'
               required
               isMulti
               options={categoriasOptions}

@@ -122,11 +122,11 @@ const Search = () => {
               <div className="flex flex-col space-y-4">
                 {modoBusqueda === "receta" ? (
                   <>
-                    {opcionesBusqueda.map((opcion, index) => (
-                      <>
-                        <label for="filtros" class="text-gray-700 font-medium">
+                  <label for="filtros" class="text-gray-700 font-medium">
                           Filtrar por:
                         </label>
+                    {opcionesBusqueda.map((opcion, index) => (
+                      <>
                         <OpcionBusqueda
                           key={index}
                           index={index}
