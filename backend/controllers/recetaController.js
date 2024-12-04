@@ -36,8 +36,11 @@ const crearReceta = async (ctx) => {
             cantidad, // Cantidad del ingrediente
         });
     }
-
-    ctx.body = { message: 'Receta creada exitosamente' };
+    ctx.status = 201;
+    ctx.body = ctx.body = { 
+        message: 'Receta creada exitosamente', 
+        id_receta: nuevaReceta.id_receta // Devolver el ID
+    };
 };
 
 // Obtener una receta por ID

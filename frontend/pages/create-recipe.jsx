@@ -202,10 +202,12 @@ const CreateRecipe = () => {
         body: JSON.stringify(recetaData),
       });
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201 ) {
+        const data = await response.json();
+        console.log(data);
         setSuccessMessage("Receta creada con éxito"); // Mensaje de éxito
         setTimeout(() => {
-          router.push("/HomeLog");
+          router.push(`/recipe/${data.id_receta}`);
         }, 2000);
       } else if (response.status === 401 || response.status === 403) {
         alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
@@ -384,7 +386,7 @@ const CreateRecipe = () => {
             <input
     type="number"
     min="1"
-    max="31"
+    max="300"
     name="tiempo_preparacion"
               value={formData.tiempo_preparacion}
     onChange={handleChange}
