@@ -39,9 +39,20 @@ body {
 .text-sm, p {
     line-height: 1.5;
   }
+
+/* styles/globals.css */
+.small-button {
+    min-width: auto;
+    min-height: auto;
+    font-size: 0.90rem; /* Tamaño de fuente más pequeño */
+    padding: 0.50rem 0.5rem; /* Ajuste del padding */
+}
+
+
 a, button{
     min-width: 44px; min-height: 44px;
 }
+
 
 .select-placeholder-text {
     color: rgb(85, 83, 83);

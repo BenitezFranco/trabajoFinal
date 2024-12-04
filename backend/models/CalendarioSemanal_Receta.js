@@ -17,9 +17,9 @@ const CalendarioSemanal_Receta = sequelize.define('CalendarioSemanal_Receta', {
     },
     completado: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        allowNull: true, // Permitir valores nulos
+        defaultValue: null, // Establecer el valor predeterminado en null
     },
- 
 }, {
     tableName: 'CalendarioSemanal_Receta',
     timestamps: false,

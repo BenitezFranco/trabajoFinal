@@ -122,20 +122,25 @@ const borrarCalendario = async (ctx) => {
 
 const completarReceta = async (ctx) => {
     const id_rel_cal_rec = ctx.params.id;
+    const { completado } = ctx.request.body;  // Recibir el estado "completado" de la solicitud
 
     try {
         const result = await CalendarioSemanalReceta.findByPk(id_rel_cal_rec);
         if (!result) {
             ctx.status = 404;
-            ctx.body = { error: 'Calendario no encontrado' };
+            ctx.body = { error: 'Calendario-Receta no encontrado' };
             return;
         }
-        await result.update({ completado: true });
+        
+        // Actualizar el estado "completado" con el valor recibido en el cuerpo de la solicitud
+        await result.update({ completado: completado });
+
         ctx.status = 200;
         ctx.body = { message: 'Calendario-Receta actualizado correctamente' };
     } catch (error) {
+        console.error(error);
         ctx.status = 500;
-        ctx.body = { error: 'Error al eliminar el calendario' };
+        ctx.body = { error: 'Error al actualizar el calendario-Receta' };
     }
 };
 
