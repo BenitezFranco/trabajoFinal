@@ -155,7 +155,7 @@ const Comentarios = ({ recetaId, autorRecetaId }) => {
                                             onClick={() =>
                                                 handleSubmitComentario(comentario.id_comentario)
                                             }
-                                            className="mt-2 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600"
+                                            className="mt-2 bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-500"
                                         >
                                             Enviar respuesta
                                         </button>

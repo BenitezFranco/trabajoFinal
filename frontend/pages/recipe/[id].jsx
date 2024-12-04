@@ -143,7 +143,7 @@ const RecipePage = () => {
         <div className="flex flex-col min-h-screen">
             <CustomHead title={receta.titulo} description={`Página de la receta: ${receta.titulo}`}/>
             <Header />
-            <div className="grid grid-cols-12 grid-rows-4 gap-12 p-6">
+            <div className="grid grid-cols-12 grid-rows-4 gap-12 p-6" role='main'>
                 <div className="col-span-3 row-span-1 bg-gray-100 p-6 rounded-lg shadow-lg">
                     <Link href={`/perfil/${receta.id_usuario}`}>
                         <div className="p-4 flex items-center bg-gray-100 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105 cursor-pointer">
