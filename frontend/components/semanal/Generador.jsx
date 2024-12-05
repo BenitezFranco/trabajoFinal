@@ -30,7 +30,7 @@ const Generador = () => {
 
     // Si hay menos resultados de los solicitados, repetir hasta completar
     const randomResults = [];
-    while (randomResults.length < recipeCount) {
+    while (randomResults.length < recipeCount && shuffled.length > 0) {
       randomResults.push(...shuffled);
     }
 
@@ -56,6 +56,7 @@ const Generador = () => {
 
       // Filtrar aleatoriamente los resultados y asegurarnos de que haya 7
       const randomResults = getRandomResults(data);
+      console.log(data);
       setResults(randomResults);
     } catch (error) {
       console.error("Error al realizar la búsqueda:", error);
@@ -259,11 +260,11 @@ const Generador = () => {
                 )}
                 <SearchGrid results={results} />
               </div>
-            ) : (
+            ) : searchSubmitted && results.length === 0 ?  (
               <p className="text-center text-gray-700">
                 No se encontraron recetas o no se ha realizado la búsqueda aún.
               </p>
-            )}
+            ):null}
           </div>
         </div>
       </div>
