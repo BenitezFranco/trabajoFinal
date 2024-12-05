@@ -14,8 +14,8 @@ const CalendarioSemanal = sequelize.define('CalendarioSemanal', {
         allowNull: false,
     },
     fecha: {
-        type: DataTypes.INTEGER,
-        defaultValue: new Date().getDay(),
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
     }
 }, {
     tableName: 'CalendarioSemanal',

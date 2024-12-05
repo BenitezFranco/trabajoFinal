@@ -3,7 +3,7 @@ const CalendarioSemanalReceta= require('../models/CalendarioSemanal_Receta');
 const Receta = require('../models/Receta');
 
 const crearCalendario = async (ctx) => {
-    const { idsRecetas, name } = ctx.request.body; // Asegúrate de recibir el nombre
+    const { idsRecetas, name, fecha } = ctx.request.body; // Asegúrate de recibir el nombre
     const id_usuario = ctx.state.user.id_usuario;
 
     try {
@@ -11,6 +11,7 @@ const crearCalendario = async (ctx) => {
         const nuevoCalendario = await CalendarioSemanal.create({
             id_usuario: id_usuario,
             nombre: name, // Guardar el nombre del calendario
+            fecha: fecha
         });
 
         // Asociar las recetas al nuevo calendario

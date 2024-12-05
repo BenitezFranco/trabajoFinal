@@ -17,6 +17,8 @@ const Generador = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [recipeCount, setRecipeCount] = useState(7);
   const [calendarName, setCalendarName] = useState(""); // Estado para el nombre del calendario
+  const [fecha, setFecha] = useState(""); // Estado para la fecha seleccionada
+
 
   // Función para seleccionar aleatoriamente los resultados
   const getRandomResults = (results) => {
@@ -89,11 +91,11 @@ const Generador = () => {
 
   // Nueva función para manejar la creación del calendario
   const handleCrearCalendario = async () => {
-    if (!calendarName) {
-      setErrorMessage("Por favor, ingresa un nombre para el calendario.");
+    if (!calendarName || !fecha) {
+      setErrorMessage("Por favor, ingresa un nombre para el calendario y selecciona una fecha.");
       return;
     }
-
+  
     setIsButtonDisabled(true); // Deshabilita el botón al iniciar la acción
     const token = localStorage.getItem("token");
     try {
@@ -104,16 +106,16 @@ const Generador = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ idsRecetas, name: calendarName }), // Incluimos el nombre
+        body: JSON.stringify({ idsRecetas, name: calendarName, fecha }), // Incluimos la fecha
       });
       if (!response.ok) {
         throw new Error("Error en la respuesta del servidor");
       }
       const data = await response.json();
       console.log("Calendario creado:", data);
-
+  
       setSuccessMessage("Calendario creado con éxito!");
-
+  
       // Redirigir después de 2 segundos
       setTimeout(() => {
         router.push("http://localhost:3001/plan-recetas");
@@ -124,7 +126,7 @@ const Generador = () => {
       setIsButtonDisabled(false); // Reactiva el botón si hay un error
     }
   };
-
+  
   const handleVerTodas = () => {
     setOpcionesBusqueda([{ filter: "titulo", term: "" }]);
     handleSearch(new Event("submit"));
@@ -167,6 +169,17 @@ const Generador = () => {
                 >
                   <span className="text-sm">+ Agregar Filtro</span>
                 </button>
+                <label htmlFor="fecha" className="text-gray-700 font-medium">
+  Fecha:
+</label>
+<input
+  id="fecha"
+  type="date"
+  value={fecha}
+  onChange={(e) => setFecha(e.target.value)}
+  className="border border-gray-300 rounded-lg p-2 w-full mt-2"
+/>
+
                 <label className="text-gray-700 font-medium">
                   Cantidad de recetas:
                   <input

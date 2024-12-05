@@ -8,8 +8,12 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { FaPlus } from 'react-icons/fa';
 import CustomHead from "@/components/head/CustomHead";
 
-const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
+const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+const meses = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];
 const CalendarioSemanal = () => {
     const router = useRouter();
     const [calendarios, setCalendarios] = useState([]);
@@ -43,7 +47,7 @@ const CalendarioSemanal = () => {
     }, []);
 
     const handleDelete = async (id_calendario) => {
-        const confirm = window.confirm(`¿Estás seguro de que deseas borrar el calendario?`);
+        const confirm = window.confirm(`¿Estás seguro de que deseas borrar el plan?`);
         if (!confirm) return;
 
         try {
@@ -55,11 +59,11 @@ const CalendarioSemanal = () => {
                 },
             });
 
-            if (!res.ok) throw new Error("Error al borrar el calendario");
+            if (!res.ok) throw new Error("Error al borrar el Plan");
             setCalendarios(calendarios.filter((cal) => cal.id_calendario !== id_calendario));
-            alert("Calendario borrado con éxito");
+            alert("Plan borrado con éxito");
         } catch (err) {
-            alert("Hubo un error al borrar el calendario");
+            alert("Hubo un error al borrar el plan");
         }
     };
 
@@ -72,8 +76,8 @@ const CalendarioSemanal = () => {
     };
 
     const getDiasReordenados = (fecha) => {
-        const diaInicio = fecha;
-        const indiceInicio = diaInicio === 0 ? 6 : diaInicio - 1; // Ajustar índice para que Lunes sea 0
+        const diaInicio = new Date(fecha).getDay();
+        const indiceInicio = diaInicio === 0 ? 6 : diaInicio; // Ajustar índice para que Lunes sea 0
         return [...diasSemana.slice(indiceInicio), ...diasSemana.slice(0, indiceInicio)];
     };
 
@@ -102,7 +106,7 @@ const CalendarioSemanal = () => {
                             <div key={calendario.id_calendario} className="mb-16 bg-white rounded-lg shadow p-6">
                                 <div className="flex justify-between items-center mb-6">
                                     <h2 className="text-2xl font-bold text-gray-800">
-                                        {calendario.nombre ? calendario.nombre : `Calendario `} {/* Mostrar el nombre del calendario */}
+                                        {calendario.nombre ? calendario.nombre : `Plan `} {/* Mostrar el nombre del calendario */}
                                     </h2>
                                     <button
                                         onClick={() => handleDelete(calendario.id_calendario)}
@@ -113,20 +117,39 @@ const CalendarioSemanal = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
-                                    {dividirRecetasEnDias(calendario.recetas).map((fila, i) => (
-                                        fila.map((receta, j) => (
-                                            <div key={`${i}-${j}`} className="p-4 bg-gray-100 rounded shadow hover:shadow-lg transition duration-200">
-                                                <h3 className="text-lg font-semibold text-center mb-4 text-blue-600">
-                                                    {diasOrdenados[(i * 7 + j) % 7]}
-                                                </h3>
-                                                <CardRecetaC
-                                                    key={receta.id_receta}
-                                                    item={receta}
-                                                    className="border-t pt-2"
-                                                />
-                                            </div>
-                                        ))
-                                    ))}
+                                {dividirRecetasEnDias(calendario.recetas).map((fila, i) => (
+    fila.map((receta, j) => { 
+        // Crear la fecha base en UTC
+        const fechaBase = new Date(calendario.fecha); // calendario.fecha debe estar en formato ISO UTC
+        const diaIncrementado = new Date(Date.UTC(
+            fechaBase.getUTCFullYear(),
+            fechaBase.getUTCMonth(),
+            fechaBase.getUTCDate(),
+            fechaBase.getUTCHours(),
+            fechaBase.getUTCMinutes(),
+            fechaBase.getUTCSeconds(),
+            fechaBase.getUTCMilliseconds()
+        )); // Clonar la fecha base en UTC
+    
+        // Incrementar días en UTC
+        diaIncrementado.setUTCDate(diaIncrementado.getUTCDate() + (i * 7 + j));
+    
+        return (
+            <div key={`${i}-${j}`} className="p-4 bg-gray-100 rounded shadow hover:shadow-lg transition duration-200">
+                <h3 className="text-lg font-semibold text-center mb-4 text-blue-600">
+                    {diasOrdenados[(i * 7 + j) % 7]} {diaIncrementado.getUTCDate()} de {meses[diaIncrementado.getUTCMonth()]}
+                </h3>
+                <CardRecetaC
+                    key={receta.id_receta}
+                    item={receta}
+                    className="border-t pt-2"
+                />
+            </div>
+        );
+    })
+    
+))}
+
                                 </div>
                             </div>
                         );
