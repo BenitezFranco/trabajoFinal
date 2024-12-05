@@ -178,6 +178,7 @@ const Generador = () => {
   value={fecha}
   onChange={(e) => setFecha(e.target.value)}
   className="border border-gray-300 rounded-lg p-2 w-full mt-2"
+  min={new Date().toISOString().split('T')[0]}
 />
 
                 <label className="text-gray-700 font-medium">
