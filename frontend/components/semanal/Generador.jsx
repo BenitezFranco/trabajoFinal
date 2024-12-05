@@ -17,8 +17,10 @@ const Generador = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [recipeCount, setRecipeCount] = useState(7);
   const [calendarName, setCalendarName] = useState(""); // Estado para el nombre del plan
-  const [fecha, setFecha] = useState(""); // Estado para la fecha seleccionada
-
+  const [fecha, setFecha] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  });
 
   // Función para seleccionar aleatoriamente los resultados
   const getRandomResults = (results) => {
