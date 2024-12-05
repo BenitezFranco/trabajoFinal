@@ -225,7 +225,6 @@ const Generador = () => {
           <div className="col-span-5 row-span-4 col-start-4 bg-white p-6 rounded-xl shadow-lg">
             {searchSubmitted && results.length > 0 ? (
               <div>
-                <SearchGrid results={results} />
                 <div className="mt-4">
                   <label htmlFor="calendarName" className="text-gray-700 font-medium">
                     Nombre del Plan:
@@ -257,6 +256,7 @@ const Generador = () => {
                 {successMessage && (
                   <p className="text-green-500 mt-4">{successMessage}</p>
                 )}
+                <SearchGrid results={results} />
               </div>
             ) : (
               <p className="text-center text-gray-700">
