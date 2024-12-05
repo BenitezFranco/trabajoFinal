@@ -16,7 +16,7 @@ const Generador = () => {
   const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [recipeCount, setRecipeCount] = useState(7);
-  const [calendarName, setCalendarName] = useState(""); // Estado para el nombre del calendario
+  const [calendarName, setCalendarName] = useState(""); // Estado para el nombre del plan
   const [fecha, setFecha] = useState(""); // Estado para la fecha seleccionada
 
 
@@ -92,7 +92,7 @@ const Generador = () => {
   // Nueva función para manejar la creación del calendario
   const handleCrearCalendario = async () => {
     if (!calendarName || !fecha) {
-      setErrorMessage("Por favor, ingresa un nombre para el calendario y selecciona una fecha.");
+      setErrorMessage("Por favor, ingresa un nombre para el plan y selecciona una fecha.");
       return;
     }
   
@@ -112,17 +112,17 @@ const Generador = () => {
         throw new Error("Error en la respuesta del servidor");
       }
       const data = await response.json();
-      console.log("Calendario creado:", data);
+      console.log("Plan creado:", data);
   
-      setSuccessMessage("Calendario creado con éxito!");
+      setSuccessMessage("Plan creado con éxito!");
   
       // Redirigir después de 2 segundos
       setTimeout(() => {
         router.push("http://localhost:3001/plan-recetas");
       }, 2000);
     } catch (error) {
-      console.error("Error al crear el calendario:", error);
-      setErrorMessage("Error al crear el calendario");
+      console.error("Error al crear el plan:", error);
+      setErrorMessage("Error al crear el plan");
       setIsButtonDisabled(false); // Reactiva el botón si hay un error
     }
   };
@@ -181,7 +181,7 @@ const Generador = () => {
 />
 
                 <label className="text-gray-700 font-medium">
-                  Cantidad de recetas:
+                  Cantidad de dias:
                   <input
                     type="number"
                     min="1"
@@ -215,7 +215,7 @@ const Generador = () => {
                   onClick={handleVerTodas}
                   className="bg-transparent text-gray-700 font-semibold border-2 border-gray-700 rounded-full py-2 px-6 mt-4 hover:bg-gray-200 focus:outline-none transition duration-300 transform hover:scale-105"
                 >
-                  Calendario Aleatorio
+                  Plan Aleatorio
                 </button>
               </div>
             </form>
@@ -228,7 +228,7 @@ const Generador = () => {
                 <SearchGrid results={results} />
                 <div className="mt-4">
                   <label htmlFor="calendarName" className="text-gray-700 font-medium">
-                    Nombre del Calendario:
+                    Nombre del Plan:
                   </label>
                   <input
                     id="calendarName"
@@ -236,7 +236,7 @@ const Generador = () => {
                     value={calendarName}
                     onChange={(e) => setCalendarName(e.target.value)}
                     className="border border-gray-300 rounded-lg p-2 w-full mt-2"
-                    placeholder="Ingresa un nombre para el calendario"
+                    placeholder="Ingresa un nombre para el plan"
                   />
                 </div>
                 <button
@@ -249,7 +249,7 @@ const Generador = () => {
                       : "hover:bg-gray-200"
                   }`}
                 >
-                  {isButtonDisabled ? "Creando..." : "Crear Calendario"}
+                  {isButtonDisabled ? "Creando..." : "Crear plan"}
                 </button>
                 {errorMessage && (
                   <p className="text-red-500 mt-4">{errorMessage}</p>
