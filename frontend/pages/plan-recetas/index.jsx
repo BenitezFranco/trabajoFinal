@@ -9,7 +9,7 @@ import { FaPlus } from 'react-icons/fa';
 import CustomHead from "@/components/head/CustomHead";
 
 
-const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
 const meses = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -76,9 +76,9 @@ const CalendarioSemanal = () => {
     };
 
     const getDiasReordenados = (fecha) => {
-        const diaInicio = new Date(fecha).getDay();
-        const indiceInicio = diaInicio === 0 ? 6 : diaInicio; // Ajustar índice para que Lunes sea 0
-        return [...diasSemana.slice(indiceInicio), ...diasSemana.slice(0, indiceInicio)];
+        const diaInicio = new Date(fecha).getDay(); 
+        //const indiceInicio = diaInicio === 0 ? 6 : diaInicio;
+        return [...diasSemana.slice(diaInicio), ...diasSemana.slice(0, diaInicio)];
     };
 
     if (error)
